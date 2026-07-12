@@ -4,6 +4,7 @@ import ReactFlow, {
   Background,
   Controls,
   MiniMap,
+  Handle,
   type Node,
   type Edge,
   Position,
@@ -51,12 +52,15 @@ function AgentNode({ data }: { data: any }) {
   const active = data.active
   return (
     <div
-      className={`glass glass-hover rounded-2xl px-3 py-2 min-w-[150px] max-w-[220px] ${active ? meta.glow : ''}`}
+      className={`glass glass-hover relative rounded-2xl px-3 py-2 min-w-[150px] max-w-[220px] ${active ? meta.glow : ''}`}
       style={{
         borderColor: active ? meta.color : undefined,
         boxShadow: active ? `0 0 0 1px ${meta.color}, 0 0 26px -6px ${meta.color}` : undefined,
       }}
     >
+      {/* Hidden handles so reactflow can connect edges without warnings */}
+      <Handle type="target" position={Position.Top} style={{ opacity: 0, width: 1, height: 1 }} />
+      <Handle type="source" position={Position.Bottom} style={{ opacity: 0, width: 1, height: 1 }} />
       <div className="flex items-center gap-2">
         <span
           className="relative flex h-7 w-7 items-center justify-center rounded-lg"
@@ -237,12 +241,12 @@ export default function WorkflowGraph() {
       style: { stroke: '#fb7185', strokeWidth: 2 },
       markerEnd: { type: MarkerType.ArrowClosed, color: '#fb7185' },
     })
-    // loop back edge (revise)
+    // loop back edge (revise) — 'default' is the bezier type in reactflow v11
     es.push({
       id: 'e-critic-synth',
       source: 'critic',
       target: 'synthesis',
-      type: 'bezier',
+      type: 'default',
       animated: lastRound?.verdict === 'revise',
       label: lastRound?.verdict === 'revise' ? 'revise' : '',
       labelStyle: { fill: '#fb7185', fontWeight: 600, fontSize: 11 },
