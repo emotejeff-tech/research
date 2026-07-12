@@ -102,18 +102,18 @@
     "name": "ua_rotator",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 12,
+    "usageCount": 13,
     "created": 1783822606744,
-    "lastUsed": 1783853741971,
+    "lastUsed": 1783856890675,
     "successRate": 1
   },
   "opsec_log_scrubber": {
     "name": "opsec_log_scrubber",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 12,
+    "usageCount": 13,
     "created": 1783822606744,
-    "lastUsed": 1783853741758,
+    "lastUsed": 1783856890633,
     "successRate": 1
   },
   "inmate_record_extractor": {
@@ -156,9 +156,9 @@
     "name": "google_dorker",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 5,
+    "usageCount": 6,
     "created": 1783830431526,
-    "lastUsed": 1783853742135,
+    "lastUsed": 1783856890715,
     "successRate": 1
   }
 }
