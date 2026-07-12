@@ -10,7 +10,7 @@
  */
 import { multiSearch } from '../tools/search_providers'
 import { getCachedResults, cacheResults } from '../tools/search_cache'
-import { validateLinks, sortByCredibility } from '../tools/link_checker'
+import { validateLinks, sortByCredibility, getCredibilityScore } from '../tools/link_checker'
 import type { Source, Emit } from '../types'
 import { sleep } from '../util'
 
@@ -129,6 +129,3 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
   })
   return sources
 }
-
-// Re-export for use in the orchestrator
-export { getCredibilityScore }
