@@ -14,6 +14,8 @@ export type Phase =
   | 'final'
   | 'error'
 
+export type TaskType = 'research' | 'blueprint'
+
 export interface Source {
   id: string
   query: string
@@ -56,6 +58,7 @@ export interface HistoryItem {
   sources: number
   finalReport: string
   routingMode: 'primary' | 'degraded'
+  taskType: TaskType
   startedAt: number
   finishedAt: number | null
 }
@@ -84,6 +87,8 @@ interface OrchestratorState {
   /** 'primary' = served by LLM; 'degraded' = no-LLM fallback active. */
   routingMode: 'primary' | 'degraded'
   routingReason: string | null
+  /** Detected by the Coordinator: research (independent analysis) vs blueprint (best-ideas design). */
+  taskType: TaskType
   error: string | null
 
   log: LogEntry[]
@@ -129,6 +134,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   finalMeta: null,
   routingMode: 'primary',
   routingReason: null,
+  taskType: 'research',
   error: null,
   log: [],
   plugins: [],
@@ -249,6 +255,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       }))
     })
 
+    socket.on('research:taskType', (d: any) => {
+      set({ taskType: (d.taskType as TaskType) || 'research' })
+    })
+
     socket.on('research:final', (d: any) => {
       set((s) => ({
         running: false,
@@ -261,6 +271,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
         critiqueRounds: d.critiqueRounds,
         currentIteration: d.iterations,
         routingMode: (d.routingMode as 'primary' | 'degraded') || 'primary',
+        taskType: (d.taskType as TaskType) || 'research',
         finalMeta: {
           iterations: d.iterations,
           durationMs: d.durationMs,
@@ -324,6 +335,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       finalMeta: null,
       routingMode: 'primary',
       routingReason: null,
+      taskType: 'research',
       error: null,
       log: [
         {
@@ -354,6 +366,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       finalMeta: null,
       routingMode: 'primary',
       routingReason: null,
+      taskType: 'research',
       error: null,
       log: [],
     })

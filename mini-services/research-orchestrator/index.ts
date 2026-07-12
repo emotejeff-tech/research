@@ -112,6 +112,7 @@ async function runResearch(socket: any, query: string) {
     query,
     status: 'running',
     phase: 'planning',
+    taskType: 'research',
     subQueries: [],
     sources: [],
     draft: '',
@@ -138,7 +139,17 @@ async function runResearch(socket: any, query: string) {
     await sleep(500)
 
     try {
-      task.subQueries = await plan(query)
+      const planResult = await plan(query)
+      task.subQueries = planResult.subqueries
+      task.taskType = planResult.taskType
+      emit('research:taskType', { taskType: task.taskType })
+      emit('research:thought', {
+        agent: 'Coordinator',
+        text:
+          task.taskType === 'blueprint'
+            ? `Classified as a BLUEPRINT goal — agents will produce the best actionable design using latest research.`
+            : `Classified as a RESEARCH goal — agents will form an independent, evidence-based conclusion.`,
+      })
     } catch (e) {
       // Planner LLM unavailable — degrade early, keep discovery working.
       degraded = true
@@ -187,6 +198,7 @@ async function runResearch(socket: any, query: string) {
           task.sources,
           lastFeedback,
           iteration,
+          task.taskType,
         )
 
         if (mode === 'degraded') {
@@ -225,7 +237,7 @@ async function runResearch(socket: any, query: string) {
 
         let round
         try {
-          round = await critique(query, draft, task.sources, iteration)
+          round = await critique(query, draft, task.sources, iteration, task.taskType)
         } catch (e) {
           // Critic LLM unavailable — accept the draft, mark degraded.
           degraded = true
@@ -267,7 +279,7 @@ async function runResearch(socket: any, query: string) {
         title: 'Synthesis Agent: degraded compilation',
       })
       emit('research:iteration', { iteration: 1, role: 'actor' })
-      const result = await synthesize(query, task.sources, '', 1)
+      const result = await synthesize(query, task.sources, '', 1, task.taskType)
       task.draft = result.draft
       emit('research:thought', {
         agent: 'Synthesis',
@@ -326,6 +338,7 @@ async function runResearch(socket: any, query: string) {
       durationMs: task.finishedAt - task.startedAt,
       routingMode: task.routingMode,
       degraded,
+      taskType: task.taskType,
     })
 
     history.unshift(task)
@@ -383,6 +396,7 @@ io.on('connection', (socket) => {
         sources: t.sources.length,
         finalReport: t.finalReport.slice(0, 200),
         routingMode: t.routingMode,
+        taskType: t.taskType,
         startedAt: t.startedAt,
         finishedAt: t.finishedAt,
       })),

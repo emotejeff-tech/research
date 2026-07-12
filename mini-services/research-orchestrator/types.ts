@@ -10,6 +10,14 @@ export type Phase =
   | 'generation'
   | 'final'
 
+/**
+ * How the engine treats a goal.
+ * - 'research': evaluate/analyze/compare → strict independent-analyst synthesis.
+ * - 'blueprint': design/build/architect → best-ideas actionable blueprint.
+ * Detected by the Coordinator during planning.
+ */
+export type TaskType = 'research' | 'blueprint'
+
 export interface Source {
   id: string
   query: string
@@ -48,6 +56,7 @@ export interface TaskState {
   query: string
   status: 'running' | 'completed' | 'error'
   phase: Phase
+  taskType: TaskType
   subQueries: string[]
   sources: Source[]
   draft: string

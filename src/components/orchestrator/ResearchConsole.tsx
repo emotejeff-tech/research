@@ -2,16 +2,16 @@
 
 import { useState, type FormEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { Rocket, Loader2, Sparkles, RotateCcw, Cpu, AlertTriangle } from 'lucide-react'
-import { useOrchestrator, PHASE_LABELS, type Phase } from '@/lib/orchestrator-store'
+import { Rocket, Loader2, Sparkles, RotateCcw, Cpu, AlertTriangle, Microscope, Wrench } from 'lucide-react'
+import { useOrchestrator, PHASE_LABELS, type Phase, type TaskType } from '@/lib/orchestrator-store'
 import { usePhaseGlow } from './usePhaseGlow'
 import { cn } from '@/lib/utils'
 
 const EXAMPLES = [
-  'State of solid-state batteries in 2025 and remaining engineering bottlenecks',
-  'How do split-agent LLM architectures reduce token exhaustion?',
-  'Compare CRISPR delivery vectors: AAV vs lipid nanoparticles',
-  'Latest breakthroughs in room-temperature superconductors',
+  'Evaluate whether nuclear fusion will reach net-positive commercial energy this decade',
+  'Compare CRISPR delivery vectors: AAV vs lipid nanoparticles — which is more clinically viable?',
+  'Design a blueprint for a decentralized AI inference network using latest research',
+  'Is lithium-iron-phosphate objectively safer than NMC for grid storage?',
 ]
 
 const PHASE_FLOW: { key: Phase; label: string; color: string }[] = [
@@ -56,6 +56,7 @@ export default function ResearchConsole() {
   const phase = useOrchestrator((s) => s.phase)
   const phaseTitle = useOrchestrator((s) => s.phaseTitle)
   const routingMode = useOrchestrator((s) => s.routingMode)
+  const taskType = useOrchestrator((s) => s.taskType)
   const planningGlow = usePhaseGlow(['planning'])
 
   const onSubmit = (e: FormEvent) => {
@@ -87,6 +88,28 @@ export default function ResearchConsole() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {(running || phase === 'final') && (
+              <span
+                className={cn(
+                  'flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider',
+                  taskType === 'blueprint'
+                    ? 'bg-orange-400/10 text-orange-300'
+                    : 'bg-teal-400/10 text-teal-300',
+                )}
+                title={
+                  taskType === 'blueprint'
+                    ? 'Blueprint mode — agents produce the best actionable design using latest research'
+                    : 'Research mode — agents form an independent, evidence-based conclusion (primary data only, no narrative adoption, definitive verdict)'
+                }
+              >
+                {taskType === 'blueprint' ? (
+                  <Wrench className="h-3 w-3" />
+                ) : (
+                  <Microscope className="h-3 w-3" />
+                )}
+                {taskType === 'blueprint' ? 'blueprint' : 'research'}
+              </span>
+            )}
             {degraded && (
               <span
                 className="flex items-center gap-1.5 rounded-full bg-amber-400/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-amber-300"

@@ -2,8 +2,8 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles, AlertTriangle } from 'lucide-react'
-import { useOrchestrator } from '@/lib/orchestrator-store'
+import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles, AlertTriangle, Microscope, Wrench } from 'lucide-react'
+import { useOrchestrator, type TaskType } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
 import { usePhaseGlow } from './usePhaseGlow'
 
@@ -27,6 +27,7 @@ export default function FinalReport() {
   const finalMeta = useOrchestrator((s) => s.finalMeta)
   const routingMode = useOrchestrator((s) => s.routingMode)
   const routingReason = useOrchestrator((s) => s.routingReason)
+  const taskType = useOrchestrator((s) => s.taskType)
   const phase = useOrchestrator((s) => s.phase)
   const error = useOrchestrator((s) => s.error)
   const running = useOrchestrator((s) => s.running)
@@ -34,14 +35,19 @@ export default function FinalReport() {
 
   const show = finalReport || error || running
   const degraded = routingMode === 'degraded'
+  const isBlueprint = taskType === 'blueprint'
 
   return (
     <GlassCard className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
-        icon={<FileText className="h-4 w-4" />}
-        title="Synthesized Research Output"
-        subtitle="Final report after Actor–Critic convergence"
-        accent="#34d399"
+        icon={isBlueprint ? <Wrench className="h-4 w-4" /> : <Microscope className="h-4 w-4" />}
+        title={isBlueprint ? 'Actionable Blueprint Output' : 'Independent Research Analysis'}
+        subtitle={
+          isBlueprint
+            ? 'Best-ideas design synthesized from latest research & code'
+            : 'Primary-data-only · logic shown · definitive conclusion'
+        }
+        accent={isBlueprint ? '#fb923c' : '#34d399'}
         right={
           finalMeta ? (
             <span
@@ -148,6 +154,23 @@ export default function FinalReport() {
                         Reason: {routingReason}
                       </span>
                     )}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Methodology banner (research mode, not degraded) */}
+              {!degraded && !isBlueprint && finalReport && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start gap-2.5 rounded-xl border border-teal-400/25 bg-teal-400/[0.05] p-3"
+                >
+                  <Microscope className="mt-0.5 h-4 w-4 shrink-0 text-teal-300" />
+                  <div className="text-[11px] leading-snug text-teal-100/80">
+                    <strong className="font-semibold text-teal-200">Independent analyst methodology.</strong>{' '}
+                    Primary data only · narrative stripped · logic shown ·
+                    definitive conclusion. The Critic verified no hedging, no
+                    adopted framing, and no non-primary data.
                   </div>
                 </motion.div>
               )}

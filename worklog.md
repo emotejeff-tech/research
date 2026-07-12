@@ -75,3 +75,30 @@ Work Log:
 
 Stage Summary:
 - Phase 2 blueprint fully implemented & verified. The orchestrator now matches the agents/+tools/ architecture, active panels pulse with phase-colored ambient glow, and the system never freezes on LLM exhaustion — it degrades to a sourced no-LLM report and surfaces the mode in the UI. Both primary and degraded paths browser-verified end-to-end.
+
+---
+Task ID: 3
+Agent: orchestrator (main)
+Task: Add mode-aware synthesis — when the goal is a research/conclusion question, agents must follow the strict independent-research-analyst methodology (primary data only, strip narrative, show logic, definitive conclusion). When the goal is a blueprint/design request, switch to best-ideas actionable design using latest research.
+
+Work Log:
+- Added TaskType ('research'|'blueprint') to backend types + TaskState, and to frontend store + HistoryItem + finalMeta.
+- agents/planner.ts: Coordinator now classifies the goal AND decomposes it in ONE LLM call (token-efficient — no extra round-trip). Returns { subqueries, taskType }. Emits a new `research:taskType` event.
+- agents/synthesizer.ts: two mode-aware system prompts:
+  - research → the user's exact independent-analyst rules (Primary Data Only / Strip the Narrative / Show Your Logic / Form an Independent Conclusion, no "some say X others say Y" hedging).
+  - blueprint → senior-architect best-ideas prompt (core objectives, architecture/step-by-step, key tech with rationale preferring newest approaches, concrete next actions).
+- agents/critic.ts: two mode-aware criteria sets:
+  - research → flags hedging, narrative/wording adoption, non-primary data (opinion/PR/consensus), missing logic chain, unsupported claims.
+  - blueprint → flags vague/non-actionable objectives, missing architecture, outdated tech when sources show better, missing concrete next actions.
+- Orchestrator index.ts: passes taskType to synthesize() + critique() in both the normal loop and the degraded branch; emits research:taskType + a Coordinator thought announcing the classification; includes taskType in research:final + history:list payloads.
+- Frontend store: handles research:taskType event; tracks taskType; resets it on start/reset; reads it from final payload.
+- UI:
+  - ResearchConsole: new task-type badge (Microscope/research=teal vs Wrench/blueprint=orange) with tooltip describing the active methodology; updated examples to include both a research ("Is LFP objectively safer than NMC?") and a blueprint ("Design a blueprint for a decentralized AI inference network") prompt.
+  - FinalReport: title/subtitle/icon/accent all switch by mode ("Independent Research Analysis" teal vs "Actionable Blueprint Output" orange). New teal methodology banner appears ONLY in non-degraded research mode explaining the analyst rules + that the Critic verified them. Degraded banner unchanged.
+- Agent Browser self-verification (via gateway :81):
+  - Research query "Is LFP objectively safer than NMC for grid storage?": Coordinator emitted "Classified as a RESEARCH goal"; research badge shown; report title = "Independent Research Analysis"; Critic flagged "Reliance on non-primary data - Reddit discussions are not primary scientific data" + "Unsupported claims" + "needs step-by-step reasoning" (exactly the analyst criteria); methodology banner displayed; DELIVERED in 80.5s, 2 iterations.
+  - Blueprint query "Design a blueprint for a decentralized AI inference network": Coordinator emitted "Classified as a BLUEPRINT goal"; blueprint badge shown (orange); report title = "Actionable Blueprint Output"; NO methodology banner (correct — banner is research-only); 3 critique iterations enforcing blueprint criteria (vague/outdated/missing-architecture); DELIVERED in 56.5s.
+  - No console/runtime errors in either run. Lint clean.
+
+Stage Summary:
+- The engine now auto-detects research vs blueprint goals and applies the correct methodology end-to-end. Research queries get the strict independent-analyst treatment (primary data, no narrative adoption, logic shown, definitive verdict) with a Critic that specifically catches hedging and non-primary sources; blueprint queries get a best-ideas actionable design with a Critic that catches vagueness and outdated approaches. Both modes browser-verified.
