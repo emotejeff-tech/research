@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   Database,
   Volume2,
+  Mic,
 } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import {
@@ -50,6 +51,10 @@ export default function SettingsPanel() {
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
   const [overrides, setOverrides] = useState<Record<string, any>>({})
+  const [ttsTesting, setTtsTesting] = useState(false)
+  const [ttsResult, setTtsResult] = useState<'success' | 'error' | null>(null)
+  const [sttTesting, setSttTesting] = useState(false)
+  const [sttResult, setSttResult] = useState<string | 'error' | 'Mic blocked' | null>(null)
 
   // Merge server settings with local overrides — derived state, no effect needed.
   const form = useMemo(() => ({
@@ -552,6 +557,113 @@ export default function SettingsPanel() {
               The system auto-detects the endpoint format (/v1/audio/speech, /api/tts, /tts).
               Check your TTS server docs at http://127.0.0.1:17493/docs for the exact endpoint.
             </p>
+            {/* Test TTS + STT buttons */}
+            <div className="mt-3 flex gap-2">
+              <Button
+                onClick={async () => {
+                  setTtsTesting(true)
+                  try {
+                    const res = await fetch('/api/test-tts', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        url: form.voiceBoxUrl,
+                        apiKey: form.voiceBoxApiKey,
+                        model: form.ttsModel || 'tts-1',
+                        voice: form.ttsVoice || 'alloy',
+                        text: 'NEXUS text to speech is working. The autonomous research engine is online.',
+                      }),
+                    })
+                    const data = await res.json()
+                    if (data.ok && data.audio) {
+                      const audio = new Audio(`data:audio/mp3;base64,${data.audio}`)
+                      audio.play()
+                      setTtsResult('success')
+                    } else {
+                      setTtsResult('error')
+                    }
+                  } catch {
+                    setTtsResult('error')
+                  }
+                  setTtsTesting(false)
+                  setTimeout(() => setTtsResult(null), 3000)
+                }}
+                disabled={ttsTesting || !form.voiceBoxUrl}
+                variant="outline"
+                className="glass border-sky-400/30 bg-sky-400/10 text-sky-300 hover:bg-sky-400/20"
+              >
+                {ttsTesting ? (
+                  <RefreshCw className="mr-1.5 h-3 w-3 animate-spin" />
+                ) : ttsResult === 'success' ? (
+                  <Check className="mr-1.5 h-3 w-3" />
+                ) : ttsResult === 'error' ? (
+                  <AlertCircle className="mr-1.5 h-3 w-3" />
+                ) : (
+                  <Volume2 className="mr-1.5 h-3 w-3" />
+                )}
+                <span className="text-[11px]">
+                  {ttsTesting ? 'Testing...' : ttsResult === 'success' ? 'TTS Works!' : ttsResult === 'error' ? 'TTS Failed' : 'Test TTS'}
+                </span>
+              </Button>
+              <Button
+                onClick={async () => {
+                  setSttTesting(true)
+                  try {
+                    // Record 3 seconds of audio from microphone
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+                    const recorder = new MediaRecorder(stream)
+                    const chunks: Blob[] = []
+                    recorder.ondataavailable = (e) => chunks.push(e.data)
+                    recorder.start()
+
+                    setTimeout(async () => {
+                      recorder.stop()
+                      stream.getTracks().forEach((t) => t.stop())
+                      const blob = new Blob(chunks, { type: 'audio/webm' })
+                      const reader = new FileReader()
+                      reader.onloadend = async () => {
+                        const base64 = (reader.result as string).split(',')[1]
+                        const res = await fetch('/api/test-stt', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            url: form.voiceBoxUrl,
+                            apiKey: form.voiceBoxApiKey,
+                            model: form.whisperModel || 'whisper-1',
+                            audio: base64,
+                          }),
+                        })
+                        const data = await res.json()
+                        if (data.ok && data.text) {
+                          setSttResult(`Heard: "${data.text.slice(0, 60)}"`)
+                        } else {
+                          setSttResult('error')
+                        }
+                        setSttTesting(false)
+                        setTimeout(() => setSttResult(null), 5000)
+                      }
+                      reader.readAsDataURL(blob)
+                    }, 3000)
+                  } catch {
+                    setSttResult('Mic blocked')
+                    setSttTesting(false)
+                    setTimeout(() => setSttResult(null), 3000)
+                  }
+                }}
+                disabled={sttTesting || !form.voiceBoxUrl}
+                variant="outline"
+                className="glass border-sky-400/30 bg-sky-400/10 text-sky-300 hover:bg-sky-400/20"
+              >
+                {sttTesting ? (
+                  <RefreshCw className="mr-1.5 h-3 w-3 animate-spin" />
+                ) : (
+                  <Mic className="mr-1.5 h-3 w-3" />
+                )}
+                <span className="text-[11px]">
+                  {sttTesting ? 'Speak now (3s)...' : typeof sttResult === 'string' && sttResult !== 'error' && sttResult !== 'Mic blocked' ? sttResult : sttResult === 'error' ? 'STT Failed' : sttResult === 'Mic blocked' ? 'Mic Blocked' : 'Test Whisper'}
+                </span>
+              </Button>
+            </div>
           </div>
 
           {/* Save button */}
