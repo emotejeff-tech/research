@@ -71,34 +71,88 @@ export default function ResearchConsole() {
   const degraded = routingMode === 'degraded'
 
   return (
-    <TiltCard className="relative overflow-hidden rounded-3xl p-[2px]"
-      style={{
-        background: 'linear-gradient(135deg, rgba(89,147,255,0.6) 0%, rgba(56,62,255,0.2) 40%, rgba(0,212,255,0.4) 70%, rgba(89,147,255,0.6) 100%)',
-        boxShadow: '0 0 40px -8px rgba(89,147,255,0.5), 0 0 80px -20px rgba(89,147,255,0.3), inset 0 0 20px -4px rgba(89,147,255,0.15)',
-      }}
-    >
-      {/* Neon glow border animation */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 rounded-3xl"
+    <div className="relative">
+      {/* OUTER GLOW FALLOFF — bright neon blue halo extending outward (matches image: ~10px falloff) */}
+      <div
+        className="pointer-events-none absolute -inset-[2px] rounded-[20px]"
         style={{
-          background: 'linear-gradient(135deg, rgba(89,147,255,0.4), transparent 30%, transparent 70%, rgba(89,147,255,0.4))',
-          filter: 'blur(8px)',
+          background: '#71bcfd',
+          filter: 'blur(4px)',
+          opacity: 0.5,
         }}
-        animate={{ opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
-      <div className="relative overflow-hidden rounded-3xl"
+      <div
+        className="pointer-events-none absolute -inset-[6px] rounded-[22px]"
         style={{
-          background: 'rgba(0, 0, 20, 0.85)',
-          backdropFilter: 'blur(24px) saturate(200%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(200%)',
-          border: '1px solid rgba(89, 147, 255, 0.25)',
+          background: 'linear-gradient(135deg, rgba(113,188,253,0.6), rgba(56,62,255,0.3), rgba(113,188,253,0.6))',
+          filter: 'blur(12px)',
+          opacity: 0.4,
+        }}
+      />
+      <motion.div
+        className="pointer-events-none absolute -inset-[14px] rounded-[28px]"
+        style={{
+          background: 'radial-gradient(ellipse at top, rgba(113,188,253,0.25), transparent 70%)',
+          filter: 'blur(20px)',
+        }}
+        animate={{ opacity: [0.15, 0.3, 0.15] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* BRIGHT NEON BORDER — the actual 2px glowing edge */}
+      <div
+        className="relative overflow-hidden rounded-[18px] p-[2px]"
+        style={{
+          background: 'linear-gradient(135deg, #71bcfd 0%, #383eff 50%, #71bcfd 100%)',
+          boxShadow: '0 0 12px rgba(113,188,253,0.5), inset 0 0 8px rgba(113,188,253,0.2)',
         }}
       >
-        {/* Inner clear glass layer */}
-        <div className="pointer-events-none absolute inset-0 rounded-3xl"
+      {/* INNER GAUSSIAN GLASS — deep blue, clear, frosted (matches image: #000061 base) */}
+      <div
+        className="relative overflow-hidden rounded-[16px]"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,40,0.85) 0%, rgba(0,0,97,0.9) 100%)',
+          backdropFilter: 'blur(30px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(30px) saturate(180%)',
+        }}
+      >
+        {/* Inner clear glass sheen — subtle top-to-bottom light refraction */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[16px]"
           style={{
-            background: 'linear-gradient(135deg, rgba(89,147,255,0.08) 0%, rgba(0,212,255,0.04) 50%, rgba(89,147,255,0.08) 100%)',
+            background: 'linear-gradient(180deg, rgba(113,188,253,0.08) 0%, transparent 20%, transparent 80%, rgba(113,188,253,0.04) 100%)',
+          }}
+        />
+        {/* Top edge neon line — the brightest part of the glow (matches image) */}
+        <div
+          className="pointer-events-none absolute top-0 left-2 right-2 h-[2px] rounded-full"
+          style={{
+            background: 'linear-gradient(90deg, transparent, #71bcfd 30%, #77cdff 50%, #71bcfd 70%, transparent)',
+            boxShadow: '0 0 10px #71bcfd, 0 0 20px rgba(113,188,253,0.5)',
+          }}
+        />
+        {/* Left edge neon line */}
+        <div
+          className="pointer-events-none absolute top-2 bottom-2 left-0 w-[1px] rounded-full"
+          style={{
+            background: 'linear-gradient(180deg, transparent, rgba(113,188,253,0.6) 30%, rgba(113,188,253,0.6) 70%, transparent)',
+            boxShadow: '0 0 6px rgba(113,188,253,0.4)',
+          }}
+        />
+        {/* Right edge neon line */}
+        <div
+          className="pointer-events-none absolute top-2 bottom-2 right-0 w-[1px] rounded-full"
+          style={{
+            background: 'linear-gradient(180deg, transparent, rgba(113,188,253,0.6) 30%, rgba(113,188,253,0.6) 70%, transparent)',
+            boxShadow: '0 0 6px rgba(113,188,253,0.4)',
+          }}
+        />
+        {/* Bottom edge neon line */}
+        <div
+          className="pointer-events-none absolute bottom-0 left-2 right-2 h-[1px] rounded-full"
+          style={{
+            background: 'linear-gradient(90deg, transparent, rgba(113,188,253,0.4) 30%, rgba(113,188,253,0.4) 70%, transparent)',
+            boxShadow: '0 0 6px rgba(113,188,253,0.3)',
           }}
         />
       <div className={cn('relative rounded-[20px] p-5 sm:p-7', planningGlow)}>
@@ -283,6 +337,7 @@ export default function ResearchConsole() {
         )}
       </div>
       </div>
-    </TiltCard>
+      </div>
+    </div>
   )
 }
