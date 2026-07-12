@@ -54,6 +54,7 @@ export default function SettingsPanel() {
     apiKey: overrides.apiKey ?? settings?.apiKey ?? '',
     model: overrides.model ?? settings?.model ?? '',
     enabled: overrides.enabled ?? settings?.enabled ?? false,
+    primary: overrides.primary ?? settings?.primary ?? false,
   }), [settings, overrides])
 
   const setField = (field: string, value: any) => {
@@ -160,12 +161,26 @@ export default function SettingsPanel() {
                 <div>
                   <div className="text-[12px] font-medium text-white/80">Enable as fallback tier</div>
                   <p className="text-[10px] text-white/40">
-                    When enabled, this provider is used as Tier 2 if the primary cloud is unavailable.
+                    When enabled, this provider is used as Tier 2 if the Z.ai cloud is unavailable.
                   </p>
                 </div>
                 <Switch
                   checked={form.enabled}
                   onCheckedChange={(v) => setField('enabled', v)}
+                />
+              </div>
+
+              {/* Use as PRIMARY engine toggle */}
+              <div className="flex items-center justify-between rounded-xl border border-emerald-400/20 bg-emerald-400/[0.05] p-3">
+                <div>
+                  <div className="text-[12px] font-medium text-emerald-200">Use as PRIMARY engine</div>
+                  <p className="text-[10px] text-white/40">
+                    Skip Z.ai entirely and use this provider for ALL LLM calls. Required if you don't have a Z.ai config file.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.primary}
+                  onCheckedChange={(v) => setField('primary', v)}
                 />
               </div>
 
@@ -270,9 +285,11 @@ export default function SettingsPanel() {
             <div className="text-[10px] text-white/35">
               {form.provider === 'zai'
                 ? 'Using the built-in Z.ai cloud gateway — no configuration needed.'
-                : form.enabled
-                  ? `Tier 2 active: ${form.provider} / ${form.model || '(no model)'}`
-                  : 'Provider configured but not enabled as a fallback tier.'}
+                : form.primary
+                  ? `PRIMARY engine: ${form.provider} / ${form.model || '(no model)'} — Z.ai skipped entirely`
+                  : form.enabled
+                    ? `Fallback tier: ${form.provider} / ${form.model || '(no model)'}`
+                    : 'Provider configured but not enabled.'}
             </div>
             <Button
               onClick={onSave}

@@ -14,7 +14,7 @@
  */
 import { getZAI } from './sdk'
 import { sleep, extractJSON } from '../util'
-import { getLocalLLMConfig, isLocalTierActive } from './settings'
+import { getLocalLLMConfig, isLocalTierActive, getSettings } from './settings'
 import type { LLMResult, Source } from '../types'
 
 export { extractJSON }
@@ -22,13 +22,20 @@ export { extractJSON }
 // ---------- Tier configuration ----------
 const LOCAL_LLM_TIMEOUT_MS = 6000 // fast-fail so we never stall on a dead endpoint
 
-// ---------- Tier 1: primary (z-ai cloud) ----------
-/** Primary LLM call with exponential-backoff retries. Throws on total failure. */
+// ---------- Tier 1: primary (z-ai cloud, or local if set as primary) ----------
+/** Primary LLM call with exponential-backoff retries. Throws on total failure.
+ * If the user set a local provider as PRIMARY in Settings, uses that instead of Z.ai.
+ */
 export async function llm(
   systemPrompt: string,
   userPrompt: string,
   retries = 2,
 ): Promise<string> {
+  // If local is set as primary, use it directly (skip Z.ai config requirement).
+  if (isLocalPrimary()) {
+    return localLLM(systemPrompt, userPrompt)
+  }
+
   let lastErr: any
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -46,7 +53,7 @@ export async function llm(
     } catch (e) {
       lastErr = e
       console.error(
-        `[llm] tier1 attempt ${attempt + 1}/${retries + 1} failed:`,
+        `[llm] attempt ${attempt + 1}/${retries + 1} failed:`,
         (e as Error)?.message,
       )
       if (attempt < retries) await sleep(800 * (attempt + 1))
@@ -108,8 +115,15 @@ export async function localLLM(
  */
 export type TaskComplexity = 'simple' | 'standard' | 'heavy'
 
+/** Check if the user has configured a local provider as the PRIMARY engine. */
+function isLocalPrimary(): boolean {
+  const s = getSettings()
+  return s.primary && s.provider !== 'zai' && !!s.baseURL && !!s.model
+}
+
 /** Multi-tier fallback pipeline: primary → local → degraded.
- * Returns the first tier that succeeds, with its tier identity recorded.
+ * If the user set a local provider as PRIMARY (in Settings), use it first.
+ * Otherwise: Z.ai cloud → local → degraded.
  * Complexity controls retry count (simple=1, standard=2, heavy=3).
  */
 export async function llmWithFallback(
@@ -119,20 +133,32 @@ export async function llmWithFallback(
 ): Promise<LLMResult> {
   const complexity = opts.complexity || 'standard'
   const retries = opts.retries ?? (complexity === 'simple' ? 1 : complexity === 'heavy' ? 3 : 2)
-  // Tier 1 — primary cloud gateway.
+
+  // If local provider is set as PRIMARY, try it first (skip Z.ai entirely).
+  if (isLocalPrimary()) {
+    try {
+      const content = await localLLM(systemPrompt, userPrompt)
+      return { content, mode: 'primary', tier: 'local' }
+    } catch (e) {
+      console.error('[llm] local primary failed:', (e as Error)?.message)
+      // Fall through to Z.ai as a secondary fallback.
+    }
+  }
+
+  // Tier 1 — Z.ai cloud gateway (skipped if local is primary and succeeded).
   try {
     const content = await llm(systemPrompt, userPrompt, retries)
     return { content, mode: 'primary', tier: 'primary' }
   } catch (e) {
     console.error(
-      '[llm] tier1 (primary) exhausted — stepping down:',
+      '[llm] tier1 (zai cloud) exhausted — stepping down:',
       (e as Error)?.message,
     )
   }
 
   // Tier 2 — local/remote model (Ollama / LM Studio / OpenRouter / llama.cpp).
-  // Only attempted if the user has enabled + configured a provider in Settings.
-  if (isLocalTierActive()) {
+  // Only attempted if enabled + configured (and not already tried as primary).
+  if (isLocalTierActive() && !isLocalPrimary()) {
     try {
       const content = await localLLM(systemPrompt, userPrompt)
       console.warn('[llm] tier2 (local) served the request — primary was unavailable.')

@@ -26,6 +26,8 @@ export interface LLMSettings {
   model: string
   /** Whether the local tier is enabled in the fallback pipeline. */
   enabled: boolean
+  /** When true, use the local provider as the PRIMARY engine (skip Z.ai entirely). */
+  primary: boolean
 }
 
 /** Provider presets with sensible defaults. */
@@ -89,6 +91,7 @@ const DEFAULT_SETTINGS: LLMSettings = {
   apiKey: '',
   model: '',
   enabled: false,
+  primary: false,
 }
 
 let settings: LLMSettings = { ...DEFAULT_SETTINGS }

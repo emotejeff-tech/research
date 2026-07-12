@@ -161,6 +161,7 @@ interface OrchestratorState {
     apiKey: string
     model: string
     enabled: boolean
+    primary: boolean
   } | null
   /** Provider presets for the settings UI. */
   providerPresets: Record<string, { label: string; defaultURL: string; defaultKey: string; defaultModel: string; needsKey: boolean; help: string }> | null
