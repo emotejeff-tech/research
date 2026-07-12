@@ -20,8 +20,9 @@ import { plan } from './agents/planner'
 import { discover } from './agents/researcher'
 import { synthesize, extractUpgrades, buildUpgradeReport } from './agents/synthesizer'
 import { critique } from './agents/critic'
-import { evolve, authorFromBlueprint, testTool, rollbackTool } from './agents/evolution'
+import { evolve, authorFromBlueprint, testTool, rollbackTool, runUnitTest } from './agents/evolution'
 import { dream } from './agents/dreamer'
+import { devilsAdvocate } from './agents/devils_advocate'
 import { runEvolvedTool } from './tools/plugin_runner'
 import {
   loadSavedRegistry,
@@ -31,6 +32,10 @@ import {
   type PluginMeta,
 } from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
+import { loadSearchCache, getCachedResults, cacheResults, getCacheStats } from './tools/search_cache'
+import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats } from './tools/vector_memory'
+import { deprecateStaleTools } from './tools/skill_deprecation'
+import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -124,6 +129,30 @@ async function runResearch(socket: any, query: string) {
       text: `Execution graph ready with ${task.subQueries.length} discovery branches.`,
       meta: { subqueries: task.subQueries },
     })
+
+    // RAG: retrieve past conclusions from vector memory before searching.
+    const pastConclusions = retrieveRelevant(query, 3)
+    if (pastConclusions.length > 0) {
+      emit('research:thought', {
+        agent: 'Memory',
+        text: `🧠 RAG: Retrieved ${pastConclusions.length} past conclusion(s) from execution memory — checking for known facts before hitting the web…`,
+      })
+      for (const pc of pastConclusions) {
+        emit('research:thought', {
+          agent: 'Memory',
+          text: `📄 Past: "${pc.query}" → ${pc.conclusion.slice(0, 100)}…`,
+        })
+      }
+    }
+
+    // Cache check: see if any sub-queries are already cached.
+    const cachedQueries = task.subQueries.filter((sq) => getCachedResults(sq) !== null)
+    if (cachedQueries.length > 0) {
+      emit('research:thought', {
+        agent: 'Cache',
+        text: `⚡ Cache: ${cachedQueries.length} sub-query(ies) already cached — will return instantly without hitting the web.`,
+      })
+    }
     await sleep(400)
 
     // -------- PHASE 2: DISCOVERY (Search Agent) --------
@@ -369,6 +398,45 @@ async function runResearch(socket: any, query: string) {
           text: `Draft ${iteration} produced (${draft.length} chars) via ${tier} tier.`,
         })
         await sleep(300)
+
+        // ---- PHASE 4.5: DEVIL'S ADVOCATE (cross-agent peer review) ----
+        try {
+          emit('research:thought', {
+            agent: "Devil's Advocate",
+            text: '😈 Cross-agent peer review: attempting to break the Synthesizer\'s logic before the formal Critic…',
+          })
+          const da = await devilsAdvocate(query, draft, task.sources)
+          if (da.fatalFlaws.length > 0 || da.weaknesses.length > 0) {
+            const allIssues = [...da.fatalFlaws, ...da.weaknesses]
+            emit('research:thought', {
+              agent: "Devil's Advocate",
+              text: `😈 Found ${da.fatalFlaws.length} fatal flaw(s) + ${da.weaknesses.length} weakness(es). Feeding to Actor as pre-critique feedback.`,
+            })
+            if (da.strongestCounter) {
+              emit('research:thought', {
+                agent: "Devil's Advocate",
+                text: `😈 Strongest counter: ${da.strongestCounter.slice(0, 120)}`,
+              })
+            }
+            // Merge Devil's Advocate findings into the feedback for the next iteration.
+            if (lastFeedback) {
+              lastFeedback += '; ' + allIssues.map((i) => `- ${i}`).join('; ')
+            } else {
+              lastFeedback = allIssues.map((i) => `- ${i}`).join('; ')
+            }
+          } else {
+            emit('research:thought', {
+              agent: "Devil's Advocate",
+              text: '😈 Logic holds — no fatal flaws found. Proceeding to formal Critic.',
+            })
+          }
+        } catch (e) {
+          emit('research:thought', {
+            agent: "Devil's Advocate",
+            text: `Peer review skipped: ${(e as Error).message}`,
+          })
+        }
+        await sleep(200)
 
         // ---- PHASE 5: CRITIQUE (Critic) ----
         task.phase = 'critique'
@@ -709,6 +777,11 @@ async function runResearch(socket: any, query: string) {
     }
     recordRun(runLog)
     socket.emit('telemetry:update', { log: runLog })
+
+    // Store conclusion in vector memory for future RAG retrieval.
+    if (task.finalReport && !degraded) {
+      storeConclusion(task.query, task.finalReport)
+    }
   } catch (err) {
     task.status = 'error'
     task.error = (err as Error)?.message || String(err)
@@ -776,6 +849,25 @@ io.on('connection', (socket) => {
     socket.emit('telemetry:history', { logs: getLogs() })
   })
 
+  socket.on('stats:request', () => {
+    const memStats = getMemoryStats()
+    const cacheStats = getCacheStats()
+    // System stats (CPU/memory from Node.js process)
+    const memUsage = process.memoryUsage()
+    socket.emit('stats:update', {
+      cpu: process.cpuUsage(),
+      mem: {
+        rss: memUsage.rss,
+        heapUsed: memUsage.heapUsed,
+        heapTotal: memUsage.heapTotal,
+      },
+      uptime: process.uptime(),
+      memory: memStats,
+      cache: cacheStats,
+      plugins: pluginRegistry.length,
+    })
+  })
+
   socket.on('telemetry:clear', () => {
     clearLogs()
     socket.emit('telemetry:history', { logs: [] })
@@ -789,6 +881,17 @@ io.on('connection', (socket) => {
 
 httpServer.listen(PORT, () => {
   initTelemetry()
+  loadSearchCache()
+  loadVectorMemory()
+  // Run skill deprecation on boot + every 6 hours.
+  const deprecated = deprecateStaleTools(pluginRegistryMeta)
+  if (deprecated.length > 0) {
+    pluginRegistry = reconstructPlugins(pluginRegistryMeta)
+  }
+  setInterval(() => {
+    const dep = deprecateStaleTools(pluginRegistryMeta)
+    if (dep.length > 0) pluginRegistry = reconstructPlugins(pluginRegistryMeta)
+  }, 1000 * 60 * 60 * 6)
   console.log(`[research-orchestrator] socket.io listening on :${PORT}`)
 })
 

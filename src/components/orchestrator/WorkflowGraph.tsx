@@ -3,6 +3,7 @@
 import ReactFlow, {
   Background,
   Controls,
+  MiniMap,
   type Node,
   type Edge,
   Position,
@@ -316,6 +317,25 @@ export default function WorkflowGraph() {
         <Controls
           showInteractive={false}
           className="!border-white/10 !bg-white/5 !backdrop-blur-md"
+        />
+        <MiniMap
+          nodeColor={(n) => {
+            const kind = (n.data as any)?.kind
+            const colors: Record<string, string> = {
+              coordinator: '#34d399',
+              subquery: '#5eead4',
+              source: '#94a3b8',
+              synthesis: '#a78bfa',
+              critic: '#f59e0b',
+              evolution: '#ec4899',
+              final: '#34d399',
+            }
+            return colors[kind] || '#64748b'
+          }}
+          maskColor="rgba(0,0,0,0.4)"
+          className="!rounded-lg !border !border-white/10 !bg-black/60"
+          pannable
+          zoomable
         />
       </ReactFlow>
       <motion.div

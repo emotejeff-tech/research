@@ -138,12 +138,22 @@ interface OrchestratorState {
   opsecAudits: { id: string; tool: string; itemsScrubbed: number; success: boolean; rotatedUA?: string; usageCount?: number; ts: number }[]
   /** UPGRADE mode: tool blueprints extracted from literature + compilation results. */
   upgradeStage: { stage: string; detail?: any } | null
+  /** Live hardware/system telemetry from the orchestrator. */
+  systemStats: {
+    mem: { rss: number; heapUsed: number; heapTotal: number }
+    uptime: number
+    memory: { count: number; oldestTs: number | null }
+    cache: { entries: number; totalHits: number }
+    plugins: number
+  } | null
 
   // actions
   init: () => void
   startResearch: (query: string) => void
   reset: () => void
   clearTelemetry: () => void
+  requestStats: () => void
+  sendCritiqueOverride: (action: 'accept' | 'revise', feedback?: string) => void
 }
 
 let socket: Socket | null = null
@@ -190,6 +200,8 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   telemetryLogs: [],
   evolutionStage: null,
   opsecAudits: [],
+  upgradeStage: null,
+  systemStats: null,
 
   init: () => {
     if (initialized) return
@@ -207,6 +219,8 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       set({ connected: true })
       socket?.emit('plugins:request', {})
       socket?.emit('history:request', {})
+      socket?.emit('telemetry:request', {})
+      socket?.emit('stats:request', {})
     })
     socket.on('disconnect', () => set({ connected: false }))
 
@@ -311,6 +325,14 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
           ts: Date.now(),
         }],
       }))
+    })
+
+    socket.on('research:upgrade', (d: any) => {
+      set({ upgradeStage: { stage: d.stage, detail: d.detail } })
+    })
+
+    socket.on('stats:update', (d: any) => {
+      set({ systemStats: d })
     })
 
     socket.on('research:routing', (d: any) => {
@@ -467,6 +489,14 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
   clearTelemetry: () => {
     socket?.emit('telemetry:clear', {})
+  },
+
+  requestStats: () => {
+    socket?.emit('stats:request', {})
+  },
+
+  sendCritiqueOverride: (action: 'accept' | 'revise', feedback?: string) => {
+    socket?.emit('critique:override', { action, feedback })
   },
 }))
 

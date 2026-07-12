@@ -27,6 +27,7 @@ import HistoryPanel from '@/components/orchestrator/HistoryPanel'
 import ImprovementGraph from '@/components/orchestrator/ImprovementGraph'
 import DreamPanel from '@/components/orchestrator/DreamPanel'
 import OpsecPanel from '@/components/orchestrator/OpsecPanel'
+import HardwareTelemetry from '@/components/orchestrator/HardwareTelemetry'
 import { GlassCard } from '@/components/orchestrator/GlassCard'
 import { usePhaseGlow } from '@/components/orchestrator/usePhaseGlow'
 
@@ -243,15 +244,23 @@ export default function Home() {
           <OpsecPanel />
         </motion.section>
 
-        {/* AUTONOMOUS IMPROVEMENT TRACKER */}
-        <motion.section
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-5"
-        >
-          <ImprovementGraph />
-        </motion.section>
+        {/* HARDWARE TELEMETRY + IMPROVEMENT TRACKER */}
+        <section className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_1.4fr]">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <HardwareTelemetry />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <ImprovementGraph />
+          </motion.div>
+        </section>
 
         {/* ARCHITECTURE / FEATURES */}
         <section className="mt-14">

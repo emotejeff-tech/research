@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ShieldCheck, RefreshCw, Check, AlertTriangle, ArrowRight } from 'lucide-react'
+import { ShieldCheck, RefreshCw, Check, AlertTriangle, ArrowRight, Hand } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
 import { usePhaseGlow } from './usePhaseGlow'
@@ -11,9 +12,12 @@ export default function CriticLoop() {
   const currentIteration = useOrchestrator((s) => s.currentIteration)
   const phase = useOrchestrator((s) => s.phase)
   const running = useOrchestrator((s) => s.running)
+  const sendOverride = useOrchestrator((s) => s.sendCritiqueOverride)
   const glow = usePhaseGlow(['critique'])
+  const [overrideText, setOverrideText] = useState('')
 
   const MAX = 3
+  const canOverride = running && phase === 'critique'
 
   return (
     <GlassCard premium className={`flex flex-col ${glow}`}>
@@ -151,6 +155,49 @@ export default function CriticLoop() {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Interactive critique override */}
+        <AnimatePresence>
+          {canOverride && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-4 rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-3"
+            >
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-amber-300">
+                <Hand className="h-3 w-3" /> Manual Intervention
+              </div>
+              <p className="mb-2 text-[11px] text-white/55">
+                Override the Critic: accept the flagged draft or force a revision with specific feedback.
+              </p>
+              <input
+                type="text"
+                value={overrideText}
+                onChange={(e) => setOverrideText(e.target.value)}
+                placeholder="Optional: type a course-correction command…"
+                className="mb-2 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-white/80 placeholder:text-white/30 outline-none focus:border-amber-400/40"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => sendOverride('accept')}
+                  className="flex items-center gap-1 rounded-lg bg-emerald-400/15 px-3 py-1.5 text-[11px] font-semibold text-emerald-300 transition-colors hover:bg-emerald-400/25"
+                >
+                  <Check className="h-3 w-3" /> Accept Draft
+                </button>
+                <button
+                  onClick={() => {
+                    sendOverride('revise', overrideText || undefined)
+                    setOverrideText('')
+                  }}
+                  className="flex items-center gap-1 rounded-lg bg-rose-400/15 px-3 py-1.5 text-[11px] font-semibold text-rose-300 transition-colors hover:bg-rose-400/25"
+                >
+                  <RefreshCw className="h-3 w-3" /> Force Revise
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </GlassCard>
   )

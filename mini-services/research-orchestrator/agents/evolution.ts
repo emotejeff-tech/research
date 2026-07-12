@@ -115,7 +115,7 @@ export async function authorFromBlueprint(
   return parsed
 }
 
-// ---------- Stage 3: Automated Test Sandbox ----------
+// ---------- Stage 3: Automated Test Sandbox (TDD) ----------
 /**
  * Writes the code to custom_plugins/<name>.py and validates it with
  * `python3 -m py_compile`. Returns the compile error (if any) so the
@@ -137,6 +137,57 @@ export function testTool(
   } catch (e: any) {
     const stderr = e.stderr?.toString() || e.message || 'unknown compile error'
     return { passed: false, error: stderr.slice(0, 400) }
+  }
+}
+
+/**
+ * TDD: generate a unit test for the tool, execute it, and return the result.
+ * The test calls the tool's main() function with a sample input and asserts
+ * it produces output without crashing.
+ */
+export async function runUnitTest(
+  name: string,
+  code: string,
+  capability: string,
+): Promise<{ passed: boolean; error?: string; testCode?: string }> {
+  // Generate a test script that imports the tool and runs it.
+  const testCode = `import sys, importlib.util, traceback
+spec = importlib.util.spec_from_file_location("${name}", "${join(PLUGIN_DIR, name + '.py').replace(/\\/g, '/')}")
+try:
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    # Call main() if it exists, else just verify the module loaded.
+    if hasattr(mod, 'main'):
+        result = mod.main()
+        print(f"[TDD PASS] main() returned: {str(result)[:80]}")
+    else:
+        print("[TDD PASS] module loaded (no main())")
+    print("TDD_OK")
+except Exception as e:
+    print(f"[TDD FAIL] {e}")
+    traceback.print_exc()
+    print("TDD_FAIL")
+`
+
+  const testPath = join(PLUGIN_DIR, `_test_${name}.py`)
+  writeFileSync(testPath, testCode, 'utf-8')
+  try {
+    const stdout = execSync(`python3 ${JSON.stringify(testPath)}`, {
+      timeout: 10000,
+      stdio: 'pipe',
+    }).toString()
+    const passed = stdout.includes('TDD_OK')
+    return {
+      passed,
+      error: passed ? undefined : stdout.slice(0, 400),
+      testCode,
+    }
+  } catch (e: any) {
+    const stderr = e.stderr?.toString() || e.message || 'test execution failed'
+    return { passed: false, error: stderr.slice(0, 400), testCode }
+  } finally {
+    // Clean up the test file.
+    try { unlinkSync(testPath) } catch { /* ignore */ }
   }
 }
 

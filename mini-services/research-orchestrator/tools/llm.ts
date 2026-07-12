@@ -101,17 +101,27 @@ export async function localLLM(
 
 // ---------- Tiered pipeline orchestrator ----------
 /**
- * Multi-tier fallback pipeline: primary → local → degraded.
+ * Task complexity levels for tiered fallback granularity.
+ * - 'simple': tool selection, classification → fewer retries (lightweight).
+ * - 'standard': planning, critique → normal retries.
+ * - 'heavy': synthesis, dreamer → max retries (reserve for quality).
+ */
+export type TaskComplexity = 'simple' | 'standard' | 'heavy'
+
+/** Multi-tier fallback pipeline: primary → local → degraded.
  * Returns the first tier that succeeds, with its tier identity recorded.
+ * Complexity controls retry count (simple=1, standard=2, heavy=3).
  */
 export async function llmWithFallback(
   systemPrompt: string,
   userPrompt: string,
-  opts: { retries?: number; degraded?: string } = {},
+  opts: { retries?: number; degraded?: string; complexity?: TaskComplexity } = {},
 ): Promise<LLMResult> {
+  const complexity = opts.complexity || 'standard'
+  const retries = opts.retries ?? (complexity === 'simple' ? 1 : complexity === 'heavy' ? 3 : 2)
   // Tier 1 — primary cloud gateway.
   try {
-    const content = await llm(systemPrompt, userPrompt, opts.retries)
+    const content = await llm(systemPrompt, userPrompt, retries)
     return { content, mode: 'primary', tier: 'primary' }
   } catch (e) {
     console.error(
