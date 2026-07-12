@@ -127,8 +127,8 @@ export async function retrieveRelevant(query: string, k = 3, threshold = 0.15): 
     try {
       const pineconeResults = await queryPinecone(query, k, s.pineconeApiKey, s.pineconeIndex)
       if (pineconeResults.length > 0) return pineconeResults
-    } catch (e) {
-      console.error('[vector-memory] Pinecone query failed, using local:', (e as Error).message)
+    } catch {
+      // Silent fallback — don't spam console on every query.
     }
   }
 

@@ -58,21 +58,22 @@ export async function executeInSandbox(
 
 // ---------- E2B Sandbox ----------
 async function executeE2b(code: string, args: string, apiKey: string): Promise<SandboxResult> {
-  // E2B's API: create a sandbox, run code, get result.
-  // The SDK uses /v1/sandboxes endpoint.
+  // E2B sandbox API: POST /v1/sandboxes to create, then run code.
   const res = await fetch('https://api.e2b.dev/v1/sandboxes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({}),
-    signal: AbortSignal.timeout(15000),
+    body: JSON.stringify({
+      template: 'base',
+    }),
+    signal: AbortSignal.timeout(20000),
   })
 
   if (!res.ok) {
-    const errText = await res.text().catch(() => '')
-    throw new Error(`E2B create HTTP ${res.status}: ${errText.slice(0, 200)}`)
+    // Don't spam console — just throw quietly so it falls back to local.
+    throw new Error(`E2B ${res.status}`)
   }
 
   const sandbox: any = await res.json()
@@ -140,8 +141,8 @@ async function executeDaytona(
   })
 
   if (!createRes.ok) {
-    const errText = await createRes.text().catch(() => '')
-    throw new Error(`Daytona create HTTP ${createRes.status}: ${errText.slice(0, 100)}`)
+    // Don't spam console — just throw quietly so it falls back to local.
+    throw new Error(`Daytona ${createRes.status}`)
   }
 
   const workspace: any = await createRes.json()

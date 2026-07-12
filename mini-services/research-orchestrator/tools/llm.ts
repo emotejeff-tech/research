@@ -20,7 +20,7 @@ import type { LLMResult, Source } from '../types'
 export { extractJSON }
 
 // ---------- Tier configuration ----------
-const LOCAL_LLM_TIMEOUT_MS = 30000 // 30s — local models can be slow, especially on first load
+const LOCAL_LLM_TIMEOUT_MS = 120000 // 120s — local models can be VERY slow (first load, large context)
 
 // ---------- Tier 1: primary (z-ai cloud, or local if set as primary) ----------
 /** Primary LLM call with exponential-backoff retries. Throws on total failure.

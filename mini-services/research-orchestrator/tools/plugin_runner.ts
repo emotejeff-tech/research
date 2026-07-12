@@ -51,9 +51,8 @@ export async function runEvolvedTool(toolName: string, args: string): Promise<{
         ok: result.ok,
         sandbox: result.sandbox,
       }
-    } catch (e) {
-      // If the sandbox fails, fall back to local execution.
-      console.error(`[plugin_runner] sandbox ${sandboxType} failed, using local:`, (e as Error).message)
+    } catch {
+      // Silent fallback to local — don't spam console on every tool execution.
     }
   }
 
