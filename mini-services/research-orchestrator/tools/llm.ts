@@ -103,6 +103,10 @@ export async function localLLM(
           { role: 'user', content: userPrompt },
         ],
         stream: false,
+        options: {
+          num_ctx: config.maxContextTokens,
+          temperature: config.temperature,
+        },
       }),
       signal: controller.signal,
     })

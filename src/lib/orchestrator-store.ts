@@ -162,6 +162,8 @@ interface OrchestratorState {
     model: string
     enabled: boolean
     primary: boolean
+    maxContextTokens: number
+    temperature: number
     tavilyApiKey?: string
     exaApiKey?: string
     youcomApiKey?: string

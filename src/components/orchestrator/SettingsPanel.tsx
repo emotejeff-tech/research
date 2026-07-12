@@ -64,6 +64,8 @@ export default function SettingsPanel() {
     model: overrides.model ?? settings?.model ?? '',
     enabled: overrides.enabled ?? settings?.enabled ?? false,
     primary: overrides.primary ?? settings?.primary ?? false,
+    maxContextTokens: overrides.maxContextTokens ?? settings?.maxContextTokens ?? 8192,
+    temperature: overrides.temperature ?? settings?.temperature ?? 0.7,
     tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
     exaApiKey: overrides.exaApiKey ?? settings?.exaApiKey ?? '',
     youcomApiKey: overrides.youcomApiKey ?? settings?.youcomApiKey ?? '',
@@ -209,6 +211,41 @@ export default function SettingsPanel() {
                   checked={form.primary}
                   onCheckedChange={(v) => setField('primary', v)}
                 />
+              </div>
+
+              {/* Context Window + Temperature */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">Context Window (tokens)</label>
+                  <select
+                    value={form.maxContextTokens}
+                    onChange={(e) => setField('maxContextTokens', parseInt(e.target.value))}
+                    className="glass w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-[12px] text-white/90 outline-none"
+                  >
+                    <option value={2048}>2,048 (fastest)</option>
+                    <option value={4096}>4,096</option>
+                    <option value={8192}>8,192 (default)</option>
+                    <option value={16384}>16,384</option>
+                    <option value={32768}>32,768</option>
+                    <option value={65536}>65,536</option>
+                    <option value={131072}>131,072 (max)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">Temperature</label>
+                  <select
+                    value={form.temperature}
+                    onChange={(e) => setField('temperature', parseFloat(e.target.value))}
+                    className="glass w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-[12px] text-white/90 outline-none"
+                  >
+                    <option value={0}>0 (deterministic)</option>
+                    <option value={0.3}>0.3 (focused)</option>
+                    <option value={0.7}>0.7 (balanced)</option>
+                    <option value={1.0}>1.0 (creative)</option>
+                    <option value={1.5}>1.5 (wild)</option>
+                    <option value={2.0}>2.0 (chaotic)</option>
+                  </select>
+                </div>
               </div>
 
               {/* Base URL */}

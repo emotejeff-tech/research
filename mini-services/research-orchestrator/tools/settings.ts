@@ -28,6 +28,10 @@ export interface LLMSettings {
   enabled: boolean
   /** When true, use the local provider as the PRIMARY engine (skip Z.ai entirely). */
   primary: boolean
+  /** Max context window (in tokens) to pass to the model. */
+  maxContextTokens: number
+  /** Temperature for generation (0-2). */
+  temperature: number
   /** Search API keys (optional — enable multi-provider search aggregation). */
   tavilyApiKey?: string
   exaApiKey?: string
@@ -114,6 +118,8 @@ const DEFAULT_SETTINGS: LLMSettings = {
   model: '',
   enabled: false,
   primary: false,
+  maxContextTokens: 8192,
+  temperature: 0.7,
 }
 
 let settings: LLMSettings = { ...DEFAULT_SETTINGS }
@@ -236,10 +242,12 @@ export function isLocalPrimary(): boolean {
 /**
  * Get the effective local LLM config.
  */
-export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string } {
+export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number } {
   return {
     baseURL: settings.baseURL || '',
     apiKey: settings.apiKey || 'none',
     model: settings.model || 'local-model',
+    maxContextTokens: settings.maxContextTokens || 8192,
+    temperature: settings.temperature ?? 0.7,
   }
 }
