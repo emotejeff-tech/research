@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useRef, type FormEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { Rocket, Loader2, Sparkles, RotateCcw, Cpu, AlertTriangle, Microscope, Wrench } from 'lucide-react'
+import { Rocket, Loader2, Sparkles, RotateCcw, Cpu, AlertTriangle, Microscope, Wrench, Mic, Volume2, Paperclip, Square } from 'lucide-react'
 import { useOrchestrator, PHASE_LABELS, type Phase, type TaskType } from '@/lib/orchestrator-store'
 import { usePhaseGlow } from './usePhaseGlow'
 import { cn } from '@/lib/utils'
@@ -59,7 +59,126 @@ export default function ResearchConsole() {
   const routingMode = useOrchestrator((s) => s.routingMode)
   const routingTier = useOrchestrator((s) => s.routingTier)
   const taskType = useOrchestrator((s) => s.taskType)
+  const llmSettings = useOrchestrator((s) => s.llmSettings)
   const planningGlow = usePhaseGlow(['planning'])
+
+  // Voice + file upload state
+  const [recording, setRecording] = useState(false)
+  const [transcribing, setTranscribing] = useState(false)
+  const [attachedFiles, setAttachedFiles] = useState<{ name: string; content: string; type: string }[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+
+  // Voice-to-text: record audio → send to Whisper → fill the query box
+  const toggleRecording = async () => {
+    if (recording) {
+      // Stop recording
+      mediaRecorderRef.current?.stop()
+      setRecording(false)
+      return
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const recorder = new MediaRecorder(stream)
+      const chunks: Blob[] = []
+      recorder.ondataavailable = (e) => chunks.push(e.data)
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop())
+        setTranscribing(true)
+        try {
+          const blob = new Blob(chunks, { type: 'audio/webm' })
+          const reader = new FileReader()
+          reader.onloadend = async () => {
+            const base64 = (reader.result as string).split(',')[1]
+            // Send to our STT API route
+            const res = await fetch('/api/test-stt', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                url: llmSettings?.voiceBoxUrl || '',
+                apiKey: llmSettings?.voiceBoxApiKey || '',
+                model: llmSettings?.whisperModel || 'whisper-1',
+                audio: base64,
+              }),
+            })
+            const data = await res.json()
+            if (data.ok && data.text) {
+              setQuery((prev) => (prev ? prev + ' ' + data.text : data.text))
+            }
+            setTranscribing(false)
+          }
+          reader.readAsDataURL(blob)
+        } catch {
+          setTranscribing(false)
+        }
+      }
+      recorder.start()
+      mediaRecorderRef.current = recorder
+      setRecording(true)
+    } catch {
+      // Mic blocked
+    }
+  }
+
+  // File upload: read text files as context
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const content = reader.result as string
+        setAttachedFiles((prev) => [
+          ...prev,
+          { name: file.name, content: content.slice(0, 5000), type: file.type || 'text' },
+        ])
+      }
+      // Read as text (works for .txt, .md, .json, .csv, .py, .js, etc.)
+      if (file.type.startsWith('text/') || file.name.match(/\.(txt|md|json|csv|py|js|ts|jsx|tsx|html|css|xml|yaml|yml|sql|sh)$/i)) {
+        reader.readAsText(file)
+      } else {
+        // For binary files, just store the name
+        setAttachedFiles((prev) => [
+          ...prev,
+          { name: file.name, content: `[Binary file: ${file.name}]`, type: file.type || 'binary' },
+        ])
+      }
+    })
+    // Reset input so the same file can be uploaded again
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const removeFile = (index: number) => {
+    setAttachedFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  // Read the final report aloud
+  const speakReport = async () => {
+    const report = useOrchestrator.getState().finalReport
+    if (!report) return
+    try {
+      const res = await fetch('/api/test-tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: llmSettings?.voiceBoxUrl || '',
+          apiKey: llmSettings?.voiceBoxApiKey || '',
+          model: llmSettings?.ttsModel || 'tts-1',
+          voice: llmSettings?.ttsVoice || 'alloy',
+          text: report.slice(0, 500),
+        }),
+      })
+      const data = await res.json()
+      if (data.ok && data.audio) {
+        const audio = new Audio(`data:audio/mp3;base64,${data.audio}`)
+        audio.play()
+      }
+    } catch {
+      /* best-effort */
+    }
+  }
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -234,6 +353,29 @@ export default function ResearchConsole() {
         </div>
 
         <form onSubmit={onSubmit} className="space-y-3">
+          {/* Attached files preview */}
+          {attachedFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {attachedFiles.map((f, i) => (
+                <div key={i} className="flex items-center gap-1.5 rounded-lg border border-sky-400/20 bg-sky-400/[0.06] px-2.5 py-1">
+                  <Paperclip className="h-3 w-3 text-sky-300" />
+                  <span className="max-w-[120px] truncate text-[10px] text-sky-200/80">{f.name}</span>
+                  <button type="button" onClick={() => removeFile(i)} className="text-sky-300/50 hover:text-sky-200">
+                    <span className="text-xs">&times;</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={handleFileUpload}
+            className="hidden"
+            accept=".txt,.md,.json,.csv,.py,.js,.ts,.jsx,.tsx,.html,.css,.xml,.yaml,.yml,.sql,.sh,.pdf,.doc,.docx"
+          />
           <textarea
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -271,6 +413,70 @@ export default function ResearchConsole() {
                 Reset
               </button>
             )}
+
+            {/* Voice-to-text (Whisper) button */}
+            <button
+              type="button"
+              onClick={toggleRecording}
+              disabled={running || transcribing || !llmSettings?.voiceBoxUrl}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all',
+                recording
+                  ? 'border-rose-400/40 bg-rose-400/15 text-rose-300 animate-pulse'
+                  : transcribing
+                    ? 'border-amber-400/30 bg-amber-400/10 text-amber-300'
+                    : 'border-sky-400/20 bg-sky-400/[0.06] text-sky-300 hover:bg-sky-400/15',
+                (!llmSettings?.voiceBoxUrl) && 'opacity-30 cursor-not-allowed',
+              )}
+              title={llmSettings?.voiceBoxUrl ? 'Voice input (Whisper)' : 'Configure VoiceBox in Settings first'}
+            >
+              {recording ? (
+                <Square className="h-3.5 w-3.5" />
+              ) : transcribing ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Mic className="h-3.5 w-3.5" />
+              )}
+              <span className="hidden sm:inline">
+                {recording ? 'Stop' : transcribing ? 'Transcribing...' : 'Voice'}
+              </span>
+            </button>
+
+            {/* File upload button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={running}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-sky-400/20 bg-sky-400/[0.06] px-3 py-2.5 text-xs font-medium text-sky-300 transition-all hover:bg-sky-400/15 disabled:opacity-30"
+              title="Attach files as context (.txt, .md, .json, .csv, .py, etc.)"
+            >
+              <Paperclip className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Attach</span>
+              {attachedFiles.length > 0 && (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-400/20 text-[9px] font-bold text-sky-200">
+                  {attachedFiles.length}
+                </span>
+              )}
+            </button>
+
+            {/* Read report aloud (TTS) button */}
+            {phase === 'final' && (
+              <button
+                type="button"
+                onClick={speakReport}
+                disabled={!llmSettings?.voiceBoxUrl}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-medium transition-all',
+                  'border-violet-400/20 bg-violet-400/[0.06] text-violet-300 hover:bg-violet-400/15',
+                  (!llmSettings?.voiceBoxUrl) && 'opacity-30 cursor-not-allowed',
+                )}
+                title={llmSettings?.voiceBoxUrl ? 'Read report aloud (TTS)' : 'Configure VoiceBox in Settings first'}
+              >
+                <Volume2 className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Read Aloud</span>
+              </button>
+            )}
+
             <div className="ml-auto hidden text-[11px] text-white/30 sm:block">
               ⏎ to launch
             </div>
