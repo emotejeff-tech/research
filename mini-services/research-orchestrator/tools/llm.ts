@@ -20,7 +20,7 @@ import type { LLMResult, Source } from '../types'
 export { extractJSON }
 
 // ---------- Tier configuration ----------
-const LOCAL_LLM_TIMEOUT_MS = 6000 // fast-fail so we never stall on a dead endpoint
+const LOCAL_LLM_TIMEOUT_MS = 30000 // 30s — local models can be slow, especially on first load
 
 // ---------- Tier 1: primary (z-ai cloud, or local if set as primary) ----------
 /** Primary LLM call with exponential-backoff retries. Throws on total failure.
@@ -31,9 +31,19 @@ export async function llm(
   userPrompt: string,
   retries = 2,
 ): Promise<string> {
-  // If local is set as primary, use it directly (skip Z.ai config requirement).
+  // If local is set as primary, use it directly with retries (skip Z.ai config requirement).
   if (isLocalPrimary()) {
-    return localLLM(systemPrompt, userPrompt)
+    let lastErr: any
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await localLLM(systemPrompt, userPrompt)
+      } catch (e) {
+        lastErr = e
+        console.error(`[llm] local attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
+        if (attempt < retries) await sleep(1000 * (attempt + 1))
+      }
+    }
+    throw lastErr
   }
 
   let lastErr: any

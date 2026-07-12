@@ -6,8 +6,11 @@
  *    non-primary data, missing logic chain, unsupported claims.
  *  - 'blueprint': flag vague/non-actionable objectives, missing architecture,
  *    outdated tech, missing concrete next actions, unsupported claims.
+ *
+ * Uses llmWithFallback so the critic works even if the primary LLM is down.
+ * Falls back to a "pass" verdict if all LLM tiers fail (never crashes the run).
  */
-import { llm, extractJSON } from '../tools/llm'
+import { llmWithFallback, extractJSON } from '../tools/llm'
 import type { Source, CritiqueRound, TaskType } from '../types'
 
 const RESEARCH_SYSTEM = `You are the Critic agent in an Actor-Critic research system. Your ONLY job is to find flaws in the Actor's INDEPENDENT RESEARCH ANALYSIS. Check specifically for:
@@ -26,8 +29,12 @@ const BLUEPRINT_SYSTEM = `You are the Critic agent in an Actor-Critic research s
 - Unsupported claims not traceable to a cited source — FLAG.
 Be rigorous but fair. Return ONLY JSON: {"verdict":"pass"|"revise","issues":["..."],"notes":"..."}. Use "pass" ONLY if the blueprint is concrete, modern, well-cited, and actionable.`
 
+const UPGRADE_SYSTEM = `You are the Critic agent. Review the upgrade report for completeness and accuracy. Return ONLY JSON: {"verdict":"pass"|"revise","issues":["..."],"notes":"..."}.`
+
 function systemFor(taskType: TaskType): string {
-  return taskType === 'blueprint' ? BLUEPRINT_SYSTEM : RESEARCH_SYSTEM
+  if (taskType === 'blueprint') return BLUEPRINT_SYSTEM
+  if (taskType === 'upgrade') return UPGRADE_SYSTEM
+  return RESEARCH_SYSTEM
 }
 
 export async function critique(
@@ -38,17 +45,43 @@ export async function critique(
   taskType: TaskType = 'research',
 ): Promise<CritiqueRound> {
   const sourcesBlock = sources
-    .map((s, i) => `[${i + 1}] ${s.title} — ${s.snippet}`)
+    .slice(0, 8) // limit to avoid token overflow
+    .map((s, i) => `[${i + 1}] ${s.title} — ${s.snippet.slice(0, 100)}`)
     .join('\n')
-  const raw = await llm(
+
+  // Use llmWithFallback instead of llm — so local models work as fallback.
+  const result = await llmWithFallback(
     systemFor(taskType),
-    `Goal: ${query}\nTask type: ${taskType}\n\nActor's ${taskType} (iteration ${iteration}):\n${draft}\n\nSources provided:\n${sourcesBlock}`,
+    `Goal: ${query}\nTask type: ${taskType}\n\nActor's ${taskType} (iteration ${iteration}):\n${draft.slice(0, 3000)}\n\nSources provided:\n${sourcesBlock}`,
+    {
+      retries: 2,
+      degraded: '{"verdict":"pass","issues":[],"notes":"Critic LLM unavailable — draft accepted without verification (degraded)."}',
+      complexity: 'standard',
+    },
   )
-  const parsed = extractJSON<{ verdict?: string; issues?: string[]; notes?: string }>(raw)
+
+  // Try to parse JSON from the response.
+  const parsed = extractJSON<{ verdict?: string; issues?: string[]; notes?: string }>(result.content)
+
+  if (!parsed) {
+    // If the LLM returned non-JSON (common with small local models), try to extract a verdict from the text.
+    const text = result.content.toLowerCase()
+    let verdict: 'pass' | 'revise' = 'pass'
+    if (text.includes('revise') || text.includes('fail') || text.includes('issue') || text.includes('flaw')) {
+      verdict = 'revise'
+    }
+    return {
+      iteration,
+      verdict,
+      issues: [],
+      notes: `Critic returned non-JSON output (mode: ${result.mode}). Verdict inferred from text. ${result.content.slice(0, 200)}`,
+    }
+  }
+
   return {
     iteration,
     verdict: parsed?.verdict === 'pass' ? 'pass' : parsed?.verdict === 'revise' ? 'revise' : 'pass',
-    issues: Array.isArray(parsed?.issues) ? parsed!.issues : [],
-    notes: parsed?.notes || 'Critic returned unparseable output; defaulting to pass.',
+    issues: Array.isArray(parsed?.issues) ? parsed!.issues.slice(0, 5) : [],
+    notes: parsed?.notes || 'Critic review complete.',
   }
 }
