@@ -846,6 +846,49 @@ async function runResearch(socket: any, query: string) {
         /* best-effort */
       }
     }
+
+    // -------- OSINT INTELLIGENCE GATHERING (Google Dorking) --------
+    // OPSEC isn't just defensive — it's also the skill to find freely-public
+    // information that seems private. The google_dorker constructs advanced
+    // dork queries to surface exposed data, credentials, user info, etc.
+    if (pluginRegistryMeta['google_dorker']) {
+      emit('research:thought', {
+        agent: 'OPSEC',
+        text: '🔍 OSINT: Invoking [google_dorker] to construct advanced dork queries for finding publicly exposed data…',
+      })
+      try {
+        const dorkInput = task.query.slice(0, 200)
+        const dorkResult = await runEvolvedTool('google_dorker', dorkInput)
+        if (dorkResult.ok && dorkResult.stdout) {
+          const meta = recordToolExecution(pluginRegistryMeta, 'google_dorker', true)
+          // Parse the dork output to count categories found.
+          const categories = (dorkResult.stdout.match(/\[(EXPOSED_FILES|CREDENTIALS|USER_DATA|EXPOSED_DIRS|CACHED_VERSIONS)\]/g) || [])
+          const dorkCount = categories.length
+          emit('research:opsec', {
+            tool: 'google_dorker',
+            dorkCount,
+            dorkOutput: dorkResult.stdout.slice(0, 500),
+            success: true,
+            usageCount: meta?.usageCount,
+          })
+          emit('research:thought', {
+            agent: 'OPSEC',
+            text: `🔍 OSINT: Constructed ${dorkCount} dork queries across ${new Set(categories).size} categories — these find freely-public data that may appear private (exposed files, credentials, user data, directories).`,
+          })
+          // Append the dork intelligence to the final report as an OSINT appendix.
+          task.draft += '\n\n---\n\n## 🔍 OSINT Intelligence Appendix\n\n> The following Google dork queries were auto-generated to find publicly exposed data related to this research topic. These use freely-available public search techniques to surface information that may appear private.\n\n```\n' + dorkResult.stdout.slice(0, 1500) + '\n```\n'
+        } else {
+          recordToolExecution(pluginRegistryMeta, 'google_dorker', false)
+          emit('research:opsec', { tool: 'google_dorker', dorkCount: 0, success: false })
+        }
+      } catch (e) {
+        emit('research:opsec', { tool: 'google_dorker', dorkCount: 0, success: false, error: (e as Error).message })
+        emit('research:thought', {
+          agent: 'OPSEC',
+          text: `🔍 OSINT: Dorker failed — ${(e as Error).message}`,
+        })
+      }
+    }
     await sleep(300)
 
     // -------- PHASE 6: FINAL --------

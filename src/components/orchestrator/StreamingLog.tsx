@@ -97,21 +97,22 @@ export default function StreamingLog() {
             const isToolExecution = entry.text.includes('⚡')
             const isReflection = entry.text.includes('🧠') && !entry.text.includes('🧬')
             const isOpsec = entry.text.includes('🛡️')
+            const isOsint = entry.text.includes('🔍')
             const isHypothesis = entry.text.includes('🔬') || entry.text.includes('📋')
             const isSwarm = entry.text.includes('🐝')
             const isSaboteur = entry.text.includes('🎭')
             const isMetaPrompt = entry.text.includes('🧬') || entry.text.includes('META-PROMPT')
             const isDevilsAdvocate = entry.text.includes('😈')
-            const lifecycleClass = isSaboteur
-              ? 'border-rose-500/40 bg-rose-500/[0.1]'
-              : isOpsec
+            const lifecycleClass = isOsint
+              ? 'border-amber-500/40 bg-amber-500/[0.1]'
+              : isSaboteur
                 ? 'border-rose-500/40 bg-rose-500/[0.1]'
-                : isHypothesis
-                  ? 'border-cyan-500/30 bg-cyan-500/[0.08]'
-                  : isSwarm
-                    ? 'border-yellow-500/30 bg-yellow-500/[0.08]'
-                    : isSaboteur
-                      ? 'border-rose-500/30 bg-rose-500/[0.08]'
+                : isOpsec
+                  ? 'border-rose-500/40 bg-rose-500/[0.1]'
+                  : isHypothesis
+                    ? 'border-cyan-500/30 bg-cyan-500/[0.08]'
+                    : isSwarm
+                      ? 'border-yellow-500/30 bg-yellow-500/[0.08]'
                       : isMetaPrompt
                         ? 'border-emerald-500/30 bg-emerald-500/[0.08]'
                         : isDevilsAdvocate
@@ -123,25 +124,27 @@ export default function StreamingLog() {
                               : isReflection
                                 ? 'border-violet-500/25 bg-violet-500/[0.06]'
                                 : 'border-white/5 bg-white/[0.03]'
-            const lifecycleColor = isSaboteur
-              ? '#fb7185'
-              : isOpsec
+            const lifecycleColor = isOsint
+              ? '#fbbf24'
+              : isSaboteur
                 ? '#fb7185'
-                : isHypothesis
-                  ? '#22d3ee'
-                  : isSwarm
-                    ? '#facc15'
-                    : isMetaPrompt
-                      ? '#34d399'
-                      : isDevilsAdvocate
-                        ? '#fb923c'
-                        : isToolCreation
-                          ? '#f472b6'
-                          : isToolExecution
-                            ? '#fbbf24'
-                            : isReflection
-                              ? '#a78bfa'
-                              : c
+                : isOpsec
+                  ? '#fb7185'
+                  : isHypothesis
+                    ? '#22d3ee'
+                    : isSwarm
+                      ? '#facc15'
+                      : isMetaPrompt
+                        ? '#34d399'
+                        : isDevilsAdvocate
+                          ? '#fb923c'
+                          : isToolCreation
+                            ? '#f472b6'
+                            : isToolExecution
+                              ? '#fbbf24'
+                              : isReflection
+                                ? '#a78bfa'
+                                : c
             return (
               <motion.div
                 key={entry.id}

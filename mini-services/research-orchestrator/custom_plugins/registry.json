@@ -102,18 +102,18 @@
     "name": "ua_rotator",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 7,
+    "usageCount": 8,
     "created": 1783822606744,
-    "lastUsed": 1783828382782,
+    "lastUsed": 1783830487683,
     "successRate": 1
   },
   "opsec_log_scrubber": {
     "name": "opsec_log_scrubber",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 7,
+    "usageCount": 8,
     "created": 1783822606744,
-    "lastUsed": 1783828382746,
+    "lastUsed": 1783830487636,
     "successRate": 1
   },
   "inmate_record_extractor": {
@@ -151,5 +151,14 @@
     "gapAnalysis": "battery_lifecycle_cost_analysis_extractor",
     "testStatus": "patched",
     "executionStatus": "ok"
+  },
+  "google_dorker": {
+    "name": "google_dorker",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783830431526,
+    "lastUsed": 1783830487888,
+    "successRate": 1
   }
 }

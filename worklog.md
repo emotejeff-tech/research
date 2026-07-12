@@ -406,3 +406,25 @@ VERIFICATION:
 
 Stage Summary:
 - Full LLM provider settings system is live. Users can configure Ollama, LM Studio, OpenRouter, llama.cpp, or any custom OpenAI-compatible endpoint via a glassmorphic settings modal. The "Fetch" button auto-discovers available models from the provider's endpoint and populates a dropdown for easy selection — no manual model name typing needed. Settings persist to settings.json and are used as Tier 2 in the fallback pipeline when enabled. Browser-verified end-to-end. Lint clean.
+
+---
+Task ID: 14
+Agent: orchestrator (main)
+Task: Reposition OPSEC from "defensive auditor" to "OSINT intelligence skills" — add Google dorking capability to find freely-public information that appears private (user data, exposed files, credentials, directories).
+
+Work Log:
+- Created google_dorker.py: OSINT skill that constructs advanced Google dork queries across 5 categories:
+  - EXPOSED_FILES: filetype:pdf/xls/sql/env/config
+  - CREDENTIALS: "password", "api key", "BEGIN RSA PRIVATE KEY", "authorization: bearer"
+  - USER_DATA: intext:"email"/"phone"/"address", inurl:admin/login, intext:"ssn"
+  - EXPOSED_DIRS: intitle:"index of" /backup, /admin, /uploads
+  - CACHED_VERSIONS: cache:, inurl:wp-config.php, inurl:.git, inurl:phpinfo
+  Each template is parameterized by domain extracted from the query. Generates 10 dorks (2 per category). Includes responsible-use disclaimer.
+- Added google_dorker to SEED_TOOLS in plugin_registry.ts with OSINT-oriented description: "OSINT skill: constructs advanced Google dork queries to find publicly exposed data that appears private — user data, config files, credentials, directories."
+- index.ts: added OSINT Intelligence Gathering phase after the defensive OPSEC audit, before final. Runs google_dorker with the query, parses the output to count dork categories, emits research:opsec event with dorkCount + dorkOutput, appends a "🔍 OSINT Intelligence Appendix" to the final report with the actual dork queries.
+- OpsecPanel.tsx: repositioned from "OPSEC Audit · Defensive Security" to "OPSEC · OSINT Intelligence Skills" with subtitle "Google dorking · log scrubbing · footprint rotation · exposed-data discovery". Added a third stat card: "dork queries" (amber, Search icon) alongside "items scrubbed" (rose) and "UA rotations" (sky). Updated empty-state text to emphasize finding freely-public information that seems private.
+- StreamingLog.tsx: added 🔍 OSINT emoji styling (amber, highest priority) so dorking events pop distinctly from defensive 🛡️ OPSEC events.
+- VERIFICATION: Ran "Evaluate the security posture of example.com" — 🔍 google_dorker constructed 10 dork queries across 5 categories, appended to the final report as an OSINT appendix. Panel shows the dork count. No errors. Lint clean.
+
+Stage Summary:
+- OPSEC is now positioned correctly as OSINT intelligence skills, not just a defensive auditor. The google_dorker tool constructs advanced dork queries (filetype, site, intitle, inurl, cache, intext) to find freely-public information that appears private — exposed files, credentials, user data, directory listings, and cached versions. These are appended to every research report as an OSINT Intelligence Appendix. The panel shows dork queries + items scrubbed + UA rotations as three distinct stats. Browser-verified.

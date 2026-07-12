@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { ShieldCheck, ShieldAlert, Eraser, Globe, CheckCircle2, XCircle } from 'lucide-react'
+import { ShieldCheck, ShieldAlert, Eraser, Globe, CheckCircle2, XCircle, Search, Terminal } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
 import { usePhaseGlow } from './usePhaseGlow'
@@ -16,24 +16,27 @@ export default function OpsecPanel() {
     .filter((a) => a.tool === 'opsec_log_scrubber')
     .reduce((sum, a) => sum + (a.itemsScrubbed || 0), 0)
   const uaRotations = audits.filter((a) => a.tool === 'ua_rotator').length
+  const dorkQueries = audits
+    .filter((a) => a.tool === 'google_dorker')
+    .reduce((sum, a) => sum + (a.itemsScrubbed || 0), 0) // itemsScrubbed field reused for dorkCount
   const hasAudits = audits.length > 0
 
   return (
     <GlassCard premium className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<ShieldCheck className="h-4 w-4" />}
-        title="OPSEC Audit · Defensive Security"
-        subtitle="Log scrubbing · footprint obfuscation · credential redaction"
+        title="OPSEC · OSINT Intelligence Skills"
+        subtitle="Google dorking · log scrubbing · footprint rotation · exposed-data discovery"
         accent="#fb7185"
         right={
           hasAudits ? (
             <span className="rounded-full bg-rose-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-rose-300">
-              {audits.length} audit{audits.length !== 1 ? 's' : ''}
+              {audits.length} action{audits.length !== 1 ? 's' : ''}
             </span>
           ) : running && phase === 'final' ? (
             <span className="flex items-center gap-1.5 rounded-full bg-rose-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-rose-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-400" />
-              auditing
+              running
             </span>
           ) : null
         }
@@ -49,11 +52,10 @@ export default function OpsecPanel() {
               className="flex flex-col items-center justify-center gap-3 py-8 text-center"
             >
               <ShieldCheck className="h-8 w-8 text-white/15" />
-              <p className="max-w-[280px] text-sm text-white/40">
-                Before final delivery, the OPSEC audit runs the{' '}
-                <code className="text-rose-300/70">opsec_log_scrubber</code> to
-                strip credentials, paths, emails and IPs from the report — and
-                rotates the research footprint to avoid detection.
+              <p className="max-w-[300px] text-sm text-white/40">
+                OPSEC skills find freely-public information that seems private —
+                using Google dorks to surface exposed files, credentials, and
+                user data. Also scrubs output and rotates footprints.
               </p>
             </motion.div>
           )}
@@ -66,7 +68,16 @@ export default function OpsecPanel() {
               className="space-y-3"
             >
               {/* Summary stats */}
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-3 gap-2.5">
+                <div className="flex items-center gap-2.5 rounded-xl border border-amber-400/20 bg-amber-400/[0.05] px-3 py-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/15 text-amber-300">
+                    <Search className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <div className="text-lg font-bold text-white/90">{dorkQueries}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40">dork queries</div>
+                  </div>
+                </div>
                 <div className="flex items-center gap-2.5 rounded-xl border border-rose-400/20 bg-rose-400/[0.05] px-3 py-2.5">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-400/15 text-rose-300">
                     <Eraser className="h-4 w-4" />
