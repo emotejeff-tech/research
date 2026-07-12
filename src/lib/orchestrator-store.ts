@@ -239,14 +239,22 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   init: () => {
     if (initialized) return
     initialized = true
-    socket = io('/?XTransformPort=3003', {
-      transports: ['websocket', 'polling'],
-      forceNew: true,
-      reconnection: true,
-      reconnectionAttempts: 10,
-      reconnectionDelay: 1200,
-      timeout: 12000,
-    })
+
+    // Detect environment: behind Caddy gateway (port 81) vs direct (Windows/no proxy).
+    // When behind Caddy, use the XTransformPort query param so Caddy routes to :3003.
+    // When running directly (e.g. localhost:3000 on Windows), connect to :3003 explicitly.
+    const isBehindCaddy =
+      typeof window !== 'undefined' &&
+      (window.location.port === '81' ||
+        window.location.hostname.endsWith('.space-z.ai') ||
+        window.location.search.includes('XTransformPort'))
+
+    const socketUrl = isBehindCaddy ? '/' : 'http://localhost:3003'
+    const socketOpts = isBehindCaddy
+      ? { transports: ['websocket', 'polling'], forceNew: true, reconnection: true, reconnectionAttempts: 10, reconnectionDelay: 1200, timeout: 12000 }
+      : { transports: ['websocket', 'polling'], forceNew: true, reconnection: true, reconnectionAttempts: 10, reconnectionDelay: 1200, timeout: 12000, cors: { origin: '*' } }
+
+    socket = io(isBehindCaddy ? '/?XTransformPort=3003' : 'http://localhost:3003', socketOpts)
 
     socket.on('connect', () => {
       set({ connected: true })
