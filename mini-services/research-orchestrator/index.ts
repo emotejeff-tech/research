@@ -42,6 +42,7 @@ import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
 import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
 import { announce, isVoiceEnabled } from './tools/voicebox'
+import { discoverEnvKeys, runHealthChecks } from './tools/health_check'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -54,6 +55,9 @@ const pluginRegistryMeta: Record<string, PluginMeta> = loadSavedRegistry()
 /** In-memory plugin list (reconstructed from disk + metadata at boot). */
 let pluginRegistry: Plugin[] = reconstructPlugins(pluginRegistryMeta)
 const history: TaskState[] = []
+
+/** Latest health check statuses (updated on boot + on request). */
+let latestHealthStatuses: any[] = []
 
 /** Broadcast the current plugin list to a socket. */
 function broadcastPlugins(socket: any) {
@@ -1081,6 +1085,17 @@ io.on('connection', (socket) => {
     socket.emit('settings:models', { models: result.models, error: result.error })
   })
 
+  // Health checks
+  socket.on('health:request', async () => {
+    const statuses = await runHealthChecks()
+    latestHealthStatuses = statuses
+    socket.emit('health:update', { statuses })
+  })
+  // Send cached statuses immediately
+  if (latestHealthStatuses.length > 0) {
+    socket.emit('health:update', { statuses: latestHealthStatuses })
+  }
+
   socket.on('telemetry:clear', () => {
     clearLogs()
     socket.emit('telemetry:history', { logs: [] })
@@ -1098,6 +1113,22 @@ httpServer.listen(PORT, () => {
   loadVectorMemory()
   loadMetaPrompts()
   loadSettings()
+
+  // Environment auto-discovery: scan env vars for API keys.
+  const envDiscovery = discoverEnvKeys()
+  if (envDiscovery.found.length > 0) {
+    console.log(`[env-discovery] found API keys: ${envDiscovery.found.join(', ')}`)
+  }
+
+  // Pre-flight health checks on all configured providers.
+  console.log('[health] running pre-flight checks…')
+  runHealthChecks().then((statuses) => {
+    const online = statuses.filter((s) => s.status === 'online').length
+    const offline = statuses.filter((s) => s.status === 'offline').length
+    const unconfigured = statuses.filter((s) => s.status === 'unconfigured').length
+    console.log(`[health] ${online} online, ${offline} offline, ${unconfigured} unconfigured`)
+    latestHealthStatuses = statuses
+  }).catch(() => { /* best-effort */ })
   // Run skill deprecation on boot + every 6 hours.
   const deprecated = deprecateStaleTools(pluginRegistryMeta)
   if (deprecated.length > 0) {

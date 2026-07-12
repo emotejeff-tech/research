@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles, AlertTriangle, Microscope, Wrench } from 'lucide-react'
+import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles, AlertTriangle, Microscope, Wrench, Download } from 'lucide-react'
 import { useOrchestrator, type TaskType } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
 import { usePhaseGlow } from './usePhaseGlow'
@@ -177,9 +177,44 @@ export default function FinalReport() {
 
               {/* Report */}
               {finalReport ? (
-                <div className="report-prose scroll-fancy max-h-[480px] overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-5">
-                  <ReactMarkdown>{finalReport}</ReactMarkdown>
-                </div>
+                <>
+                  <div className="report-prose scroll-fancy max-h-[480px] overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-5">
+                    <ReactMarkdown>{finalReport}</ReactMarkdown>
+                  </div>
+                  {/* Multi-Format Export */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase tracking-wider text-white/30">Export:</span>
+                    {[
+                      { fmt: 'Markdown', ext: 'md', mime: 'text/markdown' },
+                      { fmt: 'JSON', ext: 'json', mime: 'application/json' },
+                      { fmt: 'HTML', ext: 'html', mime: 'text/html' },
+                      { fmt: 'Plain Text', ext: 'txt', mime: 'text/plain' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.fmt}
+                        onClick={() => {
+                          let content = finalReport
+                          if (opt.ext === 'json') {
+                            content = JSON.stringify({ query, report: finalReport, sources, date: new Date().toISOString() }, null, 2)
+                          } else if (opt.ext === 'html') {
+                            content = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${query}</title><style>body{font-family:system-ui;max-width:800px;margin:2rem auto;padding:1rem;line-height:1.6;color:#1a1a1a}pre{background:#f4f4f4;padding:1rem;border-radius:8px;overflow-x:auto}code{background:#f4f4f4;padding:2px 6px;border-radius:3px}h1,h2,h3{color:#2d2d2d}a{color:#0066cc}blockquote{border-left:3px solid #ccc;margin:0;padding-left:1rem;color:#666}</style></head><body><pre style="white-space:pre-wrap">${finalReport.replace(/</g, '&lt;')}</pre></body></html>`
+                          }
+                          const blob = new Blob([content], { type: opt.mime })
+                          const url = URL.createObjectURL(blob)
+                          const a = document.createElement('a')
+                          a.href = url
+                          a.download = `nexus-report.${opt.ext}`
+                          a.click()
+                          URL.revokeObjectURL(url)
+                        }}
+                        className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-white/50 transition-colors hover:border-emerald-400/30 hover:bg-emerald-400/10 hover:text-emerald-300"
+                      >
+                        <Download className="h-2.5 w-2.5" />
+                        {opt.fmt}
+                      </button>
+                    ))}
+                  </div>
+                </>
               ) : (
                 <div className="space-y-2.5">
                   {Array.from({ length: 4 }).map((_, i) => (

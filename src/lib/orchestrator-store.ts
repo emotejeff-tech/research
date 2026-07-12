@@ -187,6 +187,8 @@ interface OrchestratorState {
   availableModels: string[]
   /** Settings modal open state. */
   settingsOpen: boolean
+  /** Pre-flight health check statuses. */
+  healthStatuses: { name: string; type: string; status: string; latencyMs?: number; detail?: string }[]
 
   // actions
   init: () => void
@@ -254,6 +256,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   providerPresets: null,
   availableModels: [],
   settingsOpen: false,
+  healthStatuses: [],
 
   init: () => {
     if (initialized) return
@@ -297,6 +300,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       socket?.emit('telemetry:request', {})
       socket?.emit('stats:request', {})
       socket?.emit('metaPrompt:request', {})
+      socket?.emit('health:request', {})
     })
     socket.on('disconnect', () => set({ connected: false }))
 
@@ -444,14 +448,15 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
     socket.on('voice:announce', (d: any) => {
       if (d?.audio) {
-        // Play the base64 audio in the browser.
         try {
           const audio = new Audio(`data:audio/mp3;base64,${d.audio}`)
           audio.play().catch(() => { /* autoplay blocked */ })
-        } catch {
-          /* ignore playback errors */
-        }
+        } catch { /* ignore */ }
       }
+    })
+
+    socket.on('health:update', (d: any) => {
+      set({ healthStatuses: d.statuses || [] })
     })
 
     socket.on('research:routing', (d: any) => {
