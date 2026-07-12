@@ -71,13 +71,42 @@ export default function ResearchConsole() {
   const degraded = routingMode === 'degraded'
 
   return (
-    <TiltCard className="glass-strong relative overflow-hidden rounded-3xl p-1.5">
-      {/* glow border */}
-      <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-400/10 via-amber-400/5 to-rose-400/10" />
-      <div className={cn('relative rounded-[20px] bg-black/30 p-5 sm:p-7', planningGlow)}>
+    <TiltCard className="relative overflow-hidden rounded-3xl p-[2px]"
+      style={{
+        background: 'linear-gradient(135deg, rgba(89,147,255,0.6) 0%, rgba(56,62,255,0.2) 40%, rgba(0,212,255,0.4) 70%, rgba(89,147,255,0.6) 100%)',
+        boxShadow: '0 0 40px -8px rgba(89,147,255,0.5), 0 0 80px -20px rgba(89,147,255,0.3), inset 0 0 20px -4px rgba(89,147,255,0.15)',
+      }}
+    >
+      {/* Neon glow border animation */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-3xl"
+        style={{
+          background: 'linear-gradient(135deg, rgba(89,147,255,0.4), transparent 30%, transparent 70%, rgba(89,147,255,0.4))',
+          filter: 'blur(8px)',
+        }}
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="relative overflow-hidden rounded-3xl"
+        style={{
+          background: 'rgba(0, 0, 20, 0.85)',
+          backdropFilter: 'blur(24px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+          border: '1px solid rgba(89, 147, 255, 0.25)',
+        }}
+      >
+        {/* Inner clear glass layer */}
+        <div className="pointer-events-none absolute inset-0 rounded-3xl"
+          style={{
+            background: 'linear-gradient(135deg, rgba(89,147,255,0.08) 0%, rgba(0,212,255,0.04) 50%, rgba(89,147,255,0.08) 100%)',
+          }}
+        />
+      <div className={cn('relative rounded-[20px] p-5 sm:p-7', planningGlow)}>
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-400/15 text-emerald-300">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ background: 'rgba(89,147,255,0.15)', color: '#5993ff' }}
+            >
               <Sparkles className="h-4 w-4" />
             </span>
             <div>
@@ -252,6 +281,7 @@ export default function ResearchConsole() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </TiltCard>
   )
