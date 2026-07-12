@@ -22,21 +22,46 @@ function formatUptime(seconds: number): string {
   return `${s}s`
 }
 
-function StatBar({ label, value, max, color, fmt }: { label: string; value: number; max: number; color: string; fmt: (n: number) => string }) {
+/** Circular glassmorphic ring gauge. */
+function RingGauge({ value, max, color, label, sublabel, icon }: {
+  value: number
+  max: number
+  color: string
+  label: string
+  sublabel: string
+  icon: React.ReactNode
+}) {
   const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0
+  const radius = 28
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (pct / 100) * circumference
+  const isHigh = pct > 80 // flash if over 80%
+
   return (
-    <div>
-      <div className="mb-1 flex items-center justify-between text-[10px]">
-        <span className="uppercase tracking-wider text-white/40">{label}</span>
-        <span className="font-mono text-white/70">{fmt(value)}</span>
+    <div className="flex flex-col items-center rounded-xl border border-white/10 bg-white/[0.03] p-3">
+      <div className="relative flex h-20 w-20 items-center justify-center">
+        <svg className="h-20 w-20 -rotate-90" viewBox="0 0 70 70">
+          <circle cx="35" cy="35" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="5" />
+          <motion.circle
+            cx="35" cy="35" r={radius} fill="none"
+            stroke={color}
+            strokeWidth="5" strokeLinecap="round"
+            strokeDasharray={circumference}
+            initial={{ strokeDashoffset: circumference }}
+            animate={{ strokeDashoffset: offset }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            style={isHigh ? { filter: `drop-shadow(0 0 6px ${color})` } : undefined}
+          />
+        </svg>
+        <div className="absolute flex flex-col items-center">
+          <span className={`text-sm font-bold ${isHigh ? 'animate-pulse' : ''}`} style={{ color }}>
+            {label}
+          </span>
+        </div>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: color }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.5 }}
-        />
+      <div className="mt-1.5 flex items-center gap-1 text-[10px] uppercase tracking-wider text-white/40">
+        {icon}
+        {sublabel}
       </div>
     </div>
   )
@@ -47,7 +72,6 @@ export default function HardwareTelemetry() {
   const requestStats = useOrchestrator((s) => s.requestStats)
   const running = useOrchestrator((s) => s.running)
 
-  // Poll stats every 3s while running, every 15s otherwise.
   useEffect(() => {
     requestStats()
     const interval = setInterval(requestStats, running ? 3000 : 15000)
@@ -61,7 +85,7 @@ export default function HardwareTelemetry() {
       <GlassPanelHeader
         icon={<Cpu className="h-4 w-4" />}
         title="Live System Telemetry"
-        subtitle="Orchestrator resources · memory · cache · vector store"
+        subtitle="Orchestrator resources · circular gauges"
         accent="#5eead4"
         right={
           <span className="flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[10px] uppercase tracking-wider text-white/50">
@@ -70,72 +94,51 @@ export default function HardwareTelemetry() {
           </span>
         }
       />
-      <div className="grid grid-cols-2 gap-3 p-4">
-        {/* Memory */}
-        <div className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-emerald-300">
-            <HardDrive className="h-3 w-3" /> Heap Memory
-          </div>
-          {stats ? (
-            <>
-              <StatBar label="Used" value={stats.mem.heapUsed} max={stats.mem.heapTotal} color="#34d399" fmt={formatBytes} />
-              <div className="flex justify-between text-[9px] text-white/35">
-                <span>RSS: {formatBytes(stats.mem.rss)}</span>
-                <span>Total: {formatBytes(stats.mem.heapTotal)}</span>
-              </div>
-            </>
-          ) : (
-            <div className="h-8 animate-pulse rounded bg-white/5" />
-          )}
-        </div>
-
-        {/* Uptime */}
-        <div className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-amber-300">
-            <Clock className="h-3 w-3" /> Uptime
-          </div>
-          {stats ? (
-            <div className="text-2xl font-bold text-white/90">{formatUptime(stats.uptime)}</div>
-          ) : (
-            <div className="h-8 animate-pulse rounded bg-white/5" />
-          )}
-        </div>
-
-        {/* Vector Memory */}
-        <div className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-violet-300">
-            <Brain className="h-3 w-3" /> Vector Memory
-          </div>
-          {stats ? (
-            <>
-              <div className="text-2xl font-bold text-white/90">{stats.memory.count}</div>
-              <div className="text-[9px] text-white/35">past conclusions indexed</div>
-            </>
-          ) : (
-            <div className="h-8 animate-pulse rounded bg-white/5" />
-          )}
-        </div>
-
-        {/* Search Cache */}
-        <div className="space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-sky-300">
-            <Database className="h-3 w-3" /> Search Cache
-          </div>
-          {stats ? (
-            <>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-white/90">{stats.cache.entries}</span>
-                <span className="flex items-center gap-0.5 text-[10px] text-emerald-300">
-                  <Zap className="h-2.5 w-2.5" />
-                  {stats.cache.totalHits} hits
-                </span>
-              </div>
-              <div className="text-[9px] text-white/35">cached queries</div>
-            </>
-          ) : (
-            <div className="h-8 animate-pulse rounded bg-white/5" />
-          )}
-        </div>
+      <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-4">
+        {/* Heap Memory — circular gauge */}
+        <RingGauge
+          value={stats?.mem.heapUsed || 0}
+          max={stats?.mem.heapTotal || 1}
+          color={heapPct > 80 ? '#ef4444' : '#34d399'}
+          label={stats ? formatBytes(stats.mem.heapUsed) : '—'}
+          sublabel="Heap"
+          icon={<HardDrive className="h-3 w-3" />}
+        />
+        {/* RSS — circular gauge (relative to 512MB) */}
+        <RingGauge
+          value={stats?.mem.rss || 0}
+          max={512 * 1024 * 1024}
+          color={stats && stats.mem.rss > 400 * 1024 * 1024 ? '#f59e0b' : '#5eead4'}
+          label={stats ? formatBytes(stats.mem.rss) : '—'}
+          sublabel="RSS"
+          icon={<Database className="h-3 w-3" />}
+        />
+        {/* Vector Memory — count gauge (relative to 200) */}
+        <RingGauge
+          value={stats?.memory.count || 0}
+          max={200}
+          color="#a78bfa"
+          label={String(stats?.memory.count || 0)}
+          sublabel="Vectors"
+          icon={<Brain className="h-3 w-3" />}
+        />
+        {/* Cache Hits — gauge (relative to 100) */}
+        <RingGauge
+          value={stats?.cache.totalHits || 0}
+          max={100}
+          color="#fbbf24"
+          label={String(stats?.cache.totalHits || 0)}
+          sublabel="Cache Hits"
+          icon={<Zap className="h-3 w-3" />}
+        />
+      </div>
+      {/* Uptime + cache entries */}
+      <div className="flex items-center justify-between border-t border-white/10 px-4 py-2 text-[10px] text-white/40">
+        <span className="flex items-center gap-1">
+          <Clock className="h-3 w-3" /> Uptime: {stats ? formatUptime(stats.uptime) : '—'}
+        </span>
+        <span>Cache entries: {stats?.cache.entries || 0}</span>
+        <span>Plugins: {stats?.plugins || 0}</span>
       </div>
     </GlassCard>
   )

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ShieldCheck, RefreshCw, Check, AlertTriangle, ArrowRight, Hand } from 'lucide-react'
+import { ShieldCheck, RefreshCw, Check, AlertTriangle, ArrowRight, Hand, GitCompare } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
 import { usePhaseGlow } from './usePhaseGlow'
@@ -158,6 +158,42 @@ export default function CriticLoop() {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Visual Diff Viewer — git-style diff between iterations */}
+        {snapshots.length > 1 && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/40 p-3">
+            <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-white/40">
+              <GitCompare className="h-3 w-3" /> Visual Diff · iteration {snapshots.length - 1} → {snapshots.length}
+            </div>
+            {(() => {
+              const prev = snapshots[snapshots.length - 2]?.draft || ''
+              const curr = snapshots[snapshots.length - 1]?.draft || ''
+              const prevSentences = new Set(prev.split(/[.!?]+/).map(s => s.trim().toLowerCase()).filter(s => s.length > 20))
+              const currSentences = curr.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 20)
+              const added = currSentences.filter(s => !prevSentences.has(s.toLowerCase())).slice(0, 3)
+              const prevSentList = prev.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 20)
+              const currSet = new Set(currSentences.map(s => s.toLowerCase()))
+              const removed = prevSentList.filter(s => !currSet.has(s.toLowerCase())).slice(0, 2)
+              if (added.length === 0 && removed.length === 0) return <p className="text-[10px] text-white/30">No significant changes detected.</p>
+              return (
+                <div className="space-y-1">
+                  {added.map((s, i) => (
+                    <div key={`a${i}`} className="flex gap-1.5 rounded border border-emerald-500/20 bg-emerald-500/[0.06] px-2 py-1">
+                      <span className="text-emerald-400">+</span>
+                      <span className="text-[10px] leading-snug text-emerald-200/80">{s.slice(0, 120)}{s.length > 120 ? '…' : ''}</span>
+                    </div>
+                  ))}
+                  {removed.map((s, i) => (
+                    <div key={`r${i}`} className="flex gap-1.5 rounded border border-rose-500/20 bg-rose-500/[0.06] px-2 py-1">
+                      <span className="text-rose-400">-</span>
+                      <span className="text-[10px] leading-snug text-rose-200/80">{s.slice(0, 120)}{s.length > 120 ? '…' : ''}</span>
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
+          </div>
+        )}
 
         {/* Timeline Snapshot Reversion */}
         {snapshots.length > 0 && (

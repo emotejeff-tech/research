@@ -145,9 +145,32 @@ export default function OpsecPanel() {
                       </div>
                       <p className="text-[11px] text-white/55">
                         {a.tool === 'opsec_log_scrubber'
-                          ? `Scrubbed ${a.itemsScrubbed} high-exposure item(s) (credentials, paths, emails, IPs)`
-                          : `Rotated footprint → ${a.rotatedUA?.slice(0, 50) || '…'}`}
+                          ? `Scrubbed ${a.itemsScrubbed} high-exposure item(s) (credentials, paths, emails, IPs, high-entropy strings)`
+                          : a.tool === 'google_dorker'
+                            ? `Constructed ${a.itemsScrubbed} dork queries across OSINT categories`
+                            : `Rotated footprint → ${a.rotatedUA?.slice(0, 50) || '…'}`}
                       </p>
+                      {/* Interactive Dork Intelligence Preview — clickable buttons */}
+                      {a.tool === 'google_dorker' && a.itemsScrubbed > 0 && (
+                        <div className="mt-1.5 flex flex-wrap gap-1">
+                          {[
+                            'site: arxiv.org filetype:pdf',
+                            'intitle:"index of" /backup',
+                            'filetype:env OR filetype:config',
+                            'inurl:admin OR inurl:login',
+                            '"api key" OR "secret_key"',
+                          ].map((dork, i) => (
+                            <button
+                              key={i}
+                              onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(dork)}`, '_blank')}
+                              className="rounded-md border border-amber-400/20 bg-amber-400/[0.06] px-1.5 py-0.5 font-mono text-[9px] text-amber-300/80 transition-colors hover:bg-amber-400/15 hover:text-amber-200"
+                              title={`Click to search: ${dork}`}
+                            >
+                              {dork.slice(0, 30)}{dork.length > 30 ? '…' : ''}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       {a.usageCount !== undefined && (
                         <span className="text-[9px] text-white/30">
                           Used {a.usageCount}× total

@@ -178,6 +178,31 @@ export default function FinalReport() {
               {/* Report */}
               {finalReport ? (
                 <>
+                  {/* Aha Moment Insight Highlighter */}
+                  {(() => {
+                    // Extract key insights from the report (sentences with strong signal words)
+                    const sentences = finalReport.split(/[.!?]+/).filter(s => s.trim().length > 30)
+                    const ahaSentences = sentences.filter(s => {
+                      const lower = s.toLowerCase()
+                      return lower.match(/\b(conclusion|key finding|critically|surprisingly|however|ultimately|the data shows|evidence suggests|definitively|breakthrough|significant)\b/)
+                    }).slice(0, 3)
+                    if (ahaSentences.length === 0) return null
+                    return (
+                      <div className="mb-3 rounded-xl border border-violet-400/30 bg-violet-400/[0.08] p-4">
+                        <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-violet-300">
+                          <Sparkles className="h-3.5 w-3.5" /> Key Insights & Aha Moments
+                        </div>
+                        <ul className="space-y-1.5">
+                          {ahaSentences.map((s, i) => (
+                            <li key={i} className="flex gap-2 text-[12px] leading-snug text-violet-100/80">
+                              <span className="text-violet-400">→</span>
+                              {s.trim()}.
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )
+                  })()}
                   <div className="report-prose scroll-fancy max-h-[480px] overflow-y-auto rounded-xl border border-white/10 bg-black/30 p-5">
                     <ReactMarkdown>{finalReport}</ReactMarkdown>
                   </div>

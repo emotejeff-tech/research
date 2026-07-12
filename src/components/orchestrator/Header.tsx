@@ -1,13 +1,22 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, Github, Wifi, WifiOff, Settings as SettingsIcon, Cpu } from 'lucide-react'
+import { Activity, Github, Wifi, WifiOff, Settings as SettingsIcon, Cpu, Coins, Zap } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 
 export default function Header() {
   const connected = useOrchestrator((s) => s.connected)
   const setSettingsOpen = useOrchestrator((s) => s.setSettingsOpen)
   const llmSettings = useOrchestrator((s) => s.llmSettings)
+  const routingMode = useOrchestrator((s) => s.routingMode)
+  const routingTier = useOrchestrator((s) => s.routingTier)
+  const log = useOrchestrator((s) => s.log)
+  const running = useOrchestrator((s) => s.running)
+
+  // Estimate tokens from log text length (~4 chars per token).
+  const estimatedTokens = log.reduce((sum, entry) => sum + Math.ceil(entry.text.length / 4), 0)
+  const estimatedCost = (estimatedTokens / 1000) * (routingTier === 'local' ? 0 : 0.002) // $0.002/1K for cloud
+  const isLocal = routingTier === 'local' || routingMode === 'degraded'
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/5 bg-black/30 backdrop-blur-xl">
@@ -45,6 +54,24 @@ export default function Header() {
             {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
             {connected ? 'orchestrator live' : 'reconnecting…'}
           </span>
+          {/* Token & Cost Counter */}
+          {running && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1"
+            >
+              <span className="flex items-center gap-1 text-[10px] font-mono text-amber-300" title="Estimated tokens consumed">
+                <Zap className="h-2.5 w-2.5" />
+                {estimatedTokens.toLocaleString()}
+              </span>
+              <span className="text-white/20">|</span>
+              <span className={`flex items-center gap-1 text-[10px] font-mono ${isLocal ? 'text-emerald-300' : 'text-rose-300'}`} title={isLocal ? 'Running on local model — $0 cost' : 'Running on cloud — paid API'}>
+                <Coins className="h-2.5 w-2.5" />
+                {isLocal ? '$0.00' : `$${estimatedCost.toFixed(4)}`}
+              </span>
+            </motion.div>
+          )}
           {/* Active provider badge */}
           {llmSettings && llmSettings.provider !== 'zai' && llmSettings.enabled && (
             <span

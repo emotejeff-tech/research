@@ -98,6 +98,7 @@ export default function WorkflowGraph() {
     plugin,
     finalReport,
     critiqueRounds,
+    running,
   } = useOrchestrator()
 
   const { nodes, edges } = useMemo(() => {
@@ -349,6 +350,34 @@ export default function WorkflowGraph() {
       >
         Live Execution Graph
       </motion.div>
+      {/* Streaming Thought Bubble — shows what the active agent is doing */}
+      {(() => {
+        const phaseMessages: Record<string, string> = {
+          planning: 'Coordinator: Decomposing your query into a DAG…',
+          discovery: 'Discovery: Querying search providers in parallel…',
+          synthesis: 'Synthesis: Drafting cited report from evidence…',
+          critique: 'Critic: Scanning for logical fallacies & flaws…',
+          reflection: 'Dreamer: Reflecting on possibilities & papers…',
+          generation: 'Evolution: Compiling tools + OSINT dorks…',
+          final: 'Complete: Report delivered.',
+        }
+        const msg = phaseMessages[phase]
+        if (!msg || !running) return null
+        return (
+          <motion.div
+            key={phase}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-xl border border-white/15 bg-black/80 px-4 py-2 backdrop-blur-md"
+          >
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+              <span className="text-[11px] font-medium text-white/80">{msg}</span>
+            </div>
+          </motion.div>
+        )
+      })()}
     </div>
   )
 }
