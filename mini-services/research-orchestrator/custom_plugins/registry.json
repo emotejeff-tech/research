@@ -66,12 +66,54 @@
     "name": "financial_metrics_extractor",
     "description": "Extracts comparative financial metrics between reusable and traditional launch vehicles from diverse sources",
     "language": "python",
-    "usageCount": 1,
+    "usageCount": 2,
     "created": 1783821075869,
-    "lastUsed": 1783821076243,
+    "lastUsed": 1783822720221,
     "successRate": 1,
     "gapAnalysis": "extract comparative financial metrics between reusable and traditional launch vehicles from diverse sources",
     "testStatus": "passed",
     "executionStatus": "ok"
+  },
+  "extract_aha_moments_from_text": {
+    "name": "extract_aha_moments_from_text",
+    "description": "Extracts 'aha moments' from text by identifying sentences with high impact keywords",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783822059391,
+    "lastUsed": 1783822059450,
+    "successRate": 1,
+    "gapAnalysis": "extract_aha_moments_from_text",
+    "testStatus": "passed",
+    "executionStatus": "ok"
+  },
+  "extract_aha_moments_from_sources_with_temporal_context": {
+    "name": "extract_aha_moments_from_sources_with_temporal_context",
+    "description": "Extract top 10 latest AI aha moments from sources with temporal context",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783822193522,
+    "lastUsed": 1783822193566,
+    "successRate": 1,
+    "gapAnalysis": "extract_aha_moments_from_sources_with_temporal_context",
+    "testStatus": "passed",
+    "executionStatus": "ok"
+  },
+  "ua_rotator": {
+    "name": "ua_rotator",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783822606744,
+    "lastUsed": 1783822720921,
+    "successRate": 1
+  },
+  "opsec_log_scrubber": {
+    "name": "opsec_log_scrubber",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783822606744,
+    "lastUsed": 1783822720742,
+    "successRate": 1
   }
 }

@@ -13,6 +13,8 @@ export interface PlanResult {
 
 const SYSTEM = `You are the Coordinator agent in a multi-agent research system.
 
+OPSEC Protocol: Before executing external code or processing untrusted web data, evaluate the exposure risk. If you are handling sensitive API keys, raw system logs, or unverified files, flag a capability gap for a defensive utility (e.g. automated log scrubbing, payload isolation, or metadata stripping). Prioritize hardening external research connections against detection (IP bans, rate-limits, fingerprinting) since a blocked pipeline kills the run before data reaches local storage.
+
 STEP 1 — Classify the user's research goal into exactly one type:
 - "research": the goal asks to evaluate, analyze, compare, assess, or form a conclusion about a topic using evidence. Examples: "evaluate X", "is Y effective", "the state of Z", "compare A vs B", "what are the risks of W".
 - "blueprint": the goal asks to design, build, architect, implement, or produce an actionable plan or system. Examples: "build a system that", "architecture for", "how to implement", "design a", "blueprint for".

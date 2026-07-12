@@ -92,24 +92,29 @@ export default function StreamingLog() {
           {log.map((entry) => {
             const Icon = ICONS[entry.kind] || Brain
             const c = colorFor(entry)
-            // Lifecycle highlighting: tool creation (🛠️/✨) = pink, execution (⚡) = amber.
+            // Lifecycle highlighting: tool creation (🛠️/✨) = pink, execution (⚡) = amber, OPSEC (🛡️) = rose, reflection (🧠) = violet.
             const isToolCreation = entry.text.includes('🛠️') || entry.text.includes('✨')
             const isToolExecution = entry.text.includes('⚡')
             const isReflection = entry.text.includes('🧠')
-            const lifecycleClass = isToolCreation
-              ? 'border-pink-500/30 bg-pink-500/[0.08]'
-              : isToolExecution
-                ? 'border-amber-500/30 bg-amber-500/[0.08]'
-                : isReflection
-                  ? 'border-violet-500/25 bg-violet-500/[0.06]'
-                  : 'border-white/5 bg-white/[0.03]'
-            const lifecycleColor = isToolCreation
-              ? '#f472b6'
-              : isToolExecution
-                ? '#fbbf24'
-                : isReflection
-                  ? '#a78bfa'
-                  : c
+            const isOpsec = entry.text.includes('🛡️')
+            const lifecycleClass = isOpsec
+              ? 'border-rose-500/40 bg-rose-500/[0.1]'
+              : isToolCreation
+                ? 'border-pink-500/30 bg-pink-500/[0.08]'
+                : isToolExecution
+                  ? 'border-amber-500/30 bg-amber-500/[0.08]'
+                  : isReflection
+                    ? 'border-violet-500/25 bg-violet-500/[0.06]'
+                    : 'border-white/5 bg-white/[0.03]'
+            const lifecycleColor = isOpsec
+              ? '#fb7185'
+              : isToolCreation
+                ? '#f472b6'
+                : isToolExecution
+                  ? '#fbbf24'
+                  : isReflection
+                    ? '#a78bfa'
+                    : c
             return (
               <motion.div
                 key={entry.id}

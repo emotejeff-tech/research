@@ -134,6 +134,8 @@ interface OrchestratorState {
   telemetryLogs: RunLog[]
   /** Current evolution-engine stage (Self-Teaching Loop). */
   evolutionStage: { stage: string; detail?: any } | null
+  /** OPSEC audit results (log scrubbing + UA rotation). */
+  opsecAudits: { id: string; tool: string; itemsScrubbed: number; success: boolean; rotatedUA?: string; usageCount?: number; ts: number }[]
 
   // actions
   init: () => void
@@ -185,6 +187,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   history: [],
   telemetryLogs: [],
   evolutionStage: null,
+  opsecAudits: [],
 
   init: () => {
     if (initialized) return
@@ -292,6 +295,20 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       if (d?.dream) {
         set({ dream: d.dream as Dream })
       }
+    })
+
+    socket.on('research:opsec', (d: any) => {
+      set((s) => ({
+        opsecAudits: [...s.opsecAudits, {
+          id: uid(),
+          tool: d.tool,
+          itemsScrubbed: d.itemsScrubbed || 0,
+          success: d.success,
+          rotatedUA: d.rotatedUA,
+          usageCount: d.usageCount,
+          ts: Date.now(),
+        }],
+      }))
     })
 
     socket.on('research:routing', (d: any) => {
@@ -406,6 +423,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       dream: null,
       error: null,
       evolutionStage: null,
+      opsecAudits: [],
       log: [
         {
           id: uid(),
@@ -440,6 +458,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       dream: null,
       error: null,
       evolutionStage: null,
+      opsecAudits: [],
       log: [],
     })
   },

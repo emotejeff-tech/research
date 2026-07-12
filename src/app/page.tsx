@@ -26,6 +26,7 @@ import FinalReport from '@/components/orchestrator/FinalReport'
 import HistoryPanel from '@/components/orchestrator/HistoryPanel'
 import ImprovementGraph from '@/components/orchestrator/ImprovementGraph'
 import DreamPanel from '@/components/orchestrator/DreamPanel'
+import OpsecPanel from '@/components/orchestrator/OpsecPanel'
 import { GlassCard } from '@/components/orchestrator/GlassCard'
 import { usePhaseGlow } from '@/components/orchestrator/usePhaseGlow'
 
@@ -230,6 +231,16 @@ export default function Home() {
           className="mt-5"
         >
           <DreamPanel />
+        </motion.section>
+
+        {/* OPSEC AUDIT PANEL */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-5"
+        >
+          <OpsecPanel />
         </motion.section>
 
         {/* AUTONOMOUS IMPROVEMENT TRACKER */}

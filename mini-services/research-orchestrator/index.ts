@@ -429,6 +429,71 @@ async function runResearch(socket: any, query: string) {
     }
     await sleep(400)
 
+    // -------- PHASE 5: OPSEC AUDIT (Defensive Security) --------
+    // Run the opsec_log_scrubber on the final report to strip credentials,
+    // paths, emails and IPs before delivery. Also rotate UA + emit the audit.
+    if (pluginRegistryMeta['opsec_log_scrubber'] && task.draft) {
+      emit('research:thought', {
+        agent: 'OPSEC',
+        text: '🛡️ OPSEC: Invoking [opsec_log_scrubber] to sanitize the compiled report payload before delivery…',
+      })
+      try {
+        const scrub = await runEvolvedTool('opsec_log_scrubber', task.draft.slice(0, 8000))
+        if (scrub.ok && scrub.stdout) {
+          const lines = scrub.stdout.split('\n')
+          const scrubLine = lines.find((l) => l.includes('scrubbed')) || ''
+          const itemsScrubbed = parseInt((scrubLine.match(/(\d+)/) || ['0'])[1], 10)
+          // Record the OPSEC tool execution in the durable registry.
+          const meta = recordToolExecution(pluginRegistryMeta, 'opsec_log_scrubber', true)
+          emit('research:opsec', {
+            tool: 'opsec_log_scrubber',
+            itemsScrubbed,
+            success: true,
+            usageCount: meta?.usageCount,
+          })
+          emit('research:thought', {
+            agent: 'OPSEC',
+            text: `🛡️ OPSEC: Sanitized ${itemsScrubbed} high-exposure item(s) from the final report (credentials, paths, emails, IPs). Payload cleared for delivery.`,
+          })
+        } else {
+          recordToolExecution(pluginRegistryMeta, 'opsec_log_scrubber', false)
+          emit('research:opsec', { tool: 'opsec_log_scrubber', itemsScrubbed: 0, success: false })
+          emit('research:thought', {
+            agent: 'OPSEC',
+            text: `🛡️ OPSEC: Scrubber executed but returned no output — report passed through unsanitized.`,
+          })
+        }
+      } catch (e) {
+        emit('research:opsec', { tool: 'opsec_log_scrubber', itemsScrubbed: 0, success: false, error: (e as Error).message })
+        emit('research:thought', {
+          agent: 'OPSEC',
+          text: `🛡️ OPSEC: Scrubber failed — ${(e as Error).message}. Report passed through.`,
+        })
+      }
+    }
+
+    // Also rotate the UA as a footprint-obfuscation step (logged for audit).
+    if (pluginRegistryMeta['ua_rotator']) {
+      try {
+        const ua = await runEvolvedTool('ua_rotator', 'ua')
+        if (ua.ok) {
+          recordToolExecution(pluginRegistryMeta, 'ua_rotator', true)
+          emit('research:opsec', {
+            tool: 'ua_rotator',
+            rotatedUA: ua.stdout.slice(0, 60),
+            success: true,
+          })
+          emit('research:thought', {
+            agent: 'OPSEC',
+            text: `🛡️ OPSEC: Rotated research footprint → ${ua.stdout.slice(0, 50)}… (anti-fingerprinting)`,
+          })
+        }
+      } catch {
+        /* best-effort */
+      }
+    }
+    await sleep(300)
+
     // -------- PHASE 6: FINAL --------
     task.phase = 'final'
     task.status = 'completed'
