@@ -45,44 +45,55 @@ export async function speak(text: string): Promise<TTSResult> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (s.voiceBoxApiKey) headers['Authorization'] = `Bearer ${s.voiceBoxApiKey}`
 
-  // Try multiple TTS endpoints in order.
+  // Try multiple TTS endpoints — /speak FIRST (your Kokoro server at port 17493)
   const endpoints = [
-    // OpenAI-compatible format
+    // Format 1: /speak with voice_id (Kokoro/F5-TTS — your server)
+    {
+      url: `${baseUrl}/speak`,
+      body: JSON.stringify({
+        voice_id: s.ttsVoice || '944602ca-5c6b-42d7-9bf2-a9e7e7425259',
+        text: truncated,
+      }),
+      expectAudio: true,
+    },
+    // Format 2: /v1/audio/speech (OpenAI-compatible)
     {
       url: `${baseUrl}/v1/audio/speech`,
       body: JSON.stringify({
-        model: s.ttsModel || 'tts-1',
+        model: s.ttsModel || 'kokoro',
         input: truncated,
-        voice: s.ttsVoice || 'alloy',
+        voice: s.ttsVoice || 'af_heart',
         response_format: 'mp3',
       }),
       expectAudio: true,
     },
-    // FastAPI/Piper style (common for local TTS servers on custom ports)
+    // Format 3: /api/tts (FastAPI style)
     {
       url: `${baseUrl}/api/tts`,
       body: JSON.stringify({
         text: truncated,
-        voice: s.ttsVoice || 'default',
-        model: s.ttsModel || 'tts-1',
+        voice: s.ttsVoice || 'af_heart',
+        model: s.ttsModel || 'kokoro',
       }),
       expectAudio: true,
     },
-    // Simple /tts endpoint
+    // Format 4: /tts (simple)
     {
       url: `${baseUrl}/tts`,
       body: JSON.stringify({
         text: truncated,
-        voice: s.ttsVoice || 'default',
+        voice: s.ttsVoice || 'af_heart',
       }),
       expectAudio: true,
     },
-    // Query param style (some FastAPI TTS servers use GET)
+    // Format 5: /api/generate (Kokoro native)
     {
-      url: `${baseUrl}/api/tts?text=${encodeURIComponent(truncated)}&voice=${encodeURIComponent(s.ttsVoice || 'default')}`,
-      body: null,
+      url: `${baseUrl}/api/generate`,
+      body: JSON.stringify({
+        text: truncated,
+        voice: s.ttsVoice || 'af_heart',
+      }),
       expectAudio: true,
-      method: 'GET',
     },
   ]
 

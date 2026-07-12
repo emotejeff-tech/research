@@ -79,8 +79,8 @@ export default function SettingsPanel() {
     voiceBoxUrl: overrides.voiceBoxUrl ?? settings?.voiceBoxUrl ?? '',
     voiceBoxApiKey: overrides.voiceBoxApiKey ?? settings?.voiceBoxApiKey ?? '',
     voiceBoxEnabled: overrides.voiceBoxEnabled ?? settings?.voiceBoxEnabled ?? false,
-    ttsModel: overrides.ttsModel ?? settings?.ttsModel ?? 'tts-1',
-    ttsVoice: overrides.ttsVoice ?? settings?.ttsVoice ?? 'alloy',
+    ttsModel: overrides.ttsModel ?? settings?.ttsModel ?? 'kokoro',
+    ttsVoice: overrides.ttsVoice ?? settings?.ttsVoice ?? 'af_heart',
     whisperModel: overrides.whisperModel ?? settings?.whisperModel ?? 'whisper-1',
   }), [settings, overrides])
 
