@@ -216,3 +216,40 @@ Work Log:
 
 Stage Summary:
 - The agent now digs deep and dreams: after the Critic converges, the Dreamer reflects on all data, envisions best-possible outcomes, proposes new goals, surfaces possibilities, and enriches them with live-searched relevant papers — all appended to the final report and displayed in a dedicated glassmorphic DreamPanel. The performance graph is rebuilt as a clear percentile tracker: a compound 0-100 improvement gauge (50=baseline) with an IMPROVED/DISIMPROVED/STABLE verdict, per-vector percentile bars, and a trend area chart with a baseline reference line — so you can see at a glance how much the engine has improved or disimproved over time. Browser-verified end-to-end.
+
+---
+Task ID: 8
+Agent: orchestrator (main)
+Task: Integrate persistent execution memory — transition the plugin registry from volatile in-memory to durable storage (registry.json), add a reflection agent that reuses existing tools before authoring new ones, and surface tool lifecycle events (creation/execution) with emoji-styled highlighting in the live stream.
+
+Work Log:
+- Created tools/plugin_registry.ts — durable JSON storage layer:
+  - PluginMeta interface: {name, description, language, usageCount, created, lastUsed, successRate, gapAnalysis, testStatus, executionStatus}
+  - loadSavedRegistry(): reads custom_plugins/registry.json at boot; seeds 3 core tools (arxiv_fetcher, source_crossref, pdf_outline) on first boot with their .py scripts; migrates orphaned .py files into the registry
+  - reconstructPlugins(): rebuilds full Plugin objects (with code) from registry metadata + .py files on disk
+  - registerTool(): persists a newly created tool to registry.json with usageCount=1
+  - recordToolExecution(): increments usageCount, updates lastUsed, recalculates rolling successRate, saves immediately
+  - saveRegistry(): atomic write of the full registry to disk
+- Extended Plugin type (backend + frontend store) with lifecycle fields: usageCount, lastUsed, successRate
+- Refactored index.ts: replaced the 70-line hardcoded in-memory seed array with loadSavedRegistry() + reconstructPlugins() at boot. Added broadcastPlugins() helper. pluginRegistry is now reconstructed from disk on every change.
+- Enhanced agents/evolution.ts with reflectForReuse(): after gap analysis, checks if any existing tool's name/description overlaps with the gap capability (keyword matching, ≥2 overlap threshold). If a match is found, returns testStatus='reused' with the tool name — skipping authoring entirely. The evolve() function now accepts full tool objects {name, description}[] instead of just names.
+- Wired three lifecycle cases in index.ts evolution phase:
+  - CASE A (reuse): reflection matched → execute the existing tool → recordToolExecution() (increment count + update successRate) → emit ⚡ lifecycle event with usage count + success rate → broadcast updated plugins:list
+  - CASE B (create): no match → author + test + register → execute → registerTool() (persist to registry.json) → reconstructPlugins() → broadcast → emit 🛠️ + ✨ lifecycle events
+  - CASE C (fail): graceful skip
+- Lifecycle events use emoji prefixes that the frontend styles distinctly:
+  - 🧠 reflection (violet border/bg) — "Reflecting on historical skills registry..."
+  - 🛠️ authoring (pink) — "Synthesizing new custom skill..."
+  - ✨ creation success (pink) — "Dynamically spawned and permanently registered..."
+  - ⚡ execution (amber) — "Executing historical skill [name] (Used Nx, success rate X%)..."
+- Frontend StreamingLog: detects emoji prefixes in log text and applies lifecycle-specific styling (pink for 🛠️/✨, amber for ⚡, violet for 🧠) with colored borders, backgrounds, and icon tints.
+- Frontend PluginRegistry cards: show lifecycle stats — usage count (N×), success rate (% with color coding: emerald ≥80%, amber ≥50%, rose <50%), and lastUsed timestamp. All visible in both collapsed and expanded card states.
+- Agent Browser self-verification (via gateway :81):
+  - On first load: 7 tools loaded from registry.json (3 seeds + 3 adopted orphans + 1 prior evolved). No errors.
+  - Ran "Evaluate whether reusable rockets have fundamentally changed the economics of space launch": full pipeline executed — 🧠 reflection (no match found), 🛠️ authoring ("extract comparative financial metrics..."), sandbox test, ✨ permanently registered "financial_metrics_extractor", ⚡ executed (runtime error caught by tool's try/except, successRate=1). Run completed 94.0s, DELIVERED.
+  - Verified registry.json: financial_metrics_extractor persisted with usageCount=1, successRate=1, lastUsed=yes.
+  - RESTART TEST: killed + restarted the orchestrator → loaded 8 tools from registry.json (including financial_metrics_extractor with its lifecycle stats intact). Reloaded the page → 8 TOOLS visible, financial_metrics_extractor shows 1× and 100% in the card. The skill survived the restart permanently.
+  - Lint clean. No console/runtime errors.
+
+Stage Summary:
+- Persistent execution memory is live. Every evolved skill is now written permanently to custom_plugins/registry.json with lifecycle metadata (usageCount, lastUsed, successRate), reconstructed from disk at boot, and migrated automatically if orphaned .py files exist. A reflection step reuses existing tools before authoring new ones (keyword-overlap matching), and every creation/execution streams an emoji-styled lifecycle event (🧠/🛠️/✨/⚡) to the frontend with distinct color highlighting. Browser-verified: a new tool was created, persisted, survived an orchestrator restart, and reappeared in the UI with its usage count + success rate intact.

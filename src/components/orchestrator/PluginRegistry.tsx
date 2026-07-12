@@ -92,10 +92,36 @@ function PluginCard({ plugin, fresh }: { plugin: Plugin; fresh?: boolean }) {
             <p className="truncate text-[11px] text-white/50">{plugin.description}</p>
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
-          <span className="hidden items-center gap-1 text-[10px] text-white/30 sm:flex">
+        <div className="flex shrink-0 items-center gap-2">
+          {/* Lifecycle stats: usage count + success rate */}
+          {plugin.usageCount !== undefined && plugin.usageCount > 0 && (
+            <div className="hidden items-center gap-1.5 sm:flex">
+              <span
+                className="flex items-center gap-0.5 rounded-md bg-white/5 px-1.5 py-0.5 text-[9px] font-medium text-white/50"
+                title={`Used ${plugin.usageCount} time(s)`}
+              >
+                <Terminal className="h-2.5 w-2.5" />
+                {plugin.usageCount}×
+              </span>
+              {plugin.successRate !== undefined && (
+                <span
+                  className={`rounded-md px-1.5 py-0.5 text-[9px] font-medium ${
+                    plugin.successRate >= 0.8
+                      ? 'bg-emerald-400/10 text-emerald-300'
+                      : plugin.successRate >= 0.5
+                        ? 'bg-amber-400/10 text-amber-300'
+                        : 'bg-rose-400/10 text-rose-300'
+                  }`}
+                  title={`Success rate: ${Math.round(plugin.successRate * 100)}%`}
+                >
+                  {Math.round(plugin.successRate * 100)}%
+                </span>
+              )}
+            </div>
+          )}
+          <span className="hidden items-center gap-1 text-[10px] text-white/30 lg:flex">
             <Clock className="h-3 w-3" />
-            {timeAgo(plugin.createdAt)}
+            {plugin.lastUsed ? timeAgo(plugin.lastUsed) : timeAgo(plugin.createdAt)}
           </span>
           <ChevronDown
             className={`h-4 w-4 text-white/40 transition-transform ${open ? 'rotate-180' : ''}`}

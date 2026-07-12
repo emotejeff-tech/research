@@ -23,80 +23,30 @@ import { critique } from './agents/critic'
 import { evolve } from './agents/evolution'
 import { dream } from './agents/dreamer'
 import { runEvolvedTool } from './tools/plugin_runner'
+import {
+  loadSavedRegistry,
+  reconstructPlugins,
+  registerTool,
+  recordToolExecution,
+  type PluginMeta,
+} from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
 
-// ---------- In-memory stores ----------
+// ---------- Persistent execution memory ----------
 const tasks = new Map<string, TaskState>()
-const pluginRegistry: Plugin[] = [
-  {
-    id: 'seed-1',
-    name: 'arxiv_fetcher',
-    description: 'Fetch and summarize the latest arXiv abstracts for a topic.',
-    language: 'python',
-    code: `import urllib.request, json, re
-
-def fetch_arxiv(topic, max_results=5):
-    url = f"http://export.arxiv.org/api/query?search_query=all:{topic}&max_results={max_results}"
-    raw = urllib.request.urlopen(url, timeout=20).read().decode()
-    titles = re.findall(r"<title>(.*?)</title>", raw, re.S)
-    return titles[1:]  # skip feed title
-
-if __name__ == "__main__":
-    for t in fetch_arxiv("large language models"):
-        print("-", t.strip())`,
-    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 2,
-  },
-  {
-    id: 'seed-2',
-    name: 'source_crossref',
-    description: 'Cross-reference a claim against a list of source snippets.',
-    language: 'python',
-    code: `import re
-
-def cross_reference(claim, sources):
-    tokens = set(re.findall(r"\\w{4,}", claim.lower()))
-    scored = []
-    for s in sources:
-        st = set(re.findall(r"\\w{4,}", s.lower()))
-        overlap = len(tokens & st) / max(len(tokens), 1)
-        scored.append((overlap, s))
-    scored.sort(reverse=True)
-    return scored[:3]
-
-if __name__ == "__main__":
-    claim = "Renewable energy adoption reduces carbon emissions."
-    srcs = ["Solar and wind lower CO2 output.", "Fossil fuels remain dominant."]
-    for score, s in cross_reference(claim, srcs):
-        print(f"{score:.2f}  {s}")`,
-    createdAt: Date.now() - 1000 * 60 * 60 * 24,
-  },
-  {
-    id: 'seed-3',
-    name: 'pdf_outline',
-    description: 'Extract a plain-text outline from a PDF URL using stdlib only.',
-    language: 'python',
-    code: `import urllib.request, re
-
-def outline(url):
-    raw = urllib.request.urlopen(url, timeout=30).read()
-    text = raw.decode("latin-1")
-    headings = re.findall(r"\\n([A-Z][A-Za-z0-9 ]{4,80})\\n", text)
-    seen, out = set(), []
-    for h in headings:
-        if h not in seen:
-            seen.add(h); out.append(h.strip())
-    return out[:20]
-
-if __name__ == "__main__":
-    for h in outline("https://example.com/paper.pdf"):
-        print("-", h)`,
-    createdAt: Date.now() - 1000 * 60 * 30,
-  },
-]
+/** Durable registry metadata (survives restarts via custom_plugins/registry.json). */
+const pluginRegistryMeta: Record<string, PluginMeta> = loadSavedRegistry()
+/** In-memory plugin list (reconstructed from disk + metadata at boot). */
+let pluginRegistry: Plugin[] = reconstructPlugins(pluginRegistryMeta)
 const history: TaskState[] = []
+
+/** Broadcast the current plugin list to a socket. */
+function broadcastPlugins(socket: any) {
+  socket.emit('plugins:list', { plugins: pluginRegistry })
+}
 
 // ---------- Emit helper ----------
 function makeEmitter(socket: any, taskId: string): Emit {
@@ -350,11 +300,11 @@ async function runResearch(socket: any, query: string) {
     })
     emit('research:thought', {
       agent: 'Evolution',
-      text: 'Initiating Self-Teaching Loop: gap analysis → authoring → sandbox test → registration.',
+      text: '🧠 Reflecting on historical skills registry to identify reusable tools before authoring new ones…',
     })
 
     try {
-      const existingTools = pluginRegistry.map((p) => p.name)
+      const existingTools = pluginRegistry.map((p) => ({ name: p.name, description: p.description }))
       const result = await evolve(
         query,
         task.sources,
@@ -364,7 +314,8 @@ async function runResearch(socket: any, query: string) {
           const stageText: Record<string, string> = {
             gap: 'Gap Analysis: scanning research context for missing capabilities…',
             gap_done: `Gap Analysis: missing capability identified — "${detail?.capability}"`,
-            author: `Tool Authoring: generating Python for "${detail?.capability}"…`,
+            reuse: `🧠 Reflection: existing tool "${detail?.name}" already covers this gap — reusing instead of authoring a new one.`,
+            author: `🛠️ Tool Authoring: generating Python for "${detail?.capability}"…`,
             author_failed: 'Tool Authoring: failed to parse generated code.',
             test: `Sandbox Test: compiling "${detail?.name}.py" via python3 -m py_compile…`,
             patch: `Self-Correction: compile error detected — feeding stack trace to patcher…`,
@@ -380,15 +331,55 @@ async function runResearch(socket: any, query: string) {
         },
       )
 
-      if (result.plugin) {
-        const plugin = result.plugin
-        // Hot-swap: execute the newly evolved tool with a sample arg to
-        // verify runtime behavior. If it errors, feed the stack trace to
-        // the Critic for a patch (self-correction at runtime).
-        const sampleArg = task.subQueries[0] || query
+      const sampleArg = task.subQueries[0] || query
+
+      // -------- CASE A: Reused an existing tool (reflection matched) --------
+      if (result.testStatus === 'reused' && result.reusedToolName) {
+        const toolName = result.reusedToolName
         emit('research:thought', {
           agent: 'Evolution',
-          text: `Runtime Execution: hot-swapping "${plugin.name}" with sample input…`,
+          text: `⚡ Executing historical skill [${toolName}] to assist with the current dataset…`,
+        })
+        const exec = await runEvolvedTool(toolName, sampleArg)
+        const success = exec.ok
+        // Record execution in the durable registry.
+        const updatedMeta = recordToolExecution(pluginRegistryMeta, toolName, success)
+        // Update the in-memory plugin object.
+        const pIdx = pluginRegistry.findIndex((p) => p.name === toolName)
+        if (pIdx >= 0) {
+          pluginRegistry[pIdx] = {
+            ...pluginRegistry[pIdx],
+            usageCount: updatedMeta?.usageCount,
+            lastUsed: updatedMeta?.lastUsed,
+            successRate: updatedMeta?.successRate,
+            executionStatus: success ? 'ok' : 'error',
+            executionResult: success ? exec.stdout.slice(0, 200) : exec.stderr.slice(0, 200),
+          }
+          task.plugin = pluginRegistry[pIdx]
+        }
+        broadcastPlugins(socket)
+        emit('research:plugin', { plugin: task.plugin })
+        emit('research:evolution', {
+          stage: 'exec',
+          detail: { status: success ? 'ok' : 'error', reused: true, result: success ? exec.stdout.slice(0, 200) : exec.stderr.slice(0, 200) },
+        })
+        emit('research:thought', {
+          agent: 'Evolution',
+          text: `⚡ Executed historical skill [${toolName}] (Used ${updatedMeta?.usageCount}x, success rate ${Math.round((updatedMeta?.successRate || 0) * 100)}%) → ${success ? exec.stdout.slice(0, 60) : 'runtime error'}${success && exec.stdout.length > 60 ? '…' : ''}`,
+        })
+      }
+
+      // -------- CASE B: Created a new tool --------
+      else if (result.plugin) {
+        const plugin = result.plugin
+        emit('research:thought', {
+          agent: 'Evolution',
+          text: `🛠️ Synthesizing new custom skill: "${plugin.name}"…`,
+        })
+        // Hot-swap: execute the newly evolved tool.
+        emit('research:thought', {
+          agent: 'Evolution',
+          text: `⚡ Runtime Execution: hot-swapping "${plugin.name}" with sample input…`,
         })
         const exec = await runEvolvedTool(plugin.name, sampleArg)
         if (exec.ok) {
@@ -396,7 +387,7 @@ async function runResearch(socket: any, query: string) {
           plugin.executionResult = exec.stdout.slice(0, 200)
           emit('research:thought', {
             agent: 'Evolution',
-            text: `Runtime Execution: ✓ "${plugin.name}" ran successfully → ${exec.stdout.slice(0, 80)}${exec.stdout.length > 80 ? '…' : ''}`,
+            text: `✨ Dynamically spawned and permanently registered: "${plugin.name}" → ${exec.stdout.slice(0, 60)}${exec.stdout.length > 60 ? '…' : ''}`,
           })
         } else {
           plugin.executionStatus = 'error'
@@ -405,20 +396,26 @@ async function runResearch(socket: any, query: string) {
             agent: 'Evolution',
             text: `Runtime Execution: ✗ "${plugin.name}" threw an error. Feeding stack trace to Critic for self-correction.`,
           })
-          // Self-correction: the runtime error goes to the Critic-style patch.
-          // (One attempt; if the patch itself fails, the tool stays registered
-          //  with its compile-passed code but flagged as runtime-error.)
           emit('research:thought', {
             agent: 'Critic',
             text: `Self-Correction: runtime error received — ${exec.stderr.slice(0, 120)}`,
           })
         }
 
+        // Persist to durable registry.
+        plugin.usageCount = 1
+        plugin.lastUsed = Date.now()
+        plugin.successRate = exec.ok ? 1.0 : 0.0
+        registerTool(pluginRegistryMeta, plugin)
         task.plugin = plugin
-        pluginRegistry.unshift(plugin)
+        pluginRegistry = reconstructPlugins(pluginRegistryMeta)
+        broadcastPlugins(socket)
         emit('research:plugin', { plugin })
         emit('research:evolution', { stage: 'exec', detail: { status: plugin.executionStatus, result: plugin.executionResult } })
-      } else {
+      }
+
+      // -------- CASE C: Failed --------
+      else {
         emit('research:thought', {
           agent: 'Evolution',
           text: `Self-Teaching Loop ended without a registered tool. Gap: "${result.gap.capability}". ${result.testError ? `Reason: ${result.testError.slice(0, 100)}` : ''}`,
@@ -515,7 +512,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('plugins:request', () => {
-    socket.emit('plugins:list', { plugins: pluginRegistry })
+    broadcastPlugins(socket)
   })
 
   socket.on('history:request', () => {

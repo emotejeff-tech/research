@@ -92,6 +92,24 @@ export default function StreamingLog() {
           {log.map((entry) => {
             const Icon = ICONS[entry.kind] || Brain
             const c = colorFor(entry)
+            // Lifecycle highlighting: tool creation (🛠️/✨) = pink, execution (⚡) = amber.
+            const isToolCreation = entry.text.includes('🛠️') || entry.text.includes('✨')
+            const isToolExecution = entry.text.includes('⚡')
+            const isReflection = entry.text.includes('🧠')
+            const lifecycleClass = isToolCreation
+              ? 'border-pink-500/30 bg-pink-500/[0.08]'
+              : isToolExecution
+                ? 'border-amber-500/30 bg-amber-500/[0.08]'
+                : isReflection
+                  ? 'border-violet-500/25 bg-violet-500/[0.06]'
+                  : 'border-white/5 bg-white/[0.03]'
+            const lifecycleColor = isToolCreation
+              ? '#f472b6'
+              : isToolExecution
+                ? '#fbbf24'
+                : isReflection
+                  ? '#a78bfa'
+                  : c
             return (
               <motion.div
                 key={entry.id}
@@ -99,11 +117,11 @@ export default function StreamingLog() {
                 initial={{ opacity: 0, y: 8, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.25 }}
-                className="flex gap-2.5 rounded-xl border border-white/5 bg-white/[0.03] p-2.5"
+                className={`flex gap-2.5 rounded-xl border p-2.5 ${lifecycleClass}`}
               >
                 <span
                   className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg"
-                  style={{ background: `${c}1f`, color: c }}
+                  style={{ background: `${lifecycleColor}1f`, color: lifecycleColor }}
                 >
                   <Icon className="h-3.5 w-3.5" />
                 </span>
@@ -111,7 +129,7 @@ export default function StreamingLog() {
                   {entry.agent && (
                     <div
                       className="text-[10px] font-semibold uppercase tracking-wider"
-                      style={{ color: c }}
+                      style={{ color: lifecycleColor }}
                     >
                       {entry.agent}
                     </div>

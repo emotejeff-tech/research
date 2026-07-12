@@ -40,6 +40,10 @@ export interface Plugin {
   executionResult?: string
   executionStatus?: 'ok' | 'error' | 'not_run'
   patched?: boolean
+  /** Persistent lifecycle metadata (survives restarts via registry.json). */
+  usageCount?: number
+  lastUsed?: number | null
+  successRate?: number
 }
 
 export interface CritiqueRound {

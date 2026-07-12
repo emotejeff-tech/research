@@ -1,0 +1,77 @@
+{
+  "arxiv_fetcher": {
+    "name": "arxiv_fetcher",
+    "description": "Fetch and summarize the latest arXiv abstracts for a topic.",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783647967635,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "source_crossref": {
+    "name": "source_crossref",
+    "description": "Cross-reference a claim against a list of source snippets.",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783734367635,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "pdf_outline": {
+    "name": "pdf_outline",
+    "description": "Extract a plain-text outline from a PDF URL using stdlib only.",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783818967635,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "extract_arch_specs": {
+    "name": "extract_arch_specs",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783820872492,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "hardware_benchmark": {
+    "name": "hardware_benchmark",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783820872492,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "bci_progress_analyzer": {
+    "name": "bci_progress_analyzer",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783820872492,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "extract_metabolic_markers": {
+    "name": "extract_metabolic_markers",
+    "description": "Evolved tool (adopted from disk)",
+    "language": "python",
+    "usageCount": 0,
+    "created": 1783820872492,
+    "lastUsed": null,
+    "successRate": 1
+  },
+  "financial_metrics_extractor": {
+    "name": "financial_metrics_extractor",
+    "description": "Extracts comparative financial metrics between reusable and traditional launch vehicles from diverse sources",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783821075869,
+    "lastUsed": 1783821076243,
+    "successRate": 1,
+    "gapAnalysis": "extract comparative financial metrics between reusable and traditional launch vehicles from diverse sources",
+    "testStatus": "passed",
+    "executionStatus": "ok"
+  }
+}

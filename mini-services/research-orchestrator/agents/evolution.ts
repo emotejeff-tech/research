@@ -147,26 +147,76 @@ export async function patchTool(
 export interface EvolutionResult {
   plugin: Plugin | null
   gap: { capability: string; rationale: string }
-  testStatus: 'passed' | 'failed' | 'patched'
+  testStatus: 'passed' | 'failed' | 'patched' | 'reused'
   testError?: string
+  /** Name of a reused tool (when reflection found an existing match). */
+  reusedToolName?: string
 }
 
 /**
- * Orchestrates the full Self-Teaching Loop:
- *   gap analysis → author → test → (patch if fail) → register
+ * Reflection: check if an existing tool already covers the identified gap.
+ * Uses keyword overlap between the gap capability and tool names/descriptions.
+ * Returns the matching tool name, or null if no match.
+ */
+export function reflectForReuse(
+  gapCapability: string,
+  tools: { name: string; description: string }[],
+): string | null {
+  if (!tools.length) return null
+  // Extract meaningful keywords (4+ chars, lowercase) from the gap.
+  const gapWords = new Set(
+    (gapCapability.toLowerCase().match(/\b[a-z]{4,}\b/g) || []).filter(
+      (w) => !['that', 'this', 'with', 'from', 'their', 'would', 'could', 'should', 'which', 'there', 'about', 'into'].includes(w),
+    ),
+  )
+  if (gapWords.size === 0) return null
+
+  let bestMatch: { name: string; score: number } | null = null
+  for (const t of tools) {
+    const toolText = `${t.name} ${t.description}`.toLowerCase()
+    const toolWords = new Set((toolText.match(/\b[a-z]{4,}\b/g) || []))
+    // Count overlapping keywords.
+    let overlap = 0
+    for (const w of gapWords) {
+      if (toolWords.has(w)) overlap++
+    }
+    // Require at least 2 keyword overlaps to reuse (avoid false matches).
+    if (overlap >= 2 && (!bestMatch || overlap > bestMatch.score)) {
+      bestMatch = { name: t.name, score: overlap }
+    }
+  }
+  return bestMatch?.name || null
+}
+
+/**
+ * Orchestrates the full Self-Teaching Loop with reflection:
+ *   gap analysis → reflect (reuse?) → author → test → (patch) → register
+ * If reflection finds a reusable tool, returns early with testStatus='reused'.
  * Emits progress via the provided callback.
  */
 export async function evolve(
   query: string,
   sources: Source[],
   subQueries: string[],
-  existingTools: string[],
+  existingTools: { name: string; description: string }[],
   onStage: (stage: string, detail?: any) => void,
 ): Promise<EvolutionResult> {
   // Stage 1 — Gap Analysis
   onStage('gap')
-  const gap = await analyzeGap(query, sources, subQueries, existingTools)
+  const gap = await analyzeGap(query, sources, subQueries, existingTools.map((t) => t.name))
   onStage('gap_done', gap)
+
+  // Stage 1.5 — Reflection: check if an existing tool already covers the gap.
+  const reuseName = reflectForReuse(gap.capability, existingTools)
+  if (reuseName) {
+    onStage('reuse', { name: reuseName, capability: gap.capability })
+    return {
+      plugin: null,
+      gap,
+      testStatus: 'reused',
+      reusedToolName: reuseName,
+    }
+  }
 
   // Stage 2 — Tool Authoring
   onStage('author', { capability: gap.capability })
