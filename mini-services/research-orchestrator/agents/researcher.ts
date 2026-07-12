@@ -1,6 +1,7 @@
 /**
  * agents/researcher.ts — The Discovery agent. Runs deep web search per
- * sub-query and streams sources to the client as they arrive.
+ * sub-query and streams sources to the client as they arrive. Also runs
+ * an academic-paper-oriented search pass to surface research papers.
  */
 import { webSearch } from '../tools/web_search'
 import type { Source, Emit } from '../types'
@@ -25,9 +26,27 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
     }
     await sleep(200)
   }
+
+  // Academic paper pass — surface research papers for deeper grounding.
+  const academicQuery = `${subQueries[0]} research paper arxiv`
   emit('research:thought', {
     agent: 'Discovery',
-    text: `Collected ${sources.length} sources across ${subQueries.length} branches.`,
+    text: `Searching for academic papers: "${academicQuery}"`,
+  })
+  try {
+    const paperResults = await webSearch(academicQuery, 4)
+    for (const src of paperResults.slice(0, 3)) {
+      sources.push(src)
+      emit('research:source', { source: src })
+      await sleep(100)
+    }
+  } catch {
+    /* academic search is best-effort */
+  }
+
+  emit('research:thought', {
+    agent: 'Discovery',
+    text: `Collected ${sources.length} sources across ${subQueries.length} branches (+ academic pass).`,
   })
   return sources
 }

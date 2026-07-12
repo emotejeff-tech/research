@@ -7,6 +7,7 @@ export type Phase =
   | 'discovery'
   | 'synthesis'
   | 'critique'
+  | 'reflection'
   | 'generation'
   | 'final'
 
@@ -50,6 +51,19 @@ export interface CritiqueRound {
   notes: string
 }
 
+export interface Dream {
+  /** Best-possible outcome the agent dreamed of from the evidence. */
+  bestOutcome: string
+  /** New goals / ideas discovered through dreaming. */
+  newGoals: string[]
+  /** Possibilities & speculative directions worth exploring. */
+  possibilities: string[]
+  /** Relevant papers / references that could advance the blueprint. */
+  papers: { title: string; relevance: string }[]
+  /** The agent's reflection on all data + dreams. */
+  reflection: string
+}
+
 export interface LLMResult {
   content: string
   /** 'primary' = served by the language model; 'degraded' = no-LLM fallback. */
@@ -71,6 +85,7 @@ export interface TaskState {
   draft: string
   plugin: Plugin | null
   critiqueRounds: CritiqueRound[]
+  dream: Dream | null
   finalReport: string
   routingMode: 'primary' | 'degraded'
   startedAt: number

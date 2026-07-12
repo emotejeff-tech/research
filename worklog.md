@@ -187,3 +187,32 @@ Work Log:
 
 Stage Summary:
 - The Self-Teaching Loop is live and verified. The agent now autonomously identifies capability gaps from live research, authors Python tools, sandbox-tests them with py_compile (with self-correction on failure), persists them to a real custom_plugins/ directory on disk, and hot-swaps them into runtime execution — all streamed live to the frontend with per-stage progress and per-tool test/execution badges. Browser-verified end-to-end with a real evolved tool that compiles and runs.
+
+---
+Task ID: 7
+Agent: orchestrator (main)
+Task: Make the agent dig deep and dream on possibilities (best outcomes, new goals, relevant papers) + rebuild the performance graph as a clear percentile-based improvement tracker showing improved/disimproved over time.
+
+Work Log:
+- Created agents/dreamer.ts — the Dreamer: after the Actor-Critic loop converges, it reflects on ALL data (query + synthesis + sources), dreams on possibilities, and returns a structured Dream {bestOutcome, newGoals[], possibilities[], papers[], reflection}. It also live-searches the web for the top paper topic to enrich references with real results. The dream is appended to the final report as a "✦ Dreamer's Reflection & Possibilities" section.
+- Enhanced agents/researcher.ts: added an academic-paper search pass (arxiv/scholar-oriented query) after the standard discovery loop, so sources now include research papers for deeper grounding.
+- Added 'reflection' to the Phase type + Dream interface to types.ts. Wired the Dreamer as a new PHASE 3.5 (reflection) between critique and generation in index.ts: emits research:phase(reflection) + research:thought + research:dream events; appends dream Markdown to the draft; includes dream in the research:final payload. Skipped in degraded mode.
+- Frontend store: added Dream type + 'reflection' phase + dream state + research:dream handler; reset in startResearch/reset; updated PHASE_LABELS.
+- Created DreamPanel.tsx: glassmorphic panel with violet reflection glow showing Best Possible Outcome (violet card), New Goals (emerald), Possibilities (amber), Relevant Papers (sky, with live-enriched references), and Reflection (italic). Empty state + dreaming skeleton state + dreamed badge.
+- Added .agent-glow-reflection (violet) to globals.css.
+- Added DreamPanel to page.tsx between FinalReport and ImprovementGraph.
+- Updated ResearchConsole PHASE_FLOW to include the Dream phase (violet) in the execution pipeline.
+- Completely rebuilt ImprovementGraph.tsx as a percentile-based improvement tracker:
+  - improvementPercentile(): computes a 0-100 score per run relative to baseline (Run #1), where 50=baseline, 100=maximally improved, 0=maximally disimproved. Three vectors weighted equally: duration (lower=better), iterations (lower=better), fact density (higher=better).
+  - HERO gauge: an animated SVG circular gauge showing the compound score (0-100) with a colored verdict badge (IMPROVED/DISIMPROVED/STABLE) + delta percentage + plain-English explanation ("The engine is performing X% better/worse than baseline...").
+  - Per-vector percentile cards: three cards (Efficiency/Convergence/Density) each showing the current value, delta %, and a 0-100 percentile bar with disimproved/baseline/improved labels.
+  - Trend area chart: improvement score over time with a baseline reference line at y=50, gradient fill, and tooltip showing score + delta + query.
+  - Clear footer explaining: "Score above the baseline line = improved · below = disimproved."
+- Agent Browser self-verification (via gateway :81):
+  - Both new panels render on load (Dreamer empty state + percentile graph with 10 existing runs showing "STABLE").
+  - Launched "Evaluate whether brain-computer interfaces will achieve consumer viability within the next decade": full pipeline ran — Coordinator (3 branches), Discovery (12 sources + academic pass), Synthesis+Critic (3 iterations), Dreamer (5 new goals, 7 possibilities, 5 relevant papers surfaced), Evolution, Final. Completed 120.4s, DELIVERED. Dreamer's reflection appended to final report. Telemetry updated to 11 RUNS.
+  - Percentile graph shows compound score gauge + per-vector percentile bars + trend area chart with baseline reference line.
+  - No console/runtime errors. Lint clean.
+
+Stage Summary:
+- The agent now digs deep and dreams: after the Critic converges, the Dreamer reflects on all data, envisions best-possible outcomes, proposes new goals, surfaces possibilities, and enriches them with live-searched relevant papers — all appended to the final report and displayed in a dedicated glassmorphic DreamPanel. The performance graph is rebuilt as a clear percentile tracker: a compound 0-100 improvement gauge (50=baseline) with an IMPROVED/DISIMPROVED/STABLE verdict, per-vector percentile bars, and a trend area chart with a baseline reference line — so you can see at a glance how much the engine has improved or disimproved over time. Browser-verified end-to-end.

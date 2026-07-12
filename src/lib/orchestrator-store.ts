@@ -10,6 +10,7 @@ export type Phase =
   | 'discovery'
   | 'synthesis'
   | 'critique'
+  | 'reflection'
   | 'generation'
   | 'final'
   | 'error'
@@ -46,6 +47,14 @@ export interface CritiqueRound {
   verdict: 'pass' | 'revise'
   issues: string[]
   notes: string
+}
+
+export interface Dream {
+  bestOutcome: string
+  newGoals: string[]
+  possibilities: string[]
+  papers: { title: string; relevance: string }[]
+  reflection: string
 }
 
 export interface LogEntry {
@@ -110,6 +119,8 @@ interface OrchestratorState {
   routingReason: string | null
   /** Detected by the Coordinator: research (independent analysis) vs blueprint (best-ideas design). */
   taskType: TaskType
+  /** The Dreamer's reflection — best outcome, new goals, possibilities, papers. */
+  dream: Dream | null
   error: string | null
 
   log: LogEntry[]
@@ -136,6 +147,7 @@ const PHASE_LABELS: Record<Phase, string> = {
   discovery: 'Discovery',
   synthesis: 'Synthesis',
   critique: 'Critic',
+  reflection: 'Dreamer',
   generation: 'Evolution',
   final: 'Complete',
   error: 'Error',
@@ -162,6 +174,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   routingTier: 'primary',
   routingReason: null,
   taskType: 'research',
+  dream: null,
   error: null,
   log: [],
   plugins: [],
@@ -269,6 +282,12 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
     socket.on('research:evolution', (d: any) => {
       set({ evolutionStage: { stage: d.stage, detail: d.detail } })
+    })
+
+    socket.on('research:dream', (d: any) => {
+      if (d?.dream) {
+        set({ dream: d.dream as Dream })
+      }
     })
 
     socket.on('research:routing', (d: any) => {
@@ -380,6 +399,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       routingTier: 'primary',
       routingReason: null,
       taskType: 'research',
+      dream: null,
       error: null,
       evolutionStage: null,
       log: [
@@ -413,6 +433,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       routingTier: 'primary',
       routingReason: null,
       taskType: 'research',
+      dream: null,
       error: null,
       evolutionStage: null,
       log: [],

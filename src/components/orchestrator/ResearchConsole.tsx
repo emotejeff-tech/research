@@ -17,9 +17,10 @@ const EXAMPLES = [
 const PHASE_FLOW: { key: Phase; label: string; color: string }[] = [
   { key: 'planning', label: 'Plan', color: '#34d399' },
   { key: 'discovery', label: 'Discover', color: '#5eead4' },
-  { key: 'synthesis', label: 'Synthesize', color: '#fbbf24' },
-  { key: 'critique', label: 'Critic', color: '#fb7185' },
-  { key: 'generation', label: 'Evolve', color: '#fb923c' },
+  { key: 'synthesis', label: 'Synthesize', color: '#a78bfa' },
+  { key: 'critique', label: 'Critic', color: '#f59e0b' },
+  { key: 'reflection', label: 'Dream', color: '#a78bfa' },
+  { key: 'generation', label: 'Evolve', color: '#ec4899' },
   { key: 'final', label: 'Deliver', color: '#34d399' },
 ]
 

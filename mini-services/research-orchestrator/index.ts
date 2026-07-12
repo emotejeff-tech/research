@@ -21,6 +21,7 @@ import { discover } from './agents/researcher'
 import { synthesize } from './agents/synthesizer'
 import { critique } from './agents/critic'
 import { evolve } from './agents/evolution'
+import { dream } from './agents/dreamer'
 import { runEvolvedTool } from './tools/plugin_runner'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 
@@ -120,6 +121,7 @@ async function runResearch(socket: any, query: string) {
     draft: '',
     plugin: null,
     critiqueRounds: [],
+    dream: null,
     finalReport: '',
     routingMode: 'primary',
     startedAt: Date.now(),
@@ -304,6 +306,41 @@ async function runResearch(socket: any, query: string) {
       })
     }
 
+    // -------- PHASE 3.5: REFLECTION (Dreamer) --------
+    // The Dreamer reflects on ALL data, dreams on possibilities, proposes
+    // best-possible outcomes + new goals, and surfaces relevant papers.
+    if (!degraded) {
+      task.phase = 'reflection'
+      emit('research:phase', {
+        phase: 'reflection',
+        title: 'Dreamer: reflecting & dreaming on possibilities',
+      })
+      emit('research:thought', {
+        agent: 'Dreamer',
+        text: 'Reflecting on all data — dreaming on the possibilities to discover better ideas, best outcomes, and relevant papers…',
+      })
+      try {
+        const dreamResult = await dream(query, task.draft, task.sources, task.taskType)
+        if (dreamResult) {
+          task.dream = dreamResult
+          emit('research:dream', { dream: dreamResult })
+          emit('research:thought', {
+            agent: 'Dreamer',
+            text: `Dream complete. Best outcome envisioned; ${dreamResult.newGoals.length} new goals; ${dreamResult.possibilities.length} possibilities; ${dreamResult.papers.length} relevant papers surfaced.`,
+          })
+          // Append the dream to the final report so it's part of the deliverable.
+          const dreamMd = `\n\n---\n\n## ✦ Dreamer's Reflection & Possibilities\n\n### Best Possible Outcome\n${dreamResult.bestOutcome}\n\n### New Goals\n${dreamResult.newGoals.map((g) => `- ${g}`).join('\n')}\n\n### Possibilities\n${dreamResult.possibilities.map((p) => `- ${p}`).join('\n')}\n\n### Relevant Papers\n${dreamResult.papers.map((p) => `- **${p.title}** — ${p.relevance}`).join('\n')}\n\n### Reflection\n${dreamResult.reflection}\n`
+          task.draft = task.draft + dreamMd
+        }
+      } catch (e) {
+        emit('research:thought', {
+          agent: 'Dreamer',
+          text: `Dream stage skipped (LLM unavailable): ${(e as Error).message}`,
+        })
+      }
+      await sleep(300)
+    }
+
     // -------- PHASE 4: SELF-TEACHING LOOP (Evolution Engine) --------
     // Gap Analysis → Tool Authoring → Sandbox Test → Register → Execute
     task.phase = 'generation'
@@ -407,6 +444,7 @@ async function runResearch(socket: any, query: string) {
       sources: task.sources,
       plugin: task.plugin,
       critiqueRounds: task.critiqueRounds,
+      dream: task.dream,
       iterations: degraded ? task.critiqueRounds.length || 1 : task.critiqueRounds.length,
       durationMs: task.finishedAt - task.startedAt,
       routingMode: task.routingMode,
