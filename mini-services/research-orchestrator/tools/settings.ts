@@ -43,6 +43,13 @@ export interface LLMSettings {
   supabaseKey?: string
   pineconeApiKey?: string
   pineconeIndex?: string
+  /** VoiceBox (local TTS + Whisper) settings. */
+  voiceBoxUrl?: string
+  voiceBoxApiKey?: string
+  voiceBoxEnabled?: boolean
+  ttsModel?: string
+  ttsVoice?: string
+  whisperModel?: string
 }
 
 /** Provider presets with sensible defaults. */

@@ -16,6 +16,7 @@ import {
   Search,
   ShieldCheck,
   Database,
+  Volume2,
 } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import {
@@ -70,6 +71,12 @@ export default function SettingsPanel() {
     supabaseKey: overrides.supabaseKey ?? settings?.supabaseKey ?? '',
     pineconeApiKey: overrides.pineconeApiKey ?? settings?.pineconeApiKey ?? '',
     pineconeIndex: overrides.pineconeIndex ?? settings?.pineconeIndex ?? '',
+    voiceBoxUrl: overrides.voiceBoxUrl ?? settings?.voiceBoxUrl ?? '',
+    voiceBoxApiKey: overrides.voiceBoxApiKey ?? settings?.voiceBoxApiKey ?? '',
+    voiceBoxEnabled: overrides.voiceBoxEnabled ?? settings?.voiceBoxEnabled ?? false,
+    ttsModel: overrides.ttsModel ?? settings?.ttsModel ?? 'tts-1',
+    ttsVoice: overrides.ttsVoice ?? settings?.ttsVoice ?? 'alloy',
+    whisperModel: overrides.whisperModel ?? settings?.whisperModel ?? 'whisper-1',
   }), [settings, overrides])
 
   const setField = (field: string, value: any) => {
@@ -466,6 +473,83 @@ export default function SettingsPanel() {
             </div>
             <p className="mt-2 text-[9px] text-white/30">
               Requires a 'conclusions' table in Supabase (id text, query text, conclusion text, text text, timestamp bigint).
+            </p>
+          </div>
+
+          {/* VoiceBox (local TTS + Whisper) */}
+          <div className="rounded-xl border border-sky-400/20 bg-sky-400/[0.04] p-4">
+            <div className="mb-1 flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-sky-300">
+                <Volume2 className="h-3 w-3" /> VoiceBox - TTS + Whisper (optional)
+              </div>
+              <Switch
+                checked={form.voiceBoxEnabled}
+                onCheckedChange={(v) => setField('voiceBoxEnabled', v)}
+              />
+            </div>
+            <p className="mb-3 text-[10px] text-white/40">
+              When enabled, the agent announces phase changes and critical
+              failures via text-to-speech. Also enables Whisper speech-to-text
+              for future voice commands. Works with any OpenAI-compatible TTS
+              endpoint (VoiceBox, LocalAI, Ollama with TTS, etc.).
+            </p>
+            <div className="space-y-2">
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">VoiceBox Server URL</label>
+                <Input
+                  type="text"
+                  value={form.voiceBoxUrl || ''}
+                  onChange={(e) => setField('voiceBoxUrl', e.target.value)}
+                  placeholder="http://localhost:5001 (VoiceBox) or http://localhost:8080/v1 (LocalAI)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">API Key (optional, if your server requires it)</label>
+                <Input
+                  type="password"
+                  value={form.voiceBoxApiKey || ''}
+                  onChange={(e) => setField('voiceBoxApiKey', e.target.value)}
+                  placeholder="(leave empty if no auth required)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">TTS Model</label>
+                  <Input
+                    type="text"
+                    value={form.ttsModel || ''}
+                    onChange={(e) => setField('ttsModel', e.target.value)}
+                    placeholder="tts-1"
+                    className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">TTS Voice</label>
+                  <Input
+                    type="text"
+                    value={form.ttsVoice || ''}
+                    onChange={(e) => setField('ttsVoice', e.target.value)}
+                    placeholder="alloy"
+                    className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">Whisper Model</label>
+                  <Input
+                    type="text"
+                    value={form.whisperModel || ''}
+                    onChange={(e) => setField('whisperModel', e.target.value)}
+                    placeholder="whisper-1"
+                    className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                  />
+                </div>
+              </div>
+            </div>
+            <p className="mt-2 text-[9px] text-white/30">
+              Install VoiceBox: pip install voicebox (or use LocalAI / any OpenAI-compatible TTS server).
+              Voices: alloy, echo, fable, onyx, nova, shimmer.
             </p>
           </div>
 

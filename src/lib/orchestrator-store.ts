@@ -174,6 +174,12 @@ interface OrchestratorState {
     supabaseKey?: string
     pineconeApiKey?: string
     pineconeIndex?: string
+    voiceBoxUrl?: string
+    voiceBoxApiKey?: string
+    voiceBoxEnabled?: boolean
+    ttsModel?: string
+    ttsVoice?: string
+    whisperModel?: string
   } | null
   /** Provider presets for the settings UI. */
   providerPresets: Record<string, { label: string; defaultURL: string; defaultKey: string; defaultModel: string; needsKey: boolean; help: string }> | null
@@ -434,6 +440,18 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
     socket.on('settings:models', (d: any) => {
       set({ availableModels: d.models || [] })
+    })
+
+    socket.on('voice:announce', (d: any) => {
+      if (d?.audio) {
+        // Play the base64 audio in the browser.
+        try {
+          const audio = new Audio(`data:audio/mp3;base64,${d.audio}`)
+          audio.play().catch(() => { /* autoplay blocked */ })
+        } catch {
+          /* ignore playback errors */
+        }
+      }
     })
 
     socket.on('research:routing', (d: any) => {

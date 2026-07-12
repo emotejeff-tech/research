@@ -41,6 +41,7 @@ import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
 import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
+import { announce, isVoiceEnabled } from './tools/voicebox'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -62,6 +63,19 @@ function broadcastPlugins(socket: any) {
 // ---------- Emit helper ----------
 function makeEmitter(socket: any, taskId: string): Emit {
   return (event, payload) => socket.emit(event, { taskId, ...payload })
+}
+
+/** Announce a message via TTS and emit the audio to the frontend. */
+async function announcePhase(socket: any, message: string) {
+  if (!isVoiceEnabled()) return
+  try {
+    const result = await announce(message)
+    if (result.ok && result.audioBase64) {
+      socket.emit('voice:announce', { audio: result.audioBase64, text: message })
+    }
+  } catch {
+    /* best-effort — TTS failures shouldn't break the run */
+  }
 }
 
 // ============================================================
@@ -101,6 +115,7 @@ async function runResearch(socket: any, query: string) {
       agent: 'Coordinator',
       text: `Breaking down the research goal: "${query}" into a focused execution graph.`,
     })
+    announcePhase(socket, 'Research initiated. Coordinator is decomposing your query.')
     await sleep(500)
 
     try {
@@ -241,6 +256,7 @@ async function runResearch(socket: any, query: string) {
     // -------- PHASE 2: DISCOVERY (Search Agent) --------
     task.phase = 'discovery'
     emit('research:phase', { phase: 'discovery', title: 'Discovery Agent: Deep web search' })
+    announcePhase(socket, 'Discovery phase. Searching the web for sources.')
     task.sources = await discover(task.subQueries, emit)
     await sleep(400)
 
@@ -590,6 +606,7 @@ async function runResearch(socket: any, query: string) {
             agent: 'Critic',
             text: `Iteration ${iteration}: REVISE. ${round.issues.length} issue(s) found. Looping back to Synthesis.`,
           })
+          announcePhase(socket, `Critique iteration ${iteration} failed. ${round.issues.length} issues found. Looping back to synthesis.`)
           await sleep(400)
         }
       }
@@ -897,6 +914,7 @@ async function runResearch(socket: any, query: string) {
     task.finalReport = task.draft
     task.finishedAt = Date.now()
     emit('research:phase', { phase: 'final', title: 'Research complete' })
+    announcePhase(socket, 'Research complete. Final report delivered.')
     emit('research:final', {
       query: task.query,
       finalReport: task.finalReport,
