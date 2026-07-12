@@ -13,6 +13,7 @@ import {
   AlertCircle,
   ChevronDown,
   Zap,
+  Search,
 } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import {
@@ -279,6 +280,53 @@ export default function SettingsPanel() {
               </div>
             </>
           )}
+
+          {/* Search API Keys (optional — enables multi-provider search) */}
+          <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
+            <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-300">
+              <Search className="h-3 w-3" /> Search API Keys (optional)
+            </div>
+            <p className="mb-3 text-[10px] text-white/40">
+              Add keys to enable multi-provider search aggregation. All configured
+              providers are queried in parallel and results are merged + deduplicated.
+              Free tiers: Brave (2000/mo), Tavily (1000/mo), Exa (1000/mo).
+            </p>
+            <div className="space-y-2">
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Brave Search API Key</label>
+                <Input
+                  type="password"
+                  value={form.braveApiKey || ''}
+                  onChange={(e) => setField('braveApiKey', e.target.value)}
+                  placeholder="BSA... (get from brave.com/search/api)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Tavily API Key</label>
+                <Input
+                  type="password"
+                  value={form.tavilyApiKey || ''}
+                  onChange={(e) => setField('tavilyApiKey', e.target.value)}
+                  placeholder="tvly-... (get from tavily.com)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Exa API Key</label>
+                <Input
+                  type="password"
+                  value={form.exaApiKey || ''}
+                  onChange={(e) => setField('exaApiKey', e.target.value)}
+                  placeholder="exa-... (get from exa.ai)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-[9px] text-white/30">
+              Without any keys, the system uses Z.ai + DuckDuckGo (both free, no key needed).
+            </p>
+          </div>
 
           {/* Save button */}
           <div className="flex items-center justify-between gap-3 border-t border-white/10 pt-4">

@@ -1,12 +1,9 @@
 /**
- * agents/researcher.ts — The Discovery agent. Runs deep web search per
- * sub-query and streams sources to the client as they arrive. Also runs
- * an academic-paper-oriented search pass to surface research papers.
- *
- * Performance: checks the parameterized search cache first — if a sub-query
- * was already searched, returns the cached result instantly.
+ * agents/researcher.ts — The Discovery agent. Runs multi-provider web search
+ * per sub-query and streams sources to the client. Uses the search aggregator
+ * to query Brave, Tavily, Exa, DuckDuckGo, and Z.ai in parallel.
  */
-import { webSearch } from '../tools/web_search'
+import { multiSearch } from '../tools/search_providers'
 import { getCachedResults, cacheResults } from '../tools/search_cache'
 import type { Source, Emit } from '../types'
 import { sleep } from '../util'
@@ -17,50 +14,68 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
     // Check cache first.
     const cached = getCachedResults(sq)
     if (cached) {
-      emit('research:thought', { agent: 'Discovery', text: `⚡ Cache hit: "${sq}" — returning ${cached.length} cached sources instantly` })
+      emit('research:thought', { agent: 'Discovery', text: `Cache hit: "${sq}" — returning ${cached.length} cached sources instantly` })
       for (const src of cached) {
-        sources.push({ ...src, id: src.id + '_c' }) // new id to avoid dupes
+        sources.push({ ...src, id: src.id + '_c' })
         emit('research:source', { source: { ...src, id: src.id + '_c' } })
       }
       continue
     }
 
-    emit('research:thought', { agent: 'Discovery', text: `Searching the web: "${sq}"` })
+    emit('research:thought', { agent: 'Discovery', text: `Multi-provider search: "${sq}"` })
     try {
-      const results = await webSearch(sq, 5)
-      // Cache the results for future runs.
+      const { sources: results, providerStats } = await multiSearch(sq, 5, (ps) => {
+        if (ps.results.length > 0) {
+          emit('research:thought', {
+            agent: 'Discovery',
+            text: `[${ps.provider}] returned ${ps.results.length} results in ${ps.durationMs}ms`,
+          })
+        } else if (ps.error) {
+          emit('research:thought', {
+            agent: 'Discovery',
+            text: `[${ps.provider}] failed: ${ps.error.slice(0, 60)}`,
+          })
+        }
+      })
+
+      // Cache the merged results.
       cacheResults(sq, results)
-      for (const src of results.slice(0, 4)) {
+      for (const src of results.slice(0, 6)) {
         sources.push(src)
         emit('research:source', { source: src })
-        await sleep(120)
+        await sleep(100)
+      }
+
+      // Summary of which providers contributed.
+      const working = providerStats.filter((p) => p.results.length > 0).map((p) => p.provider)
+      if (working.length > 0) {
+        emit('research:thought', {
+          agent: 'Discovery',
+          text: `Merged ${results.length} unique sources from ${working.length} provider(s): ${working.join(', ')}`,
+        })
       }
     } catch (e) {
       emit('research:thought', {
         agent: 'Discovery',
-        text: `Search failed for "${sq}", continuing with partial results. (${(e as Error).message})`,
+        text: `Search failed for "${sq}": ${(e as Error).message}`,
       })
     }
     await sleep(200)
   }
 
-  // Academic paper pass — surface research papers for deeper grounding.
+  // Academic paper pass.
   const academicQuery = `${subQueries[0]} research paper arxiv`
-  // Check cache for the academic query too.
   const cachedAcademic = getCachedResults(academicQuery)
   if (cachedAcademic) {
-    emit('research:thought', { agent: 'Discovery', text: `⚡ Cache hit: academic pass — returning ${cachedAcademic.length} cached sources` })
+    emit('research:thought', { agent: 'Discovery', text: `Cache hit: academic pass` })
     for (const src of cachedAcademic) {
       sources.push({ ...src, id: src.id + '_ac' })
       emit('research:source', { source: { ...src, id: src.id + '_ac' } })
     }
   } else {
-    emit('research:thought', {
-      agent: 'Discovery',
-      text: `Searching for academic papers: "${academicQuery}"`,
-    })
+    emit('research:thought', { agent: 'Discovery', text: `Academic search: "${academicQuery}"` })
     try {
-      const paperResults = await webSearch(academicQuery, 4)
+      const { sources: paperResults } = await multiSearch(academicQuery, 4)
       cacheResults(academicQuery, paperResults)
       for (const src of paperResults.slice(0, 3)) {
         sources.push(src)
@@ -68,7 +83,7 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
         await sleep(100)
       }
     } catch {
-      /* academic search is best-effort */
+      /* best-effort */
     }
   }
 

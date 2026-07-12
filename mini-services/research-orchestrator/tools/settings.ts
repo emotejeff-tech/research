@@ -28,6 +28,10 @@ export interface LLMSettings {
   enabled: boolean
   /** When true, use the local provider as the PRIMARY engine (skip Z.ai entirely). */
   primary: boolean
+  /** Search API keys (optional — enable multi-provider search aggregation). */
+  braveApiKey?: string
+  tavilyApiKey?: string
+  exaApiKey?: string
 }
 
 /** Provider presets with sensible defaults. */
