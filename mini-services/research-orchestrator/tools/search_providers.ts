@@ -22,10 +22,13 @@ export interface SearchProviderResult {
 /** Per-provider rate limiting (minimum ms between calls). */
 const RATE_LIMITS: Record<string, number> = {
   zai: 200,
-  brave: 500,      // 1 req per second (free tier)
-  tavily: 400,     // ~2.5 req/sec
-  exa: 400,        // reasonable
-  duckduckgo: 1000, // be gentle
+  brave: 500,
+  tavily: 400,
+  exa: 400,
+  youcom: 600,
+  tinyfish: 500,
+  nimbler: 500,
+  duckduckgo: 1000,
 }
 
 const lastCallTime: Record<string, number> = {}
@@ -142,7 +145,6 @@ async function searchDuckDuckGo(query: string, num: number): Promise<Source[]> {
   })
   if (!res.ok) throw new Error(`DuckDuckGo HTTP ${res.status}`)
   const data: any = await res.json()
-  // DDG Instant API returns limited results — extract what we can.
   const results: Source[] = []
   if (data.AbstractText && data.AbstractURL) {
     results.push({
@@ -162,6 +164,71 @@ async function searchDuckDuckGo(query: string, num: number): Promise<Source[]> {
     if (results.length >= num) break
   }
   return results
+}
+
+// ---------- Provider: You.com ----------
+async function searchYouCom(query: string, num: number, apiKey: string): Promise<Source[]> {
+  await rateLimit('youcom')
+  const res = await fetch(`https://api.ydc-index.io/search?query=${encodeURIComponent(query)}&num_web_results=${num}`, {
+    headers: { 'X-API-Key': apiKey },
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`You.com HTTP ${res.status}`)
+  const data: any = await res.json()
+  return (data?.hits || []).slice(0, num).map((r: any) => ({
+    id: uid(),
+    query,
+    title: r.title || 'Untitled',
+    url: r.url,
+    snippet: (r.description || r.snippet || '').slice(0, 300),
+    host: (() => { try { return new URL(r.url).hostname } catch { return '' } })(),
+  }))
+}
+
+// ---------- Provider: TinyFish (AI-optimized search) ----------
+async function searchTinyFish(query: string, num: number, apiKey: string): Promise<Source[]> {
+  await rateLimit('tinyfish')
+  const res = await fetch('https://api.tinyfish.io/search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({ query, max_results: num }),
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`TinyFish HTTP ${res.status}`)
+  const data: any = await res.json()
+  return (data?.results || data?.data || []).slice(0, num).map((r: any) => ({
+    id: uid(),
+    query,
+    title: r.title || r.name || 'Untitled',
+    url: r.url || r.link,
+    snippet: (r.snippet || r.content || r.description || '').slice(0, 300),
+    host: (() => { try { return new URL(r.url || r.link).hostname } catch { return '' } })(),
+  }))
+}
+
+// ---------- Provider: Nimbler ----------
+async function searchNimbler(query: string, num: number, apiKey: string): Promise<Source[]> {
+  await rateLimit('nimbler')
+  const res = await fetch(`https://api.nimbler.io/v1/search?q=${encodeURIComponent(query)}&limit=${num}`, {
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`Nimbler HTTP ${res.status}`)
+  const data: any = await res.json()
+  return (data?.results || data?.web || []).slice(0, num).map((r: any) => ({
+    id: uid(),
+    query,
+    title: r.title || r.name || 'Untitled',
+    url: r.url || r.link,
+    snippet: (r.snippet || r.description || r.content || '').slice(0, 300),
+    host: (() => { try { return new URL(r.url || r.link).hostname } catch { return '' } })(),
+  }))
 }
 
 // ---------- Multi-provider aggregator ----------
@@ -211,6 +278,30 @@ export async function multiSearch(
     providers.push({
       name: 'exa',
       fn: () => searchExa(query, num, settings.exaApiKey),
+    })
+  }
+
+  // You.com (needs key)
+  if (settings.youcomApiKey) {
+    providers.push({
+      name: 'youcom',
+      fn: () => searchYouCom(query, num, settings.youcomApiKey),
+    })
+  }
+
+  // TinyFish (needs key)
+  if (settings.tinyfishApiKey) {
+    providers.push({
+      name: 'tinyfish',
+      fn: () => searchTinyFish(query, num, settings.tinyfishApiKey),
+    })
+  }
+
+  // Nimbler (needs key)
+  if (settings.nimblerApiKey) {
+    providers.push({
+      name: 'nimbler',
+      fn: () => searchNimbler(query, num, settings.nimblerApiKey),
     })
   }
 

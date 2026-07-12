@@ -32,10 +32,18 @@ export interface LLMSettings {
   braveApiKey?: string
   tavilyApiKey?: string
   exaApiKey?: string
+  youcomApiKey?: string
+  tinyfishApiKey?: string
+  nimblerApiKey?: string
   /** Sandbox API keys (optional — execute evolved tools in isolated cloud sandboxes). */
   daytonaApiKey?: string
   daytonaServerUrl?: string
   e2bApiKey?: string
+  /** Database keys (optional — persistent vector memory). */
+  supabaseUrl?: string
+  supabaseKey?: string
+  pineconeApiKey?: string
+  pineconeIndex?: string
 }
 
 /** Provider presets with sensible defaults. */
@@ -138,8 +146,13 @@ export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
       settings.braveApiKey ? 'brave' : null,
       settings.tavilyApiKey ? 'tavily' : null,
       settings.exaApiKey ? 'exa' : null,
+      settings.youcomApiKey ? 'youcom' : null,
+      settings.tinyfishApiKey ? 'tinyfish' : null,
+      settings.nimblerApiKey ? 'nimbler' : null,
       settings.daytonaApiKey ? 'daytona' : null,
       settings.e2bApiKey ? 'e2b' : null,
+      settings.supabaseUrl ? 'supabase' : null,
+      settings.pineconeApiKey ? 'pinecone' : null,
     ].filter(Boolean)
     console.log(`[settings] saved provider=${settings.provider} model=${settings.model || '(none)'} keys=[${keys.join(',')}]`)
   } catch (e) {

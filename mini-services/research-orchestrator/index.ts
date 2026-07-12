@@ -136,7 +136,7 @@ async function runResearch(socket: any, query: string) {
     })
 
     // RAG: retrieve past conclusions from vector memory before searching.
-    const pastConclusions = retrieveRelevant(query, 3)
+    const pastConclusions = await retrieveRelevant(query, 3)
     if (pastConclusions.length > 0) {
       emit('research:thought', {
         agent: 'Memory',
@@ -934,7 +934,7 @@ async function runResearch(socket: any, query: string) {
 
     // Store conclusion in vector memory for future RAG retrieval.
     if (task.finalReport && !degraded) {
-      storeConclusion(task.query, task.finalReport)
+      await storeConclusion(task.query, task.finalReport)
     }
 
     // Meta-Prompt Evolution: every 5 runs, analyze metrics + evolve prompts.

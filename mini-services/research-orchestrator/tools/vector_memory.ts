@@ -10,6 +10,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
+import { getSettings } from './settings'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const STORAGE_PATH = join(__dirname, '..', 'vector_memory.json')
@@ -81,7 +82,7 @@ function persist() {
 }
 
 /** Store a completed research conclusion for future RAG retrieval. */
-export function storeConclusion(query: string, conclusion: string) {
+export async function storeConclusion(query: string, conclusion: string) {
   const text = `${query} ${conclusion.slice(0, 500)}`
   const entry: MemoryEntry = {
     id: Math.random().toString(36).slice(2, 10),
@@ -92,16 +93,46 @@ export function storeConclusion(query: string, conclusion: string) {
     vector: vectorize(text),
   }
   store.entries.push(entry)
-  // Cap at 200 entries.
   if (store.entries.length > 200) store.entries = store.entries.slice(-200)
   persist()
+
+  // If Pinecone is configured, upsert to the cloud index for scalable RAG.
+  const s = getSettings()
+  if (s.pineconeApiKey && s.pineconeIndex) {
+    try {
+      await upsertPinecone(entry, s.pineconeApiKey, s.pineconeIndex)
+    } catch (e) {
+      console.error('[vector-memory] Pinecone upsert failed:', (e as Error).message)
+    }
+  }
+  // If Supabase is configured, store there too as a persistent backup.
+  if (s.supabaseUrl && s.supabaseKey) {
+    try {
+      await upsertSupabase(entry, s.supabaseUrl, s.supabaseKey)
+    } catch (e) {
+      console.error('[vector-memory] Supabase upsert failed:', (e as Error).message)
+    }
+  }
 }
 
 /**
  * RAG retrieval: find past conclusions similar to the given query.
- * Returns the top-k matches above a similarity threshold.
+ * Checks Pinecone first (if configured), then falls back to local vector store.
  */
-export function retrieveRelevant(query: string, k = 3, threshold = 0.15): MemoryEntry[] {
+export async function retrieveRelevant(query: string, k = 3, threshold = 0.15): Promise<MemoryEntry[]> {
+  const s = getSettings()
+
+  // Try Pinecone first for scalable cloud RAG.
+  if (s.pineconeApiKey && s.pineconeIndex) {
+    try {
+      const pineconeResults = await queryPinecone(query, k, s.pineconeApiKey, s.pineconeIndex)
+      if (pineconeResults.length > 0) return pineconeResults
+    } catch (e) {
+      console.error('[vector-memory] Pinecone query failed, using local:', (e as Error).message)
+    }
+  }
+
+  // Fallback: local in-memory vector store.
   if (!store.entries.length) return []
   const qVec = vectorize(query)
   const scored = store.entries.map((e) => ({
@@ -109,10 +140,80 @@ export function retrieveRelevant(query: string, k = 3, threshold = 0.15): Memory
     score: cosineSim(qVec, e.vector),
   }))
   return scored
-    .filter((s) => s.score >= threshold)
+    .filter((s2) => s2.score >= threshold)
     .sort((a, b) => b.score - a.score)
     .slice(0, k)
-    .map((s) => s.entry)
+    .map((s2) => s2.entry)
+}
+
+// ---------- Pinecone integration ----------
+async function upsertPinecone(entry: MemoryEntry, apiKey: string, index: string) {
+  // Pinecone REST API upsert.
+  const res = await fetch(`https://${index}-${apiKey.slice(0, 8)}.svc.pinecone.io/vectors/upsert`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Api-Key': apiKey,
+    },
+    body: JSON.stringify({
+      vectors: [{
+        id: entry.id,
+        values: entry.vector,
+        metadata: { query: entry.query, conclusion: entry.conclusion, text: entry.text },
+      }],
+    }),
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`Pinecone HTTP ${res.status}`)
+}
+
+async function queryPinecone(query: string, k: number, apiKey: string, index: string): Promise<MemoryEntry[]> {
+  const qVec = vectorize(query)
+  const res = await fetch(`https://${index}-${apiKey.slice(0, 8)}.svc.pinecone.io/query`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Api-Key': apiKey,
+    },
+    body: JSON.stringify({
+      vector: qVec,
+      topK: k,
+      includeMetadata: true,
+    }),
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`Pinecone HTTP ${res.status}`)
+  const data: any = await res.json()
+  return (data?.matches || []).map((m: any) => ({
+    id: m.id,
+    text: m.metadata?.text || '',
+    query: m.metadata?.query || '',
+    conclusion: m.metadata?.conclusion || '',
+    timestamp: 0,
+    vector: [],
+  }))
+}
+
+// ---------- Supabase integration ----------
+async function upsertSupabase(entry: MemoryEntry, url: string, key: string) {
+  const res = await fetch(`${url}/rest/v1/conclusions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': key,
+      'Authorization': `Bearer ${key}`,
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({
+      id: entry.id,
+      query: entry.query,
+      conclusion: entry.conclusion,
+      text: entry.text,
+      timestamp: entry.timestamp,
+    }),
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`Supabase HTTP ${res.status}`)
 }
 
 /** Get stats for the frontend. */

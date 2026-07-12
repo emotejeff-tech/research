@@ -15,6 +15,7 @@ import {
   Zap,
   Search,
   ShieldCheck,
+  Database,
 } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import {
@@ -60,9 +61,16 @@ export default function SettingsPanel() {
     braveApiKey: overrides.braveApiKey ?? settings?.braveApiKey ?? '',
     tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
     exaApiKey: overrides.exaApiKey ?? settings?.exaApiKey ?? '',
+    youcomApiKey: overrides.youcomApiKey ?? settings?.youcomApiKey ?? '',
+    tinyfishApiKey: overrides.tinyfishApiKey ?? settings?.tinyfishApiKey ?? '',
+    nimblerApiKey: overrides.nimblerApiKey ?? settings?.nimblerApiKey ?? '',
     daytonaApiKey: overrides.daytonaApiKey ?? settings?.daytonaApiKey ?? '',
     daytonaServerUrl: overrides.daytonaServerUrl ?? settings?.daytonaServerUrl ?? '',
     e2bApiKey: overrides.e2bApiKey ?? settings?.e2bApiKey ?? '',
+    supabaseUrl: overrides.supabaseUrl ?? settings?.supabaseUrl ?? '',
+    supabaseKey: overrides.supabaseKey ?? settings?.supabaseKey ?? '',
+    pineconeApiKey: overrides.pineconeApiKey ?? settings?.pineconeApiKey ?? '',
+    pineconeIndex: overrides.pineconeIndex ?? settings?.pineconeIndex ?? '',
   }), [settings, overrides])
 
   const setField = (field: string, value: any) => {
@@ -329,6 +337,36 @@ export default function SettingsPanel() {
                   className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
                 />
               </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">You.com API Key</label>
+                <Input
+                  type="password"
+                  value={form.youcomApiKey || ''}
+                  onChange={(e) => setField('youcomApiKey', e.target.value)}
+                  placeholder="ydc-... (get from api.ydc-index.io)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">TinyFish API Key</label>
+                <Input
+                  type="password"
+                  value={form.tinyfishApiKey || ''}
+                  onChange={(e) => setField('tinyfishApiKey', e.target.value)}
+                  placeholder="tf-... (get from tinyfish.io)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Nimbler API Key</label>
+                <Input
+                  type="password"
+                  value={form.nimblerApiKey || ''}
+                  onChange={(e) => setField('nimblerApiKey', e.target.value)}
+                  placeholder="nb-... (get from nimbler.io)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
             </div>
             <p className="mt-2 text-[9px] text-white/30">
               Without any keys, the system uses Z.ai + DuckDuckGo (both free, no key needed).
@@ -380,6 +418,65 @@ export default function SettingsPanel() {
             </div>
             <p className="mt-2 text-[9px] text-white/30">
               Without keys, tools execute locally via python3. With keys, tools run in an isolated sandbox and the VM is destroyed after each execution.
+            </p>
+          </div>
+
+          {/* Database Keys (optional — persistent cloud vector memory) */}
+          <div className="rounded-xl border border-violet-400/20 bg-violet-400/[0.04] p-4">
+            <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-violet-300">
+              <Database className="h-3 w-3" /> Cloud Vector Memory (optional)
+            </div>
+            <p className="mb-3 text-[10px] text-white/40">
+              When configured, research conclusions are stored in a cloud vector
+              database for scalable RAG retrieval. Pinecone enables fast
+              semantic search across all past runs. Supabase provides a
+              persistent SQL backup. Without keys, the system uses a local
+              JSON file (limited to 200 entries).
+            </p>
+            <div className="space-y-2">
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Pinecone API Key</label>
+                <Input
+                  type="password"
+                  value={form.pineconeApiKey || ''}
+                  onChange={(e) => setField('pineconeApiKey', e.target.value)}
+                  placeholder="pc-... (get from pinecone.io)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Pinecone Index Name</label>
+                <Input
+                  type="text"
+                  value={form.pineconeIndex || ''}
+                  onChange={(e) => setField('pineconeIndex', e.target.value)}
+                  placeholder="nexus-memory (create in Pinecone console)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Supabase URL</label>
+                <Input
+                  type="text"
+                  value={form.supabaseUrl || ''}
+                  onChange={(e) => setField('supabaseUrl', e.target.value)}
+                  placeholder="https://xxx.supabase.co (get from supabase.com)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Supabase Anon Key</label>
+                <Input
+                  type="password"
+                  value={form.supabaseKey || ''}
+                  onChange={(e) => setField('supabaseKey', e.target.value)}
+                  placeholder="eyJ... (get from supabase.com dashboard)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-[9px] text-white/30">
+              Requires a 'conclusions' table in Supabase (id text, query text, conclusion text, text text, timestamp bigint).
             </p>
           </div>
 
