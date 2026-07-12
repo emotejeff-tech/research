@@ -162,7 +162,6 @@ interface OrchestratorState {
     model: string
     enabled: boolean
     primary: boolean
-    braveApiKey?: string
     tavilyApiKey?: string
     exaApiKey?: string
     youcomApiKey?: string

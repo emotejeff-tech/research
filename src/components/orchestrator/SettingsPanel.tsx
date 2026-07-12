@@ -58,7 +58,6 @@ export default function SettingsPanel() {
     model: overrides.model ?? settings?.model ?? '',
     enabled: overrides.enabled ?? settings?.enabled ?? false,
     primary: overrides.primary ?? settings?.primary ?? false,
-    braveApiKey: overrides.braveApiKey ?? settings?.braveApiKey ?? '',
     tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
     exaApiKey: overrides.exaApiKey ?? settings?.exaApiKey ?? '',
     youcomApiKey: overrides.youcomApiKey ?? settings?.youcomApiKey ?? '',
@@ -304,19 +303,9 @@ export default function SettingsPanel() {
             <p className="mb-3 text-[10px] text-white/40">
               Add keys to enable multi-provider search aggregation. All configured
               providers are queried in parallel and results are merged + deduplicated.
-              Free tiers: Brave (2000/mo), Tavily (1000/mo), Exa (1000/mo).
+              Free tiers: Tavily (1000/mo), Exa (1000/mo), You.com, TinyFish, Nimbler.
             </p>
             <div className="space-y-2">
-              <div>
-                <label className="mb-1 block text-[10px] text-white/40">Brave Search API Key</label>
-                <Input
-                  type="password"
-                  value={form.braveApiKey || ''}
-                  onChange={(e) => setField('braveApiKey', e.target.value)}
-                  placeholder="BSA... (get from brave.com/search/api)"
-                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
-                />
-              </div>
               <div>
                 <label className="mb-1 block text-[10px] text-white/40">Tavily API Key</label>
                 <Input

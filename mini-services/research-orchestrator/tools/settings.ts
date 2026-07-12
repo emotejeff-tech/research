@@ -29,7 +29,6 @@ export interface LLMSettings {
   /** When true, use the local provider as the PRIMARY engine (skip Z.ai entirely). */
   primary: boolean
   /** Search API keys (optional — enable multi-provider search aggregation). */
-  braveApiKey?: string
   tavilyApiKey?: string
   exaApiKey?: string
   youcomApiKey?: string
@@ -143,7 +142,6 @@ export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
   try {
     writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), 'utf-8')
     const keys = [
-      settings.braveApiKey ? 'brave' : null,
       settings.tavilyApiKey ? 'tavily' : null,
       settings.exaApiKey ? 'exa' : null,
       settings.youcomApiKey ? 'youcom' : null,
@@ -214,27 +212,29 @@ export async function fetchModels(
 }
 
 /**
- * Check if the local tier is currently active (enabled + configured + not zai).
+ * Check if the local tier should be used. Auto-detects: if a non-zai provider
+ * is configured with a baseURL + model, it's active. No need to manually toggle.
  */
 export function isLocalTierActive(): boolean {
-  return settings.enabled && settings.provider !== 'zai' && !!settings.baseURL
+  return settings.provider !== 'zai' && !!settings.baseURL && !!settings.model
 }
 
 /**
- * Get the effective local LLM config (from settings, falling back to env vars).
+ * Check if the local provider should be the PRIMARY engine (skip Z.ai).
+ * Auto-detects: if a non-zai provider is configured, use it as primary.
+ * This avoids the Z.ai config requirement entirely.
+ */
+export function isLocalPrimary(): boolean {
+  return settings.provider !== 'zai' && !!settings.baseURL && !!settings.model
+}
+
+/**
+ * Get the effective local LLM config.
  */
 export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string } {
-  if (isLocalTierActive()) {
-    return {
-      baseURL: settings.baseURL,
-      apiKey: settings.apiKey || 'none',
-      model: settings.model || 'local-model',
-    }
-  }
-  // Fall back to env vars (legacy behavior).
   return {
-    baseURL: process.env.LOCAL_LLM_BASE_URL || '',
-    apiKey: process.env.LOCAL_LLM_KEY || 'ollama',
-    model: process.env.LOCAL_LLM_MODEL || 'qwen2.5:7b',
+    baseURL: settings.baseURL || '',
+    apiKey: settings.apiKey || 'none',
+    model: settings.model || 'local-model',
   }
 }

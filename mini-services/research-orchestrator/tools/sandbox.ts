@@ -58,32 +58,61 @@ export async function executeInSandbox(
 
 // ---------- E2B Sandbox ----------
 async function executeE2b(code: string, args: string, apiKey: string): Promise<SandboxResult> {
-  // E2B has a REST API for running code in a sandboxed Python environment.
-  // We use the code interpreter endpoint.
-  const res = await fetch('https://api.e2b.dev/code/run', {
+  // E2B's API: create a sandbox, run code, get result.
+  // The SDK uses /v1/sandboxes endpoint.
+  const res = await fetch('https://api.e2b.dev/v1/sandboxes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({
-      code: code + `\nimport sys\nif __name__ == '__main__':\n    main() if 'main' in dir() else None`,
-      args: args ? args.split(' ') : [],
-    }),
-    signal: AbortSignal.timeout(30000),
+    body: JSON.stringify({}),
+    signal: AbortSignal.timeout(15000),
   })
 
   if (!res.ok) {
     const errText = await res.text().catch(() => '')
-    throw new Error(`E2B HTTP ${res.status}: ${errText.slice(0, 200)}`)
+    throw new Error(`E2B create HTTP ${res.status}: ${errText.slice(0, 200)}`)
   }
 
-  const data: any = await res.json()
-  return {
-    stdout: data?.stdout || data?.output || '',
-    stderr: data?.stderr || '',
-    ok: !data?.error,
-    sandbox: 'e2b',
+  const sandbox: any = await res.json()
+  const sandboxId = sandbox.sandboxID || sandbox.id
+
+  try {
+    // Execute code in the sandbox.
+    const execRes = await fetch(`https://api.e2b.dev/v1/sandboxes/${sandboxId}/processes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        cmd: 'python3',
+        args: ['-c', code],
+      }),
+      signal: AbortSignal.timeout(20000),
+    })
+
+    if (!execRes.ok) {
+      throw new Error(`E2B exec HTTP ${execRes.status}`)
+    }
+
+    const execData: any = await execRes.json()
+    return {
+      stdout: execData?.stdout || execData?.output || '',
+      stderr: execData?.stderr || '',
+      ok: execData?.exitCode === 0 || execData?.exit_code === 0,
+      sandbox: 'e2b',
+    }
+  } finally {
+    // Kill the sandbox.
+    try {
+      await fetch(`https://api.e2b.dev/v1/sandboxes/${sandboxId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        signal: AbortSignal.timeout(5000),
+      })
+    } catch { /* cleanup */ }
   }
 }
 
@@ -94,9 +123,10 @@ async function executeDaytona(
   apiKey: string,
   serverUrl?: string,
 ): Promise<SandboxResult> {
-  const baseUrl = serverUrl || 'https://api.daytona.io'
+  // Daytona API v1: create workspace, execute, destroy.
+  const baseUrl = serverUrl || 'https://app.daytona.io/api'
 
-  // Step 1: Create a sandbox workspace.
+  // Step 1: Create a workspace.
   const createRes = await fetch(`${baseUrl}/workspace`, {
     method: 'POST',
     headers: {
@@ -105,20 +135,20 @@ async function executeDaytona(
     },
     body: JSON.stringify({
       image: 'python:3.12-slim',
-      os: 'linux',
     }),
     signal: AbortSignal.timeout(30000),
   })
 
   if (!createRes.ok) {
-    throw new Error(`Daytona create HTTP ${createRes.status}`)
+    const errText = await createRes.text().catch(() => '')
+    throw new Error(`Daytona create HTTP ${createRes.status}: ${errText.slice(0, 100)}`)
   }
 
   const workspace: any = await createRes.json()
   const workspaceId = workspace.id || workspace.workspaceId
 
   try {
-    // Step 2: Execute the Python code in the workspace.
+    // Step 2: Execute Python code.
     const execRes = await fetch(`${baseUrl}/workspace/${workspaceId}/execute`, {
       method: 'POST',
       headers: {
@@ -131,28 +161,22 @@ async function executeDaytona(
       signal: AbortSignal.timeout(20000),
     })
 
-    if (!execRes.ok) {
-      throw new Error(`Daytona exec HTTP ${execRes.status}`)
-    }
-
+    if (!execRes.ok) throw new Error(`Daytona exec HTTP ${execRes.status}`)
     const execData: any = await execRes.json()
     return {
       stdout: execData?.stdout || execData?.output || '',
       stderr: execData?.stderr || '',
-      ok: execData?.exitCode === 0,
+      ok: execData?.exitCode === 0 || execData?.exit_code === 0,
       sandbox: 'daytona',
     }
   } finally {
-    // Step 3: Destroy the workspace (ephemeral).
     try {
       await fetch(`${baseUrl}/workspace/${workspaceId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${apiKey}` },
         signal: AbortSignal.timeout(5000),
       })
-    } catch {
-      /* best-effort cleanup */
-    }
+    } catch { /* cleanup */ }
   }
 }
 

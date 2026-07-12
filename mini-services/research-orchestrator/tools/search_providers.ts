@@ -22,7 +22,6 @@ export interface SearchProviderResult {
 /** Per-provider rate limiting (minimum ms between calls). */
 const RATE_LIMITS: Record<string, number> = {
   zai: 200,
-  brave: 500,
   tavily: 400,
   exa: 400,
   youcom: 600,
@@ -57,28 +56,6 @@ async function searchZai(query: string, num: number): Promise<Source[]> {
     url: r.url,
     snippet: (r.snippet || '').slice(0, 300),
     host: r.host_name || '',
-  }))
-}
-
-// ---------- Provider: Brave Search API ----------
-async function searchBrave(query: string, num: number, apiKey: string): Promise<Source[]> {
-  await rateLimit('brave')
-  const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=${num}`, {
-    headers: {
-      'Accept': 'application/json',
-      'X-Subscription-Token': apiKey,
-    },
-    signal: AbortSignal.timeout(8000),
-  })
-  if (!res.ok) throw new Error(`Brave HTTP ${res.status}`)
-  const data: any = await res.json()
-  return (data?.web?.results || []).slice(0, num).map((r: any) => ({
-    id: uid(),
-    query,
-    title: r.title || 'Untitled',
-    url: r.url,
-    snippet: (r.description || '').slice(0, 300),
-    host: (() => { try { return new URL(r.url).hostname } catch { return '' } })(),
   }))
 }
 
@@ -256,14 +233,6 @@ export async function multiSearch(
     name: 'duckduckgo',
     fn: () => searchDuckDuckGo(query, num),
   })
-
-  // Brave (needs key)
-  if (settings.braveApiKey) {
-    providers.push({
-      name: 'brave',
-      fn: () => searchBrave(query, num, settings.braveApiKey),
-    })
-  }
 
   // Tavily (needs key)
   if (settings.tavilyApiKey) {

@@ -14,7 +14,7 @@
  */
 import { getZAI } from './sdk'
 import { sleep, extractJSON } from '../util'
-import { getLocalLLMConfig, isLocalTierActive, getSettings } from './settings'
+import { getLocalLLMConfig, isLocalTierActive, isLocalPrimary } from './settings'
 import type { LLMResult, Source } from '../types'
 
 export { extractJSON }
@@ -96,7 +96,13 @@ export async function localLLM(
       }),
       signal: controller.signal,
     })
-    if (!res.ok) throw new Error(`local LLM HTTP ${res.status}`)
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => '')
+      if (res.status === 404) {
+        throw new Error(`model "${config.model}" not found (HTTP 404). Run: ollama list — to see installed models, or: ollama pull ${config.model}`)
+      }
+      throw new Error(`local LLM HTTP ${res.status}: ${errBody.slice(0, 200)}`)
+    }
     const data: any = await res.json()
     const content = data?.choices?.[0]?.message?.content
     if (content && content.trim().length > 0) return content.trim()
@@ -114,12 +120,6 @@ export async function localLLM(
  * - 'heavy': synthesis, dreamer → max retries (reserve for quality).
  */
 export type TaskComplexity = 'simple' | 'standard' | 'heavy'
-
-/** Check if the user has configured a local provider as the PRIMARY engine. */
-function isLocalPrimary(): boolean {
-  const s = getSettings()
-  return s.primary && s.provider !== 'zai' && !!s.baseURL && !!s.model
-}
 
 /** Multi-tier fallback pipeline: primary → local → degraded.
  * If the user set a local provider as PRIMARY (in Settings), use it first.
