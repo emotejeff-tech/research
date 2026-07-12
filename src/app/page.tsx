@@ -29,6 +29,7 @@ import DreamPanel from '@/components/orchestrator/DreamPanel'
 import OpsecPanel from '@/components/orchestrator/OpsecPanel'
 import HardwareTelemetry from '@/components/orchestrator/HardwareTelemetry'
 import AdvancedCognition from '@/components/orchestrator/AdvancedCognition'
+import SettingsPanel from '@/components/orchestrator/SettingsPanel'
 import { GlassCard } from '@/components/orchestrator/GlassCard'
 import { usePhaseGlow } from '@/components/orchestrator/usePhaseGlow'
 
@@ -332,6 +333,9 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      {/* LLM Provider Settings Modal */}
+      <SettingsPanel />
     </div>
   )
 }

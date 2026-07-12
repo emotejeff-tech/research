@@ -154,6 +154,20 @@ interface OrchestratorState {
   draftSnapshots: { iteration: number; draft: string; timestamp: number }[]
   /** Meta-Prompt Evolution history. */
   metaPromptHistory: { timestamp: number; reason: string; changes: string }[]
+  /** LLM provider settings. */
+  llmSettings: {
+    provider: string
+    baseURL: string
+    apiKey: string
+    model: string
+    enabled: boolean
+  } | null
+  /** Provider presets for the settings UI. */
+  providerPresets: Record<string, { label: string; defaultURL: string; defaultKey: string; defaultModel: string; needsKey: boolean; help: string }> | null
+  /** Available models fetched from the provider. */
+  availableModels: string[]
+  /** Settings modal open state. */
+  settingsOpen: boolean
 
   // actions
   init: () => void
@@ -162,6 +176,9 @@ interface OrchestratorState {
   clearTelemetry: () => void
   requestStats: () => void
   sendCritiqueOverride: (action: 'accept' | 'revise', feedback?: string) => void
+  setSettingsOpen: (open: boolean) => void
+  saveLLMSettings: (settings: any) => void
+  fetchProviderModels: (provider: string, baseURL: string, apiKey: string) => void
 }
 
 let socket: Socket | null = null
@@ -214,6 +231,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   saboteurInjection: null,
   draftSnapshots: [],
   metaPromptHistory: [],
+  llmSettings: null,
+  providerPresets: null,
+  availableModels: [],
+  settingsOpen: false,
 
   init: () => {
     if (initialized) return
@@ -366,6 +387,17 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       if (d?.history) {
         set({ metaPromptHistory: d.history as { timestamp: number; reason: string; changes: string }[] })
       }
+    })
+
+    socket.on('settings:update', (d: any) => {
+      set({
+        llmSettings: d.settings || null,
+        providerPresets: d.presets || null,
+      })
+    })
+
+    socket.on('settings:models', (d: any) => {
+      set({ availableModels: d.models || [] })
     })
 
     socket.on('research:routing', (d: any) => {
@@ -536,6 +568,20 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
   sendCritiqueOverride: (action: 'accept' | 'revise', feedback?: string) => {
     socket?.emit('critique:override', { action, feedback })
+  },
+
+  setSettingsOpen: (open: boolean) => {
+    set({ settingsOpen: open })
+    if (open) socket?.emit('settings:get', {})
+  },
+
+  saveLLMSettings: (settings: any) => {
+    socket?.emit('settings:save', { settings })
+  },
+
+  fetchProviderModels: (provider: string, baseURL: string, apiKey: string) => {
+    set({ availableModels: [] })
+    socket?.emit('settings:fetchModels', { provider, baseURL, apiKey })
   },
 }))
 

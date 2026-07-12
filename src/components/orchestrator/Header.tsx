@@ -1,11 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, Github, Wifi, WifiOff } from 'lucide-react'
+import { Activity, Github, Wifi, WifiOff, Settings as SettingsIcon, Cpu } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 
 export default function Header() {
   const connected = useOrchestrator((s) => s.connected)
+  const setSettingsOpen = useOrchestrator((s) => s.setSettingsOpen)
+  const llmSettings = useOrchestrator((s) => s.llmSettings)
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/5 bg-black/30 backdrop-blur-xl">
@@ -43,11 +45,30 @@ export default function Header() {
             {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
             {connected ? 'orchestrator live' : 'reconnecting…'}
           </span>
+          {/* Active provider badge */}
+          {llmSettings && llmSettings.provider !== 'zai' && llmSettings.enabled && (
+            <span
+              className="flex items-center gap-1.5 rounded-full bg-sky-400/10 px-2.5 py-1 text-[10px] font-medium text-sky-300"
+              title={`${llmSettings.provider}: ${llmSettings.model}`}
+            >
+              <Cpu className="h-3 w-3" />
+              {llmSettings.provider}
+            </span>
+          )}
+          {/* Settings button */}
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-white/60 transition-colors hover:border-emerald-400/30 hover:bg-emerald-400/10 hover:text-emerald-300"
+            title="LLM Provider Settings"
+          >
+            <SettingsIcon className="h-3 w-3" />
+            <span className="hidden sm:inline">Settings</span>
+          </button>
           <a
             href="https://github.com/langchain-ai/langgraph"
             target="_blank"
             rel="noreferrer noopener"
-            className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-white/50 transition-colors hover:bg-white/10 hover:text-white/80 sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] text-white/50 transition-colors hover:bg-white/10 hover:text-white/80 lg:flex"
           >
             <Github className="h-3 w-3" />
             LangGraph-style DAG

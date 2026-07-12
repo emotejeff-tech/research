@@ -14,15 +14,13 @@
  */
 import { getZAI } from './sdk'
 import { sleep, extractJSON } from '../util'
+import { getLocalLLMConfig, isLocalTierActive } from './settings'
 import type { LLMResult, Source } from '../types'
 
 export { extractJSON }
 
 // ---------- Tier configuration ----------
-const LOCAL_LLM_BASE_URL = process.env.LOCAL_LLM_BASE_URL || '' // e.g. http://localhost:11434/v1
-const LOCAL_LLM_MODEL = process.env.LOCAL_LLM_MODEL || 'qwen2.5:7b'
-const LOCAL_LLM_KEY = process.env.LOCAL_LLM_KEY || 'ollama'
-const LOCAL_LLM_TIMEOUT_MS = 4000 // fast-fail so we never stall on a dead endpoint
+const LOCAL_LLM_TIMEOUT_MS = 6000 // fast-fail so we never stall on a dead endpoint
 
 // ---------- Tier 1: primary (z-ai cloud) ----------
 /** Primary LLM call with exponential-backoff retries. Throws on total failure. */
@@ -57,30 +55,32 @@ export async function llm(
   throw lastErr
 }
 
-// ---------- Tier 2: local model (Ollama / LM Studio, OpenAI-compatible) ----------
+// ---------- Tier 2: local model (Ollama / LM Studio / OpenRouter / llama.cpp) ----------
 /**
- * Attempts a local OpenAI-compatible inference endpoint. Returns the text on
- * success, or throws if unconfigured / unreachable / empty. Designed to fail
- * fast (LOCAL_LLM_TIMEOUT_MS) so the pipeline moves on without stalling.
+ * Attempts a local or remote OpenAI-compatible inference endpoint, using the
+ * provider settings configured via the UI (or env vars as fallback). Returns
+ * the text on success, or throws if unconfigured / unreachable / empty.
+ * Designed to fail fast (LOCAL_LLM_TIMEOUT_MS) so the pipeline moves on.
  */
 export async function localLLM(
   systemPrompt: string,
   userPrompt: string,
 ): Promise<string> {
-  if (!LOCAL_LLM_BASE_URL) {
-    throw new Error('LOCAL_LLM_BASE_URL not configured')
+  const config = getLocalLLMConfig()
+  if (!config.baseURL) {
+    throw new Error('No local LLM configured — set a provider in Settings')
   }
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
   try {
-    const res = await fetch(`${LOCAL_LLM_BASE_URL.replace(/\/$/, '')}/chat/completions`, {
+    const res = await fetch(`${config.baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${LOCAL_LLM_KEY}`,
+        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify({
-        model: LOCAL_LLM_MODEL,
+        model: config.model,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
@@ -130,8 +130,9 @@ export async function llmWithFallback(
     )
   }
 
-  // Tier 2 — local model (Ollama / LM Studio). Only attempted if configured.
-  if (LOCAL_LLM_BASE_URL) {
+  // Tier 2 — local/remote model (Ollama / LM Studio / OpenRouter / llama.cpp).
+  // Only attempted if the user has enabled + configured a provider in Settings.
+  if (isLocalTierActive()) {
     try {
       const content = await localLLM(systemPrompt, userPrompt)
       console.warn('[llm] tier2 (local) served the request — primary was unavailable.')

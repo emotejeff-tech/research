@@ -369,3 +369,40 @@ GPU/vLLM, Neo4j, Docker/WSL/Kali, Tor, RAM-disk, VRAM offloading, LoRA fine-tuni
 
 Stage Summary:
 - Implemented 8 of the 30 features: Meta-Prompt Evolution (self-compounding prompts), Hypothesis Engine (anti-confirmation-bias), Swarm Mode (parallel planners), Dynamic Agent Spawning (specialist agents), Saboteur (adversarial red-teaming), Timeline Snapshot Reversions (scrub through iterations), expanded StreamingLog emoji styling, and the AdvancedCognition panel. Browser-verified: hypotheses + spawning + timeline snapshots all render and fire correctly. Lint clean.
+
+---
+Task ID: 13
+Agent: orchestrator (main)
+Task: Add LLM provider settings UI — support Ollama, LM Studio, OpenRouter, llama.cpp, and custom OpenAI-compatible endpoints, with auto model fetching so the user can select from a dropdown.
+
+Work Log:
+- tools/settings.ts (new): persistent LLM provider settings module:
+  - ProviderType: 'zai' | 'ollama' | 'lmstudio' | 'openrouter' | 'llamacpp' | 'custom'
+  - PROVIDER_PRESETS: 6 presets with label, defaultURL, defaultKey, defaultModel, needsKey, help text for each
+  - loadSettings()/saveSettings(): persist to settings.json (survives restarts)
+  - fetchModels(): auto-discovers available models — Ollama uses /api/tags (native), all others use /v1/models (OpenAI-compatible). 5s timeout.
+  - getLocalLLMConfig(): returns the effective config from settings (falls back to env vars if not configured)
+  - isLocalTierActive(): checks if the local tier is enabled + configured
+- tools/llm.ts: updated localLLM() to use getLocalLLMConfig() dynamically instead of static env vars. Updated llmWithFallback() to use isLocalTierActive() instead of checking LOCAL_LLM_BASE_URL. Timeout increased to 6s for slower local models.
+- index.ts: added loadSettings() to startup; added socket events:
+  - settings:get → emits current settings + presets
+  - settings:save → persists + broadcasts updated settings
+  - settings:fetchModels → fetches models from the provider endpoint
+  - Auto-sends settings:update on client connect
+- Frontend store: added llmSettings, providerPresets, availableModels, settingsOpen state + settings:update/settings:models handlers + setSettingsOpen/saveLLMSettings/fetchProviderModels actions
+- SettingsPanel.tsx (new): glassmorphic modal dialog with:
+  - Provider dropdown (Z.ai / Ollama / LM Studio / OpenRouter / llama.cpp / Custom) with help text per provider
+  - Enable-as-fallback-tier toggle
+  - Base URL input (auto-filled from preset)
+  - API key input (only shown for providers that need it — OpenRouter)
+  - Model field with auto-fetch: "Fetch" button calls the provider's /v1/models endpoint, results populate a dropdown for easy selection. Auto-selects the first model if none is chosen.
+  - Save button with "Saved" confirmation
+  - Status text showing current configuration
+- Header.tsx: added Settings button (gear icon) + active-provider badge (sky, shows when a non-zai provider is enabled)
+- page.tsx: renders SettingsPanel modal
+
+VERIFICATION:
+- Agent Browser: Settings button visible in header. Clicked → modal opens with "LLM Provider Settings" heading. Provider dropdown shows all 6 options (Z.ai, Ollama, LM Studio, OpenRouter, llama.cpp, Custom). Selected Ollama → URL/model auto-filled from preset. Clicked "Fetch" → spinner showed "Fetching models from ollama…" → timed out gracefully (no Ollama running). Clicked "Save Settings" → settings persisted to settings.json ({provider:ollama, baseURL:http://localhost:11434/v1, apiKey:ollama, model:llama3.2, enabled:false}). No errors. Lint clean.
+
+Stage Summary:
+- Full LLM provider settings system is live. Users can configure Ollama, LM Studio, OpenRouter, llama.cpp, or any custom OpenAI-compatible endpoint via a glassmorphic settings modal. The "Fetch" button auto-discovers available models from the provider's endpoint and populates a dropdown for easy selection — no manual model name typing needed. Settings persist to settings.json and are used as Tier 2 in the fallback pipeline when enabled. Browser-verified end-to-end. Lint clean.

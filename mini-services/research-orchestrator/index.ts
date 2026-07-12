@@ -40,6 +40,7 @@ import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats } f
 import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
+import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -935,6 +936,8 @@ io.on('connection', (socket) => {
 
   // Send historical telemetry so the frontend graph renders immediately.
   socket.emit('telemetry:history', { logs: getLogs() })
+  // Send current LLM provider settings + presets.
+  socket.emit('settings:update', { settings: getSettings(), presets: PROVIDER_PRESETS })
 
   socket.on('research:start', (data: { query: string }) => {
     const query = (data?.query || '').trim()
@@ -997,6 +1000,25 @@ io.on('connection', (socket) => {
     socket.emit('research:metaPrompt', { history: getEvolutionHistory() })
   })
 
+  // ---- LLM Provider Settings ----
+  socket.on('settings:get', () => {
+    socket.emit('settings:update', {
+      settings: getSettings(),
+      presets: PROVIDER_PRESETS,
+    })
+  })
+
+  socket.on('settings:save', (data: { settings: LLMSettings }) => {
+    const saved = saveSettings(data.settings)
+    socket.emit('settings:update', { settings: saved, presets: PROVIDER_PRESETS })
+    console.log(`[settings] provider saved: ${saved.provider} / ${saved.model || '(none)'}`)
+  })
+
+  socket.on('settings:fetchModels', async (data: { provider: ProviderType; baseURL: string; apiKey: string }) => {
+    const result = await fetchModels(data.provider, data.baseURL, data.apiKey)
+    socket.emit('settings:models', { models: result.models, error: result.error })
+  })
+
   socket.on('telemetry:clear', () => {
     clearLogs()
     socket.emit('telemetry:history', { logs: [] })
@@ -1013,6 +1035,7 @@ httpServer.listen(PORT, () => {
   loadSearchCache()
   loadVectorMemory()
   loadMetaPrompts()
+  loadSettings()
   // Run skill deprecation on boot + every 6 hours.
   const deprecated = deprecateStaleTools(pluginRegistryMeta)
   if (deprecated.length > 0) {
