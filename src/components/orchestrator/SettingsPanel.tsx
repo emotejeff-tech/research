@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Zap,
   Search,
+  ShieldCheck,
 } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import {
@@ -56,6 +57,12 @@ export default function SettingsPanel() {
     model: overrides.model ?? settings?.model ?? '',
     enabled: overrides.enabled ?? settings?.enabled ?? false,
     primary: overrides.primary ?? settings?.primary ?? false,
+    braveApiKey: overrides.braveApiKey ?? settings?.braveApiKey ?? '',
+    tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
+    exaApiKey: overrides.exaApiKey ?? settings?.exaApiKey ?? '',
+    daytonaApiKey: overrides.daytonaApiKey ?? settings?.daytonaApiKey ?? '',
+    daytonaServerUrl: overrides.daytonaServerUrl ?? settings?.daytonaServerUrl ?? '',
+    e2bApiKey: overrides.e2bApiKey ?? settings?.e2bApiKey ?? '',
   }), [settings, overrides])
 
   const setField = (field: string, value: any) => {
@@ -325,6 +332,54 @@ export default function SettingsPanel() {
             </div>
             <p className="mt-2 text-[9px] text-white/30">
               Without any keys, the system uses Z.ai + DuckDuckGo (both free, no key needed).
+            </p>
+          </div>
+
+          {/* Sandbox API Keys (optional — isolated execution of evolved tools) */}
+          <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.04] p-4">
+            <div className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-rose-300">
+              <ShieldCheck className="h-3 w-3" /> Sandbox Execution (optional)
+            </div>
+            <p className="mb-3 text-[10px] text-white/40">
+              When configured, evolved Python tools execute in an isolated cloud
+              sandbox instead of your local machine. This creates a hard security
+              boundary — if the agent hallucinates destructive code, it only
+              affects the ephemeral sandbox. Priority: E2B {'->'} Daytona {'->'} local.
+            </p>
+            <div className="space-y-2">
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">E2B API Key (Python-native sandbox)</label>
+                <Input
+                  type="password"
+                  value={form.e2bApiKey || ''}
+                  onChange={(e) => setField('e2bApiKey', e.target.value)}
+                  placeholder="e2b-... (get from e2b.dev)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Daytona API Key (full VM sandbox)</label>
+                <Input
+                  type="password"
+                  value={form.daytonaApiKey || ''}
+                  onChange={(e) => setField('daytonaApiKey', e.target.value)}
+                  placeholder="dt-... (get from daytona.io)"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] text-white/40">Daytona Server URL (optional, self-hosted)</label>
+                <Input
+                  type="text"
+                  value={form.daytonaServerUrl || ''}
+                  onChange={(e) => setField('daytonaServerUrl', e.target.value)}
+                  placeholder="https://api.daytona.io (default) or https://your-server.com"
+                  className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-[9px] text-white/30">
+              Without keys, tools execute locally via python3. With keys, tools run in an isolated sandbox and the VM is destroyed after each execution.
             </p>
           </div>
 

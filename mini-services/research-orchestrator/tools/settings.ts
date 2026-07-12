@@ -32,6 +32,10 @@ export interface LLMSettings {
   braveApiKey?: string
   tavilyApiKey?: string
   exaApiKey?: string
+  /** Sandbox API keys (optional — execute evolved tools in isolated cloud sandboxes). */
+  daytonaApiKey?: string
+  daytonaServerUrl?: string
+  e2bApiKey?: string
 }
 
 /** Provider presets with sensible defaults. */
@@ -116,12 +120,28 @@ export function loadSettings() {
   }
 }
 
-/** Save settings to disk. */
-export function saveSettings(newSettings: LLMSettings): LLMSettings {
-  settings = { ...newSettings }
+/** Save settings to disk. Merges with existing settings so partial updates
+ * from the frontend don't wipe keys that aren't in the current form. */
+export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
+  // Merge: existing settings as base, new settings override on top.
+  // Only override keys that are explicitly present (not undefined).
+  const merged: LLMSettings = { ...settings }
+  for (const [key, value] of Object.entries(newSettings)) {
+    if (value !== undefined) {
+      ;(merged as any)[key] = value
+    }
+  }
+  settings = merged
   try {
     writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), 'utf-8')
-    console.log(`[settings] saved provider=${settings.provider} model=${settings.model}`)
+    const keys = [
+      settings.braveApiKey ? 'brave' : null,
+      settings.tavilyApiKey ? 'tavily' : null,
+      settings.exaApiKey ? 'exa' : null,
+      settings.daytonaApiKey ? 'daytona' : null,
+      settings.e2bApiKey ? 'e2b' : null,
+    ].filter(Boolean)
+    console.log(`[settings] saved provider=${settings.provider} model=${settings.model || '(none)'} keys=[${keys.join(',')}]`)
   } catch (e) {
     console.error('[settings] save failed:', (e as Error).message)
   }

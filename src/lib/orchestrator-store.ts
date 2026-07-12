@@ -165,6 +165,9 @@ interface OrchestratorState {
     braveApiKey?: string
     tavilyApiKey?: string
     exaApiKey?: string
+    daytonaApiKey?: string
+    daytonaServerUrl?: string
+    e2bApiKey?: string
   } | null
   /** Provider presets for the settings UI. */
   providerPresets: Record<string, { label: string; defaultURL: string; defaultKey: string; defaultModel: string; needsKey: boolean; help: string }> | null
