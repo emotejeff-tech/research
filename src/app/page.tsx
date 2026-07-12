@@ -28,6 +28,7 @@ import ImprovementGraph from '@/components/orchestrator/ImprovementGraph'
 import DreamPanel from '@/components/orchestrator/DreamPanel'
 import OpsecPanel from '@/components/orchestrator/OpsecPanel'
 import HardwareTelemetry from '@/components/orchestrator/HardwareTelemetry'
+import AdvancedCognition from '@/components/orchestrator/AdvancedCognition'
 import { GlassCard } from '@/components/orchestrator/GlassCard'
 import { usePhaseGlow } from '@/components/orchestrator/usePhaseGlow'
 
@@ -242,6 +243,16 @@ export default function Home() {
           className="mt-5"
         >
           <OpsecPanel />
+        </motion.section>
+
+        {/* ADVANCED COGNITION LAYER */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-5"
+        >
+          <AdvancedCognition />
         </motion.section>
 
         {/* HARDWARE TELEMETRY + IMPROVEMENT TRACKER */}

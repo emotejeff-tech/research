@@ -146,6 +146,14 @@ interface OrchestratorState {
     cache: { entries: number; totalHits: number }
     plugins: number
   } | null
+  /** Hypothesis Engine: 3 mutually exclusive hypotheses + disproof queries. */
+  hypotheses: { statement: string; disproofQuery: string }[]
+  /** Saboteur: the injected poisoned source flaw (for the Critic to catch). */
+  saboteurInjection: { flaw: string; flawType: string } | null
+  /** Draft snapshots for timeline reversion (one per critic iteration). */
+  draftSnapshots: { iteration: number; draft: string; timestamp: number }[]
+  /** Meta-Prompt Evolution history. */
+  metaPromptHistory: { timestamp: number; reason: string; changes: string }[]
 
   // actions
   init: () => void
@@ -202,6 +210,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   opsecAudits: [],
   upgradeStage: null,
   systemStats: null,
+  hypotheses: [],
+  saboteurInjection: null,
+  draftSnapshots: [],
+  metaPromptHistory: [],
 
   init: () => {
     if (initialized) return
@@ -221,6 +233,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       socket?.emit('history:request', {})
       socket?.emit('telemetry:request', {})
       socket?.emit('stats:request', {})
+      socket?.emit('metaPrompt:request', {})
     })
     socket.on('disconnect', () => set({ connected: false }))
 
@@ -333,6 +346,26 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
     socket.on('stats:update', (d: any) => {
       set({ systemStats: d })
+    })
+
+    socket.on('research:hypotheses', (d: any) => {
+      set({ hypotheses: (d.hypotheses || []) as { statement: string; disproofQuery: string }[] })
+    })
+
+    socket.on('research:saboteur', (d: any) => {
+      set({ saboteurInjection: { flaw: d.flaw, flawType: d.flawType } })
+    })
+
+    socket.on('research:snapshot', (d: any) => {
+      set((s) => ({
+        draftSnapshots: [...s.draftSnapshots, { iteration: d.iteration, draft: d.draft, timestamp: d.timestamp }],
+      }))
+    })
+
+    socket.on('research:metaPrompt', (d: any) => {
+      if (d?.history) {
+        set({ metaPromptHistory: d.history as { timestamp: number; reason: string; changes: string }[] })
+      }
     })
 
     socket.on('research:routing', (d: any) => {
@@ -448,6 +481,9 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       error: null,
       evolutionStage: null,
       opsecAudits: [],
+      hypotheses: [],
+      saboteurInjection: null,
+      draftSnapshots: [],
       log: [
         {
           id: uid(),
@@ -483,6 +519,9 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       error: null,
       evolutionStage: null,
       opsecAudits: [],
+      hypotheses: [],
+      saboteurInjection: null,
+      draftSnapshots: [],
       log: [],
     })
   },

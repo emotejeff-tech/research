@@ -13,8 +13,11 @@ export default function CriticLoop() {
   const phase = useOrchestrator((s) => s.phase)
   const running = useOrchestrator((s) => s.running)
   const sendOverride = useOrchestrator((s) => s.sendCritiqueOverride)
+  const snapshots = useOrchestrator((s) => s.draftSnapshots)
+  const finalReport = useOrchestrator((s) => s.finalReport)
   const glow = usePhaseGlow(['critique'])
   const [overrideText, setOverrideText] = useState('')
+  const [selectedSnapshot, setSelectedSnapshot] = useState<number | null>(null)
 
   const MAX = 3
   const canOverride = running && phase === 'critique'
@@ -155,6 +158,51 @@ export default function CriticLoop() {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Timeline Snapshot Reversion */}
+        {snapshots.length > 0 && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-white/40">
+                Timeline Snapshots · scrub through iterations
+              </span>
+              {selectedSnapshot !== null && (
+                <button
+                  onClick={() => setSelectedSnapshot(null)}
+                  className="text-[10px] text-white/40 hover:text-white/70"
+                >
+                  return to latest
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {snapshots.map((snap, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedSnapshot(snap.iteration)}
+                  className={`flex-1 rounded-lg border px-2 py-1.5 text-center text-[10px] font-medium transition-all ${
+                    selectedSnapshot === snap.iteration
+                      ? 'border-violet-400/40 bg-violet-400/15 text-violet-300'
+                      : i === snapshots.length - 1 && selectedSnapshot === null
+                        ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-300'
+                        : 'border-white/10 bg-white/5 text-white/40 hover:bg-white/10'
+                  }`}
+                  title={`Iteration ${snap.iteration} · ${snap.draft.length} chars`}
+                >
+                  i{snap.iteration}
+                  {i === snapshots.length - 1 && (
+                    <span className="ml-1 text-[8px] uppercase">latest</span>
+                  )}
+                </button>
+              ))}
+            </div>
+            {selectedSnapshot !== null && (
+              <div className="mt-2 max-h-32 overflow-y-auto scroll-fancy rounded-lg bg-black/40 p-2 text-[10px] leading-relaxed text-white/50">
+                {snapshots.find((s) => s.iteration === selectedSnapshot)?.draft.slice(0, 400)}…
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Interactive critique override */}
         <AnimatePresence>

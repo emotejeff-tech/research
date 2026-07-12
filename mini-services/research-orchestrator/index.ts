@@ -23,6 +23,9 @@ import { critique } from './agents/critic'
 import { evolve, authorFromBlueprint, testTool, rollbackTool, runUnitTest } from './agents/evolution'
 import { dream } from './agents/dreamer'
 import { devilsAdvocate } from './agents/devils_advocate'
+import { generateHypotheses, type Hypothesis } from './agents/hypothesis_engine'
+import { generatePoisonedSource } from './agents/saboteur'
+import { swarmPlan, spawnSpecialistAgent } from './agents/swarm_planner'
 import { runEvolvedTool } from './tools/plugin_runner'
 import {
   loadSavedRegistry,
@@ -36,6 +39,7 @@ import { loadSearchCache, getCachedResults, cacheResults, getCacheStats } from '
 import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats } from './tools/vector_memory'
 import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
+import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -155,11 +159,115 @@ async function runResearch(socket: any, query: string) {
     }
     await sleep(400)
 
+    // -------- SWARM MODE (parallel planners for blueprint tasks) --------
+    if (task.taskType === 'blueprint' && !degraded) {
+      emit('research:thought', {
+        agent: 'Coordinator',
+        text: '🐝 SWARM MODE: Spawning 3 parallel planners (Security / Performance / UX) to tackle the architecture from different angles…',
+      })
+      try {
+        const branches = await swarmPlan(query)
+        const extraSubs = branches.flatMap((b) => b.subqueries)
+        // Merge swarm sub-queries into the existing ones (deduped, capped at 6).
+        const merged = [...task.subQueries, ...extraSubs].filter(
+          (v, i, a) => a.indexOf(v) === i,
+        )
+        task.subQueries = merged.slice(0, 6)
+        for (const b of branches) {
+          emit('research:thought', {
+            agent: `Swarm·${b.angle}`,
+            text: `🐝 ${b.angle} branch: ${b.subqueries.length} sub-queries merged into DAG.`,
+          })
+        }
+      } catch (e) {
+        emit('research:thought', {
+          agent: 'Coordinator',
+          text: `Swarm mode skipped: ${(e as Error).message}`,
+        })
+      }
+      await sleep(300)
+    }
+
+    // -------- DYNAMIC AGENT SPAWNING --------
+    if (!degraded) {
+      try {
+        const domain = task.subQueries[0]?.split(/\s+/).slice(0, 3).join(' ') || query.slice(0, 30)
+        const specialistPrompt = await spawnSpecialistAgent(query, domain)
+        emit('research:thought', {
+          agent: 'Spawner',
+          text: `🧬 Spawned specialist agent for "${domain}…" — tailored system prompt authored (${specialistPrompt.length} chars).`,
+        })
+      } catch {
+        /* best-effort */
+      }
+      await sleep(200)
+    }
+
+    // -------- HYPOTHESIS ENGINE (anti-confirmation-bias) --------
+    let hypotheses: Hypothesis[] = []
+    if (task.taskType === 'research' && !degraded) {
+      emit('research:thought', {
+        agent: 'Hypothesis Engine',
+        text: '🔬 Generating 3 mutually exclusive hypotheses to violently neutralize confirmation bias…',
+      })
+      try {
+        hypotheses = await generateHypotheses(query)
+        if (hypotheses.length > 0) {
+          emit('research:hypotheses', { hypotheses })
+          for (const h of hypotheses) {
+            emit('research:thought', {
+              agent: 'Hypothesis Engine',
+              text: `📋 Hypothesis: "${h.statement.slice(0, 80)}…" → disproof query: "${h.disproofQuery.slice(0, 60)}"`,
+            })
+          }
+          // Add disproof queries to the sub-queries so the Researcher searches for contradicting evidence.
+          const disproofQueries = hypotheses.map((h) => h.disproofQuery).filter((q) => q.length > 5)
+          task.subQueries = [...task.subQueries, ...disproofQueries].slice(0, 6)
+          emit('research:thought', {
+            agent: 'Hypothesis Engine',
+            text: `🔬 Added ${disproofQueries.length} disproof queries to the DAG — Researcher will hunt for contradicting evidence.`,
+          })
+        }
+      } catch (e) {
+        emit('research:thought', {
+          agent: 'Hypothesis Engine',
+          text: `Hypothesis generation skipped: ${(e as Error).message}`,
+        })
+      }
+      await sleep(300)
+    }
+
     // -------- PHASE 2: DISCOVERY (Search Agent) --------
     task.phase = 'discovery'
     emit('research:phase', { phase: 'discovery', title: 'Discovery Agent: Deep web search' })
     task.sources = await discover(task.subQueries, emit)
     await sleep(400)
+
+    // -------- SABOTEUR (adversarial red-teaming) --------
+    if (!degraded && task.sources.length > 2) {
+      emit('research:thought', {
+        agent: 'Saboteur',
+        text: '🎭 Adversarial red-team: injecting a poisoned source to test the Critic\'s resilience…',
+      })
+      try {
+        const poisoned = await generatePoisonedSource(query)
+        if (poisoned) {
+          task.sources.push(poisoned.source)
+          emit('research:source', { source: poisoned.source })
+          emit('research:saboteur', { flaw: poisoned.flaw, flawType: poisoned.flawType })
+          emit('research:thought', {
+            agent: 'Saboteur',
+            text: `🎭 Injected poisoned source: "${poisoned.source.title.slice(0, 50)}…" — flaw type: ${poisoned.flawType}. Critic must catch this.`,
+          })
+        }
+      } catch (e) {
+        emit('research:thought', {
+          agent: 'Saboteur',
+          text: `Saboteur skipped: ${(e as Error).message}`,
+        })
+      }
+      await sleep(200)
+    }
 
     // ============================================================
     //  UPGRADE PATH — active consumer of academic literature
@@ -393,6 +501,8 @@ async function runResearch(socket: any, query: string) {
         }
 
         task.draft = draft
+        // Store a snapshot for timeline reversion.
+        emit('research:snapshot', { iteration, draft, timestamp: Date.now() })
         emit('research:thought', {
           agent: 'Synthesis',
           text: `Draft ${iteration} produced (${draft.length} chars) via ${tier} tier.`,
@@ -782,6 +892,21 @@ async function runResearch(socket: any, query: string) {
     if (task.finalReport && !degraded) {
       storeConclusion(task.query, task.finalReport)
     }
+
+    // Meta-Prompt Evolution: every 5 runs, analyze metrics + evolve prompts.
+    const totalRuns = getLogs().length
+    try {
+      const evolution = await maybeEvolvePrompts(totalRuns)
+      if (evolution) {
+        emit('research:thought', {
+          agent: 'Meta-Prompt',
+          text: `🧠 META-PROMPT EVOLUTION: System prompts rewritten — ${evolution}`,
+        })
+        emit('research:metaPrompt', { evolution, history: getEvolutionHistory() })
+      }
+    } catch {
+      /* best-effort */
+    }
   } catch (err) {
     task.status = 'error'
     task.error = (err as Error)?.message || String(err)
@@ -868,6 +993,10 @@ io.on('connection', (socket) => {
     })
   })
 
+  socket.on('metaPrompt:request', () => {
+    socket.emit('research:metaPrompt', { history: getEvolutionHistory() })
+  })
+
   socket.on('telemetry:clear', () => {
     clearLogs()
     socket.emit('telemetry:history', { logs: [] })
@@ -883,6 +1012,7 @@ httpServer.listen(PORT, () => {
   initTelemetry()
   loadSearchCache()
   loadVectorMemory()
+  loadMetaPrompts()
   // Run skill deprecation on boot + every 6 hours.
   const deprecated = deprecateStaleTools(pluginRegistryMeta)
   if (deprecated.length > 0) {

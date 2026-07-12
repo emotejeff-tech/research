@@ -92,29 +92,56 @@ export default function StreamingLog() {
           {log.map((entry) => {
             const Icon = ICONS[entry.kind] || Brain
             const c = colorFor(entry)
-            // Lifecycle highlighting: tool creation (🛠️/✨) = pink, execution (⚡) = amber, OPSEC (🛡️) = rose, reflection (🧠) = violet.
+            // Lifecycle highlighting with expanded palette.
             const isToolCreation = entry.text.includes('🛠️') || entry.text.includes('✨')
             const isToolExecution = entry.text.includes('⚡')
-            const isReflection = entry.text.includes('🧠')
+            const isReflection = entry.text.includes('🧠') && !entry.text.includes('🧬')
             const isOpsec = entry.text.includes('🛡️')
-            const lifecycleClass = isOpsec
+            const isHypothesis = entry.text.includes('🔬') || entry.text.includes('📋')
+            const isSwarm = entry.text.includes('🐝')
+            const isSaboteur = entry.text.includes('🎭')
+            const isMetaPrompt = entry.text.includes('🧬') || entry.text.includes('META-PROMPT')
+            const isDevilsAdvocate = entry.text.includes('😈')
+            const lifecycleClass = isSaboteur
               ? 'border-rose-500/40 bg-rose-500/[0.1]'
-              : isToolCreation
-                ? 'border-pink-500/30 bg-pink-500/[0.08]'
-                : isToolExecution
-                  ? 'border-amber-500/30 bg-amber-500/[0.08]'
-                  : isReflection
-                    ? 'border-violet-500/25 bg-violet-500/[0.06]'
-                    : 'border-white/5 bg-white/[0.03]'
-            const lifecycleColor = isOpsec
+              : isOpsec
+                ? 'border-rose-500/40 bg-rose-500/[0.1]'
+                : isHypothesis
+                  ? 'border-cyan-500/30 bg-cyan-500/[0.08]'
+                  : isSwarm
+                    ? 'border-yellow-500/30 bg-yellow-500/[0.08]'
+                    : isSaboteur
+                      ? 'border-rose-500/30 bg-rose-500/[0.08]'
+                      : isMetaPrompt
+                        ? 'border-emerald-500/30 bg-emerald-500/[0.08]'
+                        : isDevilsAdvocate
+                          ? 'border-orange-500/30 bg-orange-500/[0.08]'
+                          : isToolCreation
+                            ? 'border-pink-500/30 bg-pink-500/[0.08]'
+                            : isToolExecution
+                              ? 'border-amber-500/30 bg-amber-500/[0.08]'
+                              : isReflection
+                                ? 'border-violet-500/25 bg-violet-500/[0.06]'
+                                : 'border-white/5 bg-white/[0.03]'
+            const lifecycleColor = isSaboteur
               ? '#fb7185'
-              : isToolCreation
-                ? '#f472b6'
-                : isToolExecution
-                  ? '#fbbf24'
-                  : isReflection
-                    ? '#a78bfa'
-                    : c
+              : isOpsec
+                ? '#fb7185'
+                : isHypothesis
+                  ? '#22d3ee'
+                  : isSwarm
+                    ? '#facc15'
+                    : isMetaPrompt
+                      ? '#34d399'
+                      : isDevilsAdvocate
+                        ? '#fb923c'
+                        : isToolCreation
+                          ? '#f472b6'
+                          : isToolExecution
+                            ? '#fbbf24'
+                            : isReflection
+                              ? '#a78bfa'
+                              : c
             return (
               <motion.div
                 key={entry.id}
