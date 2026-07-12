@@ -134,18 +134,16 @@ export function loadSettings() {
   }
 }
 
-/** Save settings to disk. Merges with existing settings so partial updates
- * from the frontend don't wipe keys that aren't in the current form. */
+/** Save settings to disk. Writes the COMPLETE settings object — no merging.
+ * This ensures all fields from the frontend form are saved every time. */
 export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
-  // Merge: existing settings as base, new settings override on top.
-  // Only override keys that are explicitly present (not undefined).
-  const merged: LLMSettings = { ...settings }
-  for (const [key, value] of Object.entries(newSettings)) {
-    if (value !== undefined) {
-      ;(merged as any)[key] = value
-    }
-  }
-  settings = merged
+  // Start with defaults, then overlay EVERYTHING from the incoming data.
+  // This ensures old/corrupted settings.json fields are overwritten.
+  settings = {
+    ...DEFAULT_SETTINGS,
+    ...newSettings,
+  } as LLMSettings
+
   try {
     writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), 'utf-8')
     const keys = [
@@ -159,7 +157,7 @@ export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
       settings.supabaseUrl ? 'supabase' : null,
       settings.pineconeApiKey ? 'pinecone' : null,
     ].filter(Boolean)
-    console.log(`[settings] saved provider=${settings.provider} model=${settings.model || '(none)'} keys=[${keys.join(',')}]`)
+    console.log(`[settings] saved provider=${settings.provider} model=${settings.model || '(none)'} primary=${settings.primary} keys=[${keys.join(',')}]`)
   } catch (e) {
     console.error('[settings] save failed:', (e as Error).message)
   }
