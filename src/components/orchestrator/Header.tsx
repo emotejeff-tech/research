@@ -26,7 +26,7 @@ export default function Header() {
             initial={{ rotate: -20, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-            className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-amber-400 text-black shadow-[0_0_24px_-4px_rgba(52,211,153,0.6)]"
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#383eff] to-[#00d4ff] text-white shadow-[0_0_24px_-4px_rgba(56,62,255,0.6)]"
           >
             <Activity className="h-5 w-5" strokeWidth={2.5} />
           </motion.div>

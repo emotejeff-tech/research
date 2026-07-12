@@ -66,7 +66,7 @@ function Particles({ count = 220 }: { count?: number }) {
     <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#9ad7c0"
+        color="#383eff"
         size={0.035}
         sizeAttenuation
         depthWrite={false}
@@ -96,15 +96,15 @@ export default function Scene3D() {
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       style={{ background: 'transparent' }}
     >
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 5, 5]} intensity={1.2} color="#ffe7b0" />
-      <directionalLight position={[-5, -3, 2]} intensity={0.7} color="#7ee0c0" />
-      <pointLight position={[0, 0, 3]} intensity={1.5} color="#fb7185" />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 5, 5]} intensity={1.5} color="#383eff" />
+      <directionalLight position={[-5, -3, 2]} intensity={0.8} color="#00d4ff" />
+      <pointLight position={[0, 0, 3]} intensity={1.2} color="#0000ff" />
 
-      <GlassKnot position={[-2.6, 0.8, -1]} color="#34d399" scale={1.05} speed={0.8} />
-      <GlassKnot position={[2.8, -0.6, -1.5]} color="#fbbf24" scale={0.85} speed={1.1} />
-      <GlassKnot position={[0.2, 1.4, -2]} color="#fb7185" scale={0.6} speed={1.3} />
-      <GlassKnot position={[1.2, -1.6, 0]} color="#a7f3d0" scale={0.45} speed={1.5} />
+      <GlassKnot position={[-2.6, 0.8, -1]} color="#383eff" scale={1.05} speed={0.8} />
+      <GlassKnot position={[2.8, -0.6, -1.5]} color="#00d4ff" scale={0.85} speed={1.1} />
+      <GlassKnot position={[0.2, 1.4, -2]} color="#0000ff" scale={0.6} speed={1.3} />
+      <GlassKnot position={[1.2, -1.6, 0]} color="#a855f7" scale={0.45} speed={1.5} />
 
       <Particles />
       <Rig />

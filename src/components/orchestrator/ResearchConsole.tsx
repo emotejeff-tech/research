@@ -167,7 +167,7 @@ export default function ResearchConsole() {
                 'group relative inline-flex items-center gap-2 overflow-hidden rounded-xl px-5 py-2.5 text-sm font-semibold transition-all',
                 running || !query.trim()
                   ? 'cursor-not-allowed bg-white/5 text-white/30'
-                  : 'bg-gradient-to-r from-emerald-400 to-amber-400 text-black hover:shadow-[0_0_30px_-4px_rgba(52,211,153,0.6)]',
+                  : 'bg-gradient-to-r from-[#383eff] to-[#00d4ff] text-white hover:shadow-[0_0_30px_-4px_rgba(56,62,255,0.6)]',
               )}
             >
               {running ? (

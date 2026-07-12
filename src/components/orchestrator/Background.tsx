@@ -11,89 +11,89 @@ export default function Background() {
   const running = useOrchestrator((s) => s.running)
   const phase = useOrchestrator((s) => s.phase)
 
-  // State morphing: degraded = amber/crimson, optimal = emerald/cyan
   const isDegraded = routingMode === 'degraded'
   const isError = phase === 'error'
 
+  // Deep blue theme matching the reference UI
   const blobColors = isError
-    ? ['#ef4444', '#dc2626', '#991b1b'] // crimson
+    ? ['#ff3366', '#dc2626', '#991b1b']
     : isDegraded
-      ? ['#f59e0b', '#fb7185', '#f97316'] // amber/rose
-      : ['#10b981', '#f59e0b', '#fb7185'] // default emerald/amber/rose
+      ? ['#ffaa00', '#ff3366', '#f97316']
+      : ['#0000ff', '#383eff', '#00d4ff'] // deep blue to electric blue to cyan
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#070a12] transition-all duration-1000">
-      {/* base gradient — shifts color based on system state */}
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-black transition-all duration-1000">
+      {/* Deep blue radial gradient base */}
       <div
         className="absolute inset-0 transition-all duration-1000"
         style={{
           background: isError
-            ? 'radial-gradient(ellipse at top, rgba(40,10,10,0.9), rgba(7,10,18,1))'
+            ? 'radial-gradient(ellipse at 50% 30%, rgba(40,0,10,0.8), #000000)'
             : isDegraded
-              ? 'radial-gradient(ellipse at top, rgba(40,30,10,0.9), rgba(7,10,18,1))'
-              : 'radial-gradient(ellipse at top, rgba(16,24,32,0.9), rgba(7,10,18,1))',
+              ? 'radial-gradient(ellipse at 50% 30%, rgba(40,20,0,0.6), #000000)'
+              : 'radial-gradient(ellipse at 50% 30%, rgba(0,0,54,0.8), #000000)',
         }}
       />
 
-      {/* Status pulse overlay — visible only when degraded/error */}
+      {/* Status pulse overlay */}
       <AnimatePresence>
         {(isDegraded || isError) && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0.03, 0.08, 0.03] }}
+            animate={{ opacity: [0.02, 0.06, 0.02] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute inset-0"
             style={{
               background: isError
-                ? 'radial-gradient(ellipse at center, rgba(239,68,68,0.15), transparent 60%)'
-                : 'radial-gradient(ellipse at center, rgba(245,158,11,0.12), transparent 60%)',
+                ? 'radial-gradient(ellipse at center, rgba(255,51,102,0.12), transparent 60%)'
+                : 'radial-gradient(ellipse at center, rgba(255,170,0,0.1), transparent 60%)',
             }}
           />
         )}
       </AnimatePresence>
 
-      {/* aurora blobs — color morphs with state */}
+      {/* Deep blue aurora blobs */}
       <motion.div
         className="aurora-blob"
-        style={{ background: blobColors[0], width: 520, height: 520, top: '-10%', left: '-8%' }}
-        animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ background: blobColors[0], width: 600, height: 600, top: '-15%', left: '-10%' }}
+        animate={{ x: [0, 80, 0], y: [0, 50, 0] }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="aurora-blob"
-        style={{ background: blobColors[1], width: 460, height: 460, top: '20%', right: '-10%' }}
-        animate={{ x: [0, -50, 0], y: [0, 60, 0] }}
-        transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ background: blobColors[1], width: 500, height: 500, top: '30%', right: '-12%' }}
+        animate={{ x: [0, -60, 0], y: [0, 70, 0] }}
+        transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="aurora-blob"
-        style={{ background: blobColors[2], width: 420, height: 420, bottom: '-12%', left: '30%' }}
-        animate={{ x: [0, 40, 0], y: [0, -40, 0] }}
-        transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ background: blobColors[2], width: 450, height: 450, bottom: '-15%', left: '35%' }}
+        animate={{ x: [0, 50, 0], y: [0, -50, 0] }}
+        transition={{ duration: 32, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* 3D layer */}
-      <div className="absolute inset-0 opacity-70">
+      <div className="absolute inset-0 opacity-50">
         <Scene3D />
       </div>
 
-      {/* grid overlay */}
-      <div className="absolute inset-0 bg-grid" />
+      {/* Subtle blue grid overlay */}
+      <div className="absolute inset-0 bg-grid opacity-60" />
 
-      {/* vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.55))]" />
+      {/* Deep vignette for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.8))]" />
 
-      {/* Status banner — top edge color bar */}
+      {/* Top edge color bar — blue when optimal, amber when degraded, red when error */}
       <div
         className="absolute top-0 left-0 right-0 h-0.5 transition-colors duration-1000"
         style={{
           background: isError
-            ? 'linear-gradient(90deg, #ef4444, #dc2626, #ef4444)'
+            ? 'linear-gradient(90deg, #ff3366, #dc2626, #ff3366)'
             : isDegraded
-              ? 'linear-gradient(90deg, #f59e0b, #fb7185, #f59e0b)'
+              ? 'linear-gradient(90deg, #ffaa00, #ff3366, #ffaa00)'
               : running
-                ? 'linear-gradient(90deg, #34d399, #5eead4, #34d399)'
+                ? 'linear-gradient(90deg, #383eff, #00d4ff, #383eff)'
                 : 'transparent',
         }}
       />
