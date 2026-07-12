@@ -500,7 +500,7 @@ export default function SettingsPanel() {
                   type="text"
                   value={form.voiceBoxUrl || ''}
                   onChange={(e) => setField('voiceBoxUrl', e.target.value)}
-                  placeholder="http://localhost:5001 (VoiceBox) or http://localhost:8080/v1 (LocalAI)"
+                  placeholder="http://127.0.0.1:17493 (FastAPI TTS) or http://localhost:5001 (VoiceBox)"
                   className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
                 />
               </div>
@@ -548,8 +548,9 @@ export default function SettingsPanel() {
               </div>
             </div>
             <p className="mt-2 text-[9px] text-white/30">
-              Install VoiceBox: pip install voicebox (or use LocalAI / any OpenAI-compatible TTS server).
-              Voices: alloy, echo, fable, onyx, nova, shimmer.
+              Works with any TTS server: FastAPI TTS (port 17493), VoiceBox, LocalAI, or OpenAI-compatible.
+              The system auto-detects the endpoint format (/v1/audio/speech, /api/tts, /tts).
+              Check your TTS server docs at http://127.0.0.1:17493/docs for the exact endpoint.
             </p>
           </div>
 

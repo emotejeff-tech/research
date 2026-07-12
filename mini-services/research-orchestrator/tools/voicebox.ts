@@ -26,6 +26,11 @@ export interface STTResult {
 
 /**
  * Generate speech from text using the local TTS endpoint.
+ * Supports multiple TTS API formats:
+ *  1. OpenAI-compatible: POST /v1/audio/speech (body: {model, input, voice})
+ *  2. FastAPI/Piper style: POST /api/tts or /tts (body: {text} or {text, voice})
+ *  3. Coqui TTS style: POST /api/tts (body: {text, speaker_id})
+ *
  * Returns base64-encoded audio that the frontend can play.
  */
 export async function speak(text: string): Promise<TTSResult> {
@@ -36,40 +41,95 @@ export async function speak(text: string): Promise<TTSResult> {
 
   // Truncate very long text — TTS is for short announcements.
   const truncated = text.slice(0, 300)
+  const baseUrl = s.voiceBoxUrl.replace(/\/$/, '')
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (s.voiceBoxApiKey) headers['Authorization'] = `Bearer ${s.voiceBoxApiKey}`
 
-  try {
-    const res = await fetch(`${s.voiceBoxUrl.replace(/\/$/, '')}/v1/audio/speech`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(s.voiceBoxApiKey ? { 'Authorization': `Bearer ${s.voiceBoxApiKey}` } : {}),
-      },
+  // Try multiple TTS endpoints in order.
+  const endpoints = [
+    // OpenAI-compatible format
+    {
+      url: `${baseUrl}/v1/audio/speech`,
       body: JSON.stringify({
         model: s.ttsModel || 'tts-1',
         input: truncated,
         voice: s.ttsVoice || 'alloy',
         response_format: 'mp3',
       }),
-      signal: AbortSignal.timeout(15000),
-    })
+      expectAudio: true,
+    },
+    // FastAPI/Piper style (common for local TTS servers on custom ports)
+    {
+      url: `${baseUrl}/api/tts`,
+      body: JSON.stringify({
+        text: truncated,
+        voice: s.ttsVoice || 'default',
+        model: s.ttsModel || 'tts-1',
+      }),
+      expectAudio: true,
+    },
+    // Simple /tts endpoint
+    {
+      url: `${baseUrl}/tts`,
+      body: JSON.stringify({
+        text: truncated,
+        voice: s.ttsVoice || 'default',
+      }),
+      expectAudio: true,
+    },
+    // Query param style (some FastAPI TTS servers use GET)
+    {
+      url: `${baseUrl}/api/tts?text=${encodeURIComponent(truncated)}&voice=${encodeURIComponent(s.ttsVoice || 'default')}`,
+      body: null,
+      expectAudio: true,
+      method: 'GET',
+    },
+  ]
 
-    if (!res.ok) {
-      const errText = await res.text().catch(() => '')
-      return { ok: false, error: `TTS HTTP ${res.status}: ${errText.slice(0, 100)}` }
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(ep.url, {
+        method: ep.method || 'POST',
+        headers: ep.body ? headers : { ...(s.voiceBoxApiKey ? { 'Authorization': `Bearer ${s.voiceBoxApiKey}` } : {}) },
+        body: ep.body || undefined,
+        signal: AbortSignal.timeout(15000),
+      })
+
+      if (!res.ok) continue // Try next endpoint
+
+      const contentType = res.headers.get('content-type') || ''
+
+      // If we got JSON, it might be a different format — try to extract audio.
+      if (contentType.includes('application/json')) {
+        const data: any = await res.json()
+        // Some TTS APIs return {audio: "base64..."} or {audio_base64: "..."}
+        const audioB64 = data?.audio || data?.audio_base64 || data?.audioBase64 || data?.data
+        if (audioB64 && typeof audioB64 === 'string') {
+          return { ok: true, audioBase64: audioB64 }
+        }
+        continue // Not the right format, try next
+      }
+
+      // If we got raw audio bytes, convert to base64.
+      if (contentType.startsWith('audio/') || ep.expectAudio) {
+        const arrayBuffer = await res.arrayBuffer()
+        if (arrayBuffer.byteLength > 0) {
+          const base64 = Buffer.from(arrayBuffer).toString('base64')
+          return { ok: true, audioBase64: base64 }
+        }
+      }
+    } catch {
+      continue // Try next endpoint
     }
-
-    // The response is raw audio bytes — convert to base64.
-    const arrayBuffer = await res.arrayBuffer()
-    const base64 = Buffer.from(arrayBuffer).toString('base64')
-    return { ok: true, audioBase64: base64 }
-  } catch (e) {
-    return { ok: false, error: (e as Error).message }
   }
+
+  return { ok: false, error: 'All TTS endpoints failed — check if the server is running and the URL is correct' }
 }
 
 /**
  * Transcribe audio using the local Whisper endpoint.
  * Accepts base64-encoded audio, returns transcribed text.
+ * Supports multiple STT API formats (OpenAI-compatible + FastAPI).
  */
 export async function transcribe(audioBase64: string, format: string = 'wav'): Promise<STTResult> {
   const s = getSettings()
@@ -77,32 +137,44 @@ export async function transcribe(audioBase64: string, format: string = 'wav'): P
     return { ok: false, error: 'VoiceBox not configured' }
   }
 
-  try {
-    // Convert base64 to a Blob for multipart form upload.
-    const buffer = Buffer.from(audioBase64, 'base64')
-    const blob = new Blob([buffer], { type: `audio/${format}` })
-    const formData = new FormData()
-    formData.append('file', blob, `audio.${format}`)
-    formData.append('model', s.whisperModel || 'whisper-1')
+  const baseUrl = s.voiceBoxUrl.replace(/\/$/, '')
+  const buffer = Buffer.from(audioBase64, 'base64')
 
-    const res = await fetch(`${s.voiceBoxUrl.replace(/\/$/, '')}/v1/audio/transcriptions`, {
-      method: 'POST',
-      headers: {
-        ...(s.voiceBoxApiKey ? { 'Authorization': `Bearer ${s.voiceBoxApiKey}` } : {}),
-      },
-      body: formData,
-      signal: AbortSignal.timeout(30000),
-    })
+  // Try multiple transcription endpoints.
+  const endpoints = [
+    `${baseUrl}/v1/audio/transcriptions`,
+    `${baseUrl}/api/transcribe`,
+    `${baseUrl}/transcribe`,
+    `${baseUrl}/api/stt`,
+  ]
 
-    if (!res.ok) {
-      return { ok: false, error: `Whisper HTTP ${res.status}` }
+  for (const url of endpoints) {
+    try {
+      const blob = new Blob([buffer], { type: `audio/${format}` })
+      const formData = new FormData()
+      formData.append('file', blob, `audio.${format}`)
+      formData.append('model', s.whisperModel || 'whisper-1')
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          ...(s.voiceBoxApiKey ? { 'Authorization': `Bearer ${s.voiceBoxApiKey}` } : {}),
+        },
+        body: formData,
+        signal: AbortSignal.timeout(30000),
+      })
+
+      if (!res.ok) continue
+
+      const data: any = await res.json()
+      const text = data?.text || data?.transcript || data?.result
+      if (text) return { ok: true, text }
+    } catch {
+      continue
     }
-
-    const data: any = await res.json()
-    return { ok: true, text: data?.text || '' }
-  } catch (e) {
-    return { ok: false, error: (e as Error).message }
   }
+
+  return { ok: false, error: 'All transcription endpoints failed' }
 }
 
 /** Check if voice/audio is configured. */

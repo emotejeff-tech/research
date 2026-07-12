@@ -186,26 +186,48 @@ async function searchTinyFish(query: string, num: number, apiKey: string): Promi
   }))
 }
 
-// ---------- Provider: Nimbler ----------
+// ---------- Provider: Nimble (nimbleway.com) ----------
+// API: POST https://sdk.nimbleway.com/v1/agents/run
+// Auth: Bearer token
+// Uses the "google_search" agent with a query parameter.
 async function searchNimbler(query: string, num: number, apiKey: string): Promise<Source[]> {
   await rateLimit('nimbler')
-  const res = await fetch(`https://api.nimbler.io/v1/search?q=${encodeURIComponent(query)}&limit=${num}`, {
+  const res = await fetch('https://sdk.nimbleway.com/v1/agents/run', {
+    method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
-    signal: AbortSignal.timeout(8000),
+    body: JSON.stringify({
+      agent: 'google_search',
+      params: {
+        query: query,
+        num: num,
+        parse: true,
+      },
+    }),
+    signal: AbortSignal.timeout(15000),
   })
-  if (!res.ok) throw new Error(`Nimbler HTTP ${res.status}`)
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '')
+    throw new Error(`Nimble HTTP ${res.status}: ${errText.slice(0, 100)}`)
+  }
   const data: any = await res.json()
-  return (data?.results || data?.web || []).slice(0, num).map((r: any) => ({
-    id: uid(),
-    query,
-    title: r.title || r.name || 'Untitled',
-    url: r.url || r.link,
-    snippet: (r.snippet || r.description || r.content || '').slice(0, 300),
-    host: (() => { try { return new URL(r.url || r.link).hostname } catch { return '' } })(),
-  }))
+  // Nimble returns results in data.output.results or data.results
+  const results = data?.output?.results || data?.results || data?.output || []
+  const sources: Source[] = []
+  for (const r of (Array.isArray(results) ? results : [])) {
+    sources.push({
+      id: uid(),
+      query,
+      title: r.title || r.name || 'Untitled',
+      url: r.url || r.link || r.href || '',
+      snippet: (r.snippet || r.description || r.content || r.text || '').slice(0, 300),
+      host: (() => { try { return r.url ? new URL(r.url).hostname : (r.domain || '') } catch { return '' } })(),
+    })
+    if (sources.length >= num) break
+  }
+  return sources
 }
 
 // ---------- Multi-provider aggregator ----------
