@@ -21,6 +21,7 @@ import { discover } from './agents/researcher'
 import { synthesize } from './agents/synthesizer'
 import { critique } from './agents/critic'
 import { evolve } from './agents/evolution'
+import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
@@ -343,6 +344,24 @@ async function runResearch(socket: any, query: string) {
 
     history.unshift(task)
     if (history.length > 12) history.pop()
+
+    // -------- TELEMETRY: record run for improvement tracking --------
+    const wordCount = (task.finalReport || '')
+      .split(/\s+/)
+      .filter(Boolean).length
+    const runLog: RunLog = {
+      id: uid(),
+      timestamp: Date.now(),
+      query: task.query,
+      taskType: task.taskType,
+      iterations: task.critiqueRounds.length,
+      sourceCount: task.sources.length,
+      wordCount,
+      durationMs: task.finishedAt - task.startedAt,
+      routingMode: task.routingMode,
+    }
+    recordRun(runLog)
+    socket.emit('telemetry:update', { log: runLog })
   } catch (err) {
     task.status = 'error'
     task.error = (err as Error)?.message || String(err)
@@ -368,6 +387,9 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
   console.log(`[orchestrator] client connected: ${socket.id}`)
+
+  // Send historical telemetry so the frontend graph renders immediately.
+  socket.emit('telemetry:history', { logs: getLogs() })
 
   socket.on('research:start', (data: { query: string }) => {
     const query = (data?.query || '').trim()
@@ -403,12 +425,23 @@ io.on('connection', (socket) => {
     })
   })
 
+  socket.on('telemetry:request', () => {
+    socket.emit('telemetry:history', { logs: getLogs() })
+  })
+
+  socket.on('telemetry:clear', () => {
+    clearLogs()
+    socket.emit('telemetry:history', { logs: [] })
+    console.log('[telemetry] cleared by client')
+  })
+
   socket.on('disconnect', () => {
     console.log(`[orchestrator] client disconnected: ${socket.id}`)
   })
 })
 
 httpServer.listen(PORT, () => {
+  initTelemetry()
   console.log(`[research-orchestrator] socket.io listening on :${PORT}`)
 })
 

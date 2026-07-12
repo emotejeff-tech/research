@@ -24,6 +24,7 @@ import CriticLoop from '@/components/orchestrator/CriticLoop'
 import PluginRegistry from '@/components/orchestrator/PluginRegistry'
 import FinalReport from '@/components/orchestrator/FinalReport'
 import HistoryPanel from '@/components/orchestrator/HistoryPanel'
+import ImprovementGraph from '@/components/orchestrator/ImprovementGraph'
 import { GlassCard } from '@/components/orchestrator/GlassCard'
 import { usePhaseGlow } from '@/components/orchestrator/usePhaseGlow'
 
@@ -218,6 +219,16 @@ export default function Home() {
           className="mt-5"
         >
           <FinalReport />
+        </motion.section>
+
+        {/* AUTONOMOUS IMPROVEMENT TRACKER */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-5"
+        >
+          <ImprovementGraph />
         </motion.section>
 
         {/* ARCHITECTURE / FEATURES */}

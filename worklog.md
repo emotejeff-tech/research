@@ -102,3 +102,29 @@ Work Log:
 
 Stage Summary:
 - The engine now auto-detects research vs blueprint goals and applies the correct methodology end-to-end. Research queries get the strict independent-analyst treatment (primary data, no narrative adoption, logic shown, definitive verdict) with a Critic that specifically catches hedging and non-primary sources; blueprint queries get a best-ideas actionable design with a Critic that catches vagueness and outdated approaches. Both modes browser-verified.
+
+---
+Task ID: 4
+Agent: orchestrator (main)
+Task: Add an autonomous improvement tracker — telemetry logging that records metrics for every run, persists them, and surfaces them on the frontend as a historical line graph (convergence speed / fact density / execution efficiency).
+
+Work Log:
+- Backend telemetry module (mini-services/research-orchestrator/telemetry.ts): RunLog interface + JSONL persistence (telemetry.jsonl). Loads last 50 on startup (survives restarts), append on record, in-memory cache for fast serving. clearLogs() wipes disk+memory. Chose JSONL over Prisma because the orchestrator is an independent mini-service on port 3003 — keeps it self-contained (the spec explicitly allows "a local database or a JSON lines file").
+- Orchestrator index.ts: imports telemetry; calls initTelemetry() on listen; on run completion builds a RunLog {id,timestamp,query,taskType,iterations,sourceCount,wordCount,durationMs,routingMode} and recordRun()+emits telemetry:update. On every client connect emits telemetry:history (so the graph renders immediately). Added telemetry:request (re-emit history) and telemetry:clear (wipe) socket handlers.
+- Frontend store (orchestrator-store.ts): added RunLog type + telemetryLogs state + clearTelemetry action. Handles telemetry:history (replace array) and telemetry:update (append, cap 50).
+- ImprovementGraph.tsx (recharts, already in deps): glassmorphic panel with the final-phase glow. Three trend stat cards comparing last-3-runs avg vs earlier avg with % delta + colored arrows (green=improving, rose=regressing):
+  - Execution Efficiency (duration, ↓=faster, emerald)
+  - Convergence Speed (iterations, ↓=better 1st draft, amber)
+  - Fact Density (sources/100words, ↑=denser, rose)
+  Dual-axis LineChart: left axis=duration seconds (emerald solid), right axis=loops (amber solid) + fact density (rose dashed). Custom glass tooltip showing all 3 metrics + query. Empty-state placeholder + "clear" button (emits telemetry:clear). Legend + explanatory footer.
+- page.tsx: added ImprovementGraph section between FinalReport and the architecture features.
+- Agent Browser self-verification (via gateway :81):
+  - Empty state: "0 RUNS" + placeholder renders cleanly, no errors.
+  - Ran CCS query (research, 65.5s, 3 iter) → telemetry recorded. Ran lab-grown meat query (degraded, 41.2s, 3 iter) → telemetry recorded. JSONL now holds 4 runs total (incl. 2 from prior task verification).
+  - Live update: telemetry:update fired on completion, panel went 3→4 RUNS without reload, chart added #4 point live.
+  - Persistence: full reload → telemetry:history sent all 4 logs, chart rendered #1–#4 with no duplicates.
+  - Trend cards show real computed values + deltas: Execution 58.6s (4% faster ↓), Convergence 3.0 loops (11% better ↓), Fact Density (11% denser ↑).
+  - clear button wired (telemetry:clear → clearLogs → empty history). No console/runtime errors. Lint clean.
+
+Stage Summary:
+- Autonomous improvement tracking is live. Every completed run persists a RunLog to telemetry.jsonl and broadcasts telemetry:update; the frontend graphs convergence speed, fact density, and execution efficiency over time with trend deltas, and the data survives restarts. Browser-verified with 4 real runs (live update + reload persistence). The user can now watch the agents self-optimize across runs.

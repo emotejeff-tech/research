@@ -63,6 +63,18 @@ export interface HistoryItem {
   finishedAt: number | null
 }
 
+export interface RunLog {
+  id: string
+  timestamp: number
+  query: string
+  taskType: TaskType
+  iterations: number
+  sourceCount: number
+  wordCount: number
+  durationMs: number
+  routingMode: 'primary' | 'degraded'
+}
+
 interface OrchestratorState {
   connected: boolean
   phase: Phase
@@ -94,11 +106,14 @@ interface OrchestratorState {
   log: LogEntry[]
   plugins: Plugin[]
   history: HistoryItem[]
+  /** Autonomous improvement telemetry — one RunLog per completed run. */
+  telemetryLogs: RunLog[]
 
   // actions
   init: () => void
   startResearch: (query: string) => void
   reset: () => void
+  clearTelemetry: () => void
 }
 
 let socket: Socket | null = null
@@ -139,6 +154,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   log: [],
   plugins: [],
   history: [],
+  telemetryLogs: [],
 
   init: () => {
     if (initialized) return
@@ -314,6 +330,15 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
     socket.on('history:list', (d: any) => {
       set({ history: (d.history || []) as HistoryItem[] })
     })
+
+    socket.on('telemetry:history', (d: any) => {
+      set({ telemetryLogs: (d.logs || []) as RunLog[] })
+    })
+
+    socket.on('telemetry:update', (d: any) => {
+      if (!d?.log) return
+      set((s) => ({ telemetryLogs: [...s.telemetryLogs, d.log as RunLog].slice(-50) }))
+    })
   },
 
   startResearch: (query: string) => {
@@ -370,6 +395,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       error: null,
       log: [],
     })
+  },
+
+  clearTelemetry: () => {
+    socket?.emit('telemetry:clear', {})
   },
 }))
 
