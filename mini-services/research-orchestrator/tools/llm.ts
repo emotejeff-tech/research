@@ -144,18 +144,25 @@ export async function llmWithFallback(
   const complexity = opts.complexity || 'standard'
   const retries = opts.retries ?? (complexity === 'simple' ? 1 : complexity === 'heavy' ? 3 : 2)
 
-  // If local provider is set as PRIMARY, try it first (skip Z.ai entirely).
+  // If local provider is set as PRIMARY, try it with retries (skip Z.ai entirely).
   if (isLocalPrimary()) {
-    try {
-      const content = await localLLM(systemPrompt, userPrompt)
-      return { content, mode: 'primary', tier: 'local' }
-    } catch (e) {
-      console.error('[llm] local primary failed:', (e as Error)?.message)
-      // Fall through to Z.ai as a secondary fallback.
+    let lastErr: any
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const content = await localLLM(systemPrompt, userPrompt)
+        return { content, mode: 'primary', tier: 'local' }
+      } catch (e) {
+        lastErr = e
+        console.error(`[llm] local primary attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
+        if (attempt < retries) await sleep(2000 * (attempt + 1))
+      }
     }
+    console.error('[llm] local primary exhausted after retries — falling to degraded.')
+    // Don't try Z.ai — it's not configured. Go straight to degraded.
+    return { content: opts.degraded || '', mode: 'degraded', tier: 'degraded' }
   }
 
-  // Tier 1 — Z.ai cloud gateway (skipped if local is primary and succeeded).
+  // Tier 1 — Z.ai cloud gateway.
   try {
     const content = await llm(systemPrompt, userPrompt, retries)
     return { content, mode: 'primary', tier: 'primary' }
@@ -166,8 +173,7 @@ export async function llmWithFallback(
     )
   }
 
-  // Tier 2 — local/remote model (Ollama / LM Studio / OpenRouter / llama.cpp).
-  // Only attempted if enabled + configured (and not already tried as primary).
+  // Tier 2 — local/remote model (only if not already tried as primary).
   if (isLocalTierActive() && !isLocalPrimary()) {
     try {
       const content = await localLLM(systemPrompt, userPrompt)
