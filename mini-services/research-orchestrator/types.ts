@@ -34,6 +34,13 @@ export interface Plugin {
   language: string
   code: string
   createdAt: number
+  /** Self-Teaching Loop metadata. */
+  gapAnalysis?: string
+  testStatus?: 'passed' | 'failed' | 'patched'
+  testError?: string
+  executionResult?: string
+  executionStatus?: 'ok' | 'error' | 'not_run'
+  patched?: boolean
 }
 
 export interface CritiqueRound {

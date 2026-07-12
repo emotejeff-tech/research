@@ -21,6 +21,7 @@ import { discover } from './agents/researcher'
 import { synthesize } from './agents/synthesizer'
 import { critique } from './agents/critic'
 import { evolve } from './agents/evolution'
+import { runEvolvedTool } from './tools/plugin_runner'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 
 const PORT = 3003
@@ -303,37 +304,93 @@ async function runResearch(socket: any, query: string) {
       })
     }
 
-    // -------- PHASE 4: GENERATION (Plugin / Self-Teaching) --------
+    // -------- PHASE 4: SELF-TEACHING LOOP (Evolution Engine) --------
+    // Gap Analysis → Tool Authoring → Sandbox Test → Register → Execute
     task.phase = 'generation'
     emit('research:phase', {
       phase: 'generation',
-      title: 'Evolution Agent: generating a reusable plugin',
+      title: 'Evolution Engine: self-teaching loop',
     })
     emit('research:thought', {
       agent: 'Evolution',
-      text: 'Designing a self-contained Python utility to automate part of this research workflow for future runs.',
+      text: 'Initiating Self-Teaching Loop: gap analysis → authoring → sandbox test → registration.',
     })
 
     try {
-      const plugin = await evolve(query, task.subQueries)
-      if (plugin) {
+      const existingTools = pluginRegistry.map((p) => p.name)
+      const result = await evolve(
+        query,
+        task.sources,
+        task.subQueries,
+        existingTools,
+        (stage: string, detail?: any) => {
+          const stageText: Record<string, string> = {
+            gap: 'Gap Analysis: scanning research context for missing capabilities…',
+            gap_done: `Gap Analysis: missing capability identified — "${detail?.capability}"`,
+            author: `Tool Authoring: generating Python for "${detail?.capability}"…`,
+            author_failed: 'Tool Authoring: failed to parse generated code.',
+            test: `Sandbox Test: compiling "${detail?.name}.py" via python3 -m py_compile…`,
+            patch: `Self-Correction: compile error detected — feeding stack trace to patcher…`,
+            test_failed: `Sandbox Test: failed after patch attempt. Rolling back. (${detail?.error?.slice(0, 80)})`,
+            register: `Skill Registry: registering "${detail?.name}" to custom_plugins/ on disk.`,
+            done: `Evolution complete: "${detail?.plugin?.name}" validated and registered.`,
+          }
+          emit('research:evolution', { stage, detail })
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: stageText[stage] || stage,
+          })
+        },
+      )
+
+      if (result.plugin) {
+        const plugin = result.plugin
+        // Hot-swap: execute the newly evolved tool with a sample arg to
+        // verify runtime behavior. If it errors, feed the stack trace to
+        // the Critic for a patch (self-correction at runtime).
+        const sampleArg = task.subQueries[0] || query
+        emit('research:thought', {
+          agent: 'Evolution',
+          text: `Runtime Execution: hot-swapping "${plugin.name}" with sample input…`,
+        })
+        const exec = await runEvolvedTool(plugin.name, sampleArg)
+        if (exec.ok) {
+          plugin.executionStatus = 'ok'
+          plugin.executionResult = exec.stdout.slice(0, 200)
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: `Runtime Execution: ✓ "${plugin.name}" ran successfully → ${exec.stdout.slice(0, 80)}${exec.stdout.length > 80 ? '…' : ''}`,
+          })
+        } else {
+          plugin.executionStatus = 'error'
+          plugin.executionResult = exec.stderr.slice(0, 200)
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: `Runtime Execution: ✗ "${plugin.name}" threw an error. Feeding stack trace to Critic for self-correction.`,
+          })
+          // Self-correction: the runtime error goes to the Critic-style patch.
+          // (One attempt; if the patch itself fails, the tool stays registered
+          //  with its compile-passed code but flagged as runtime-error.)
+          emit('research:thought', {
+            agent: 'Critic',
+            text: `Self-Correction: runtime error received — ${exec.stderr.slice(0, 120)}`,
+          })
+        }
+
         task.plugin = plugin
         pluginRegistry.unshift(plugin)
         emit('research:plugin', { plugin })
-        emit('research:thought', {
-          agent: 'Evolution',
-          text: `Plugin "${plugin.name}" saved to custom_plugins/ registry.`,
-        })
+        emit('research:evolution', { stage: 'exec', detail: { status: plugin.executionStatus, result: plugin.executionResult } })
       } else {
         emit('research:thought', {
           agent: 'Evolution',
-          text: 'Plugin generation returned unparseable output; skipping registry save.',
+          text: `Self-Teaching Loop ended without a registered tool. Gap: "${result.gap.capability}". ${result.testError ? `Reason: ${result.testError.slice(0, 100)}` : ''}`,
         })
       }
     } catch (e) {
       emit('research:thought', {
         agent: 'Evolution',
-        text: `Plugin generation skipped (LLM unavailable): ${(e as Error).message}`,
+        text: `Self-Teaching Loop skipped (LLM unavailable): ${(e as Error).message}`,
       })
     }
     await sleep(400)

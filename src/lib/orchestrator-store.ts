@@ -32,6 +32,13 @@ export interface Plugin {
   language: string
   code: string
   createdAt: number
+  /** Self-Teaching Loop metadata. */
+  gapAnalysis?: string
+  testStatus?: 'passed' | 'failed' | 'patched'
+  testError?: string
+  executionResult?: string
+  executionStatus?: 'ok' | 'error' | 'not_run'
+  patched?: boolean
 }
 
 export interface CritiqueRound {
@@ -110,6 +117,8 @@ interface OrchestratorState {
   history: HistoryItem[]
   /** Autonomous improvement telemetry — one RunLog per completed run. */
   telemetryLogs: RunLog[]
+  /** Current evolution-engine stage (Self-Teaching Loop). */
+  evolutionStage: { stage: string; detail?: any } | null
 
   // actions
   init: () => void
@@ -158,6 +167,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   plugins: [],
   history: [],
   telemetryLogs: [],
+  evolutionStage: null,
 
   init: () => {
     if (initialized) return
@@ -255,6 +265,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
           },
         ],
       }))
+    })
+
+    socket.on('research:evolution', (d: any) => {
+      set({ evolutionStage: { stage: d.stage, detail: d.detail } })
     })
 
     socket.on('research:routing', (d: any) => {
@@ -367,6 +381,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       routingReason: null,
       taskType: 'research',
       error: null,
+      evolutionStage: null,
       log: [
         {
           id: uid(),
@@ -399,6 +414,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       routingReason: null,
       taskType: 'research',
       error: null,
+      evolutionStage: null,
       log: [],
     })
   },

@@ -156,3 +156,34 @@ Work Log:
 
 Stage Summary:
 - 3-tier inference pipeline live: primary z-ai → local Ollama-compatible (env-gated, fast-fail) → degraded no-LLM. The local tier is architecturally complete and will engage automatically if LOCAL_LLM_BASE_URL is set; in this environment (no Ollama) it skips cleanly to degraded. Premium glass + refined phase-glow palette (sky/emerald/violet/amber/pink) applied to all panels with a 3-state routing chip showing the active tier. Browser-verified; lint clean.
+
+---
+Task ID: 6
+Agent: orchestrator (main)
+Task: Build the Self-Teaching Loop (Evolution Engine) — gap analysis → tool authoring → sandbox test → disk registry → runtime execution → self-correction.
+
+Work Log:
+- agents/evolution.ts: completely refactored from a single LLM call into a 4-stage Self-Teaching Loop:
+  - Stage 1 analyzeGap(): Gap Analysis agent examines the research context (query + sources + sub-queries + existing tool registry) and identifies ONE specific missing capability. Returns {capability, rationale}.
+  - Stage 2 authorTool(): Tool Authoring agent generates self-contained Python (stdlib only, main() entry point, CLI arg, try/except, <45 lines). Returns {name, description, code}.
+  - Stage 3 testTool(): writes the code to custom_plugins/<name>.py on disk and runs `python3 -m py_compile` in an isolated child process (8s timeout). Returns {passed, error?}.
+  - Self-correction: if compilation fails, patchTool() feeds the error back to the authoring LLM which rewrites the entire script; the patched code is re-tested. One patch attempt; if it still fails, rollbackTool() deletes the file and the tool is not registered.
+  - Stage 4: on success, returns a Plugin with gapAnalysis/testStatus/patched metadata.
+  - The full evolve() function takes an onStage callback so the orchestrator can stream each stage to the client.
+- tools/plugin_runner.ts (new): runEvolvedTool(name, args) executes the agent's self-generated Python via `python3` in an isolated child process with 8s timeout, safe arg escaping, and returns {stdout, stderr, ok}. listEvolvedTools() reads custom_plugins/ dir at runtime (hot-swap manifest).
+- Orchestrator index.ts: replaced the old single-call generation phase with the full staged loop. Emits research:evolution events for each stage (gap/gap_done/author/test/patch/register/done/exec) + corresponding research:thought messages. After registration, hot-swaps the new tool by executing it with a sample arg (first sub-query); if runtime execution errors, the stack trace is surfaced as a Critic self-correction thought. The plugin carries executionStatus + executionResult.
+- Frontend store: Plugin type extended with gapAnalysis/testStatus/testError/executionResult/executionStatus/patched. Added evolutionStage state + research:evolution handler. Reset on start/reset.
+- PluginRegistry.tsx: rebuilt with the Self-Teaching Loop UX:
+  - EvolutionProgress bar appears during the generation phase showing the 5 stages (Gap→Author→Test→Register→Execute) lighting up in sequence, with a "self-correction: patching compile error…" indicator when patching.
+  - PluginCard now shows test-status badges (TESTED=emerald / PATCHED=amber / FAILED=rose) + execution badges (RAN=emerald / RUNTIME ERR=rose).
+  - Expanded card reveals: Gap Analysis panel (sky) showing the identified missing capability, Runtime Execution panel (emerald/rose) showing stdout/stderr, and the full Python source.
+  - Panel retitled "Evolution Engine · Self-Teaching Loop" with subtitle "gap → author → sandbox → register → execute".
+- Verified python3 + py_compile available in the sandbox (Python 3.12.13).
+- Agent Browser self-verification (via gateway :81):
+  - Ran "Evaluate the evidence on whether intermittent fasting improves metabolic health markers in humans": full pipeline executed — Gap Analysis identified "Extract and standardize metabolic health marker measurements across different intermittent fasting studies"; Tool Authoring generated extract_metabolic_markers.py (2KB, stdlib only: sys/re/collections); Sandbox Test (py_compile) passed; registered to custom_plugins/ on disk; Runtime Execution hot-swapped and ran successfully → "No metabolic markers found in the input text". Run completed 68.6s, 3 critique iterations, DELIVERED.
+  - Verified the .py file physically exists on disk, compiles cleanly (exit 0), and runs standalone producing the same output the orchestrator reported.
+  - UI shows TESTED + RAN badges on the plugin card; EvolutionProgress bar animated through all 5 stages during the run.
+  - 2 evolved tools now on disk (extract_metabolic_markers.py + hardware_benchmark.py from a concurrent run). Telemetry at 10 runs. Lint clean.
+
+Stage Summary:
+- The Self-Teaching Loop is live and verified. The agent now autonomously identifies capability gaps from live research, authors Python tools, sandbox-tests them with py_compile (with self-correction on failure), persists them to a real custom_plugins/ directory on disk, and hot-swaps them into runtime execution — all streamed live to the frontend with per-stage progress and per-tool test/execution badges. Browser-verified end-to-end with a real evolved tool that compiles and runs.
