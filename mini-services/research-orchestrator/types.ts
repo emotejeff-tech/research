@@ -15,9 +15,11 @@ export type Phase =
  * How the engine treats a goal.
  * - 'research': evaluate/analyze/compare → strict independent-analyst synthesis.
  * - 'blueprint': design/build/architect → best-ideas actionable blueprint.
+ * - 'upgrade': the user wants the agent to read research, learn new methods,
+ *   and create new tools/skills for itself — forces the Evolution Engine.
  * Detected by the Coordinator during planning.
  */
-export type TaskType = 'research' | 'blueprint'
+export type TaskType = 'research' | 'blueprint' | 'upgrade'
 
 export interface Source {
   id: string
@@ -66,6 +68,14 @@ export interface Dream {
   papers: { title: string; relevance: string }[]
   /** The agent's reflection on all data + dreams. */
   reflection: string
+}
+
+/** A tool blueprint extracted from academic literature in UPGRADE mode. */
+export interface UpgradeBlueprint {
+  suggestedToolName: string
+  mechanics: string
+  justification: string
+  sourceTitle?: string
 }
 
 export interface LLMResult {

@@ -91,6 +91,30 @@ export async function authorTool(
   return parsePlugin(raw)
 }
 
+/**
+ * UPGRADE mode: authors a tool directly from a blueprint's mechanics.
+ * The suggestedToolName is used as the tool name; the mechanics provide the
+ * exact algorithm/formula to implement. Bypasses gap analysis since the
+ * blueprint already identifies the capability.
+ */
+export async function authorFromBlueprint(
+  suggestedName: string,
+  mechanics: string,
+  justification: string,
+): Promise<Omit<Plugin, 'id' | 'createdAt'> | null> {
+  const raw = await llm(
+    AUTHOR_SYSTEM,
+    `Implement this specific algorithm/technique as a Python tool:\n\nTool name: ${suggestedName}\nMechanics to implement: ${mechanics}\nJustification: ${justification}\n\nGenerate the Python tool now. The tool name MUST be "${suggestedName}".`,
+  )
+  const parsed = parsePlugin(raw)
+  if (parsed) {
+    // Force the suggested name from the blueprint.
+    parsed.name = suggestedName.replace(/[^a-z0-9_]/gi, '_').toLowerCase()
+    parsed.description = justification.slice(0, 120) || parsed.description
+  }
+  return parsed
+}
+
 // ---------- Stage 3: Automated Test Sandbox ----------
 /**
  * Writes the code to custom_plugins/<name>.py and validates it with

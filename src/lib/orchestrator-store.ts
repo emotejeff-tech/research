@@ -15,7 +15,7 @@ export type Phase =
   | 'final'
   | 'error'
 
-export type TaskType = 'research' | 'blueprint'
+export type TaskType = 'research' | 'blueprint' | 'upgrade'
 
 export interface Source {
   id: string
@@ -136,6 +136,8 @@ interface OrchestratorState {
   evolutionStage: { stage: string; detail?: any } | null
   /** OPSEC audit results (log scrubbing + UA rotation). */
   opsecAudits: { id: string; tool: string; itemsScrubbed: number; success: boolean; rotatedUA?: string; usageCount?: number; ts: number }[]
+  /** UPGRADE mode: tool blueprints extracted from literature + compilation results. */
+  upgradeStage: { stage: string; detail?: any } | null
 
   // actions
   init: () => void

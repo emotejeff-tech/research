@@ -18,9 +18,9 @@ import type { Phase, TaskState, Plugin, Emit } from './types'
 import { uid, sleep } from './util'
 import { plan } from './agents/planner'
 import { discover } from './agents/researcher'
-import { synthesize } from './agents/synthesizer'
+import { synthesize, extractUpgrades, buildUpgradeReport } from './agents/synthesizer'
 import { critique } from './agents/critic'
-import { evolve } from './agents/evolution'
+import { evolve, authorFromBlueprint, testTool, rollbackTool } from './agents/evolution'
 import { dream } from './agents/dreamer'
 import { runEvolvedTool } from './tools/plugin_runner'
 import {
@@ -31,6 +31,7 @@ import {
   type PluginMeta,
 } from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
+import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
@@ -131,7 +132,180 @@ async function runResearch(socket: any, query: string) {
     task.sources = await discover(task.subQueries, emit)
     await sleep(400)
 
-    // -------- ACTOR-CRITIC LOOP --------
+    // ============================================================
+    //  UPGRADE PATH — active consumer of academic literature
+    // ============================================================
+    let upgradeCompleted = false
+    if (task.taskType === 'upgrade' && !degraded) {
+      emit('research:thought', {
+        agent: 'Coordinator',
+        text: '🧬 UPGRADE MODE INITIALIZED: Scanning literature for architectural enhancements to compile into executable skills…',
+      })
+      emit('research:upgrade', { stage: 'init' })
+
+      // Step 1: Extract tool blueprints from the literature.
+      task.phase = 'synthesis'
+      emit('research:phase', {
+        phase: 'synthesis',
+        title: 'Nexus Architect: extracting tool blueprints from literature',
+      })
+      emit('research:thought', {
+        agent: 'Synthesis',
+        text: '⚙️ Extracting actionable mechanics from academic sources — not writing a summary, but isolating algorithms to compile…',
+      })
+
+      let blueprints: UpgradeBlueprint[] = []
+      try {
+        blueprints = await extractUpgrades(query, task.sources)
+        emit('research:thought', {
+          agent: 'Synthesis',
+          text: `📋 Extracted ${blueprints.length} tool blueprint(s) from the literature.`,
+        })
+        emit('research:upgrade', { stage: 'blueprints', blueprints })
+      } catch (e) {
+        emit('research:thought', {
+          agent: 'Synthesis',
+          text: `Blueprint extraction failed: ${(e as Error).message}. Falling back to degraded synthesis.`,
+        })
+        degraded = true
+      }
+
+      if (!degraded && blueprints.length > 0) {
+        // Step 2: Force the Evolution Engine to build each blueprint.
+        task.phase = 'generation'
+        emit('research:phase', {
+          phase: 'generation',
+          title: '🧬 Evolution Engine: compiling theoretical concepts into executable skills',
+        })
+
+        const createdTools: { name: string; success: boolean }[] = []
+
+        for (const bp of blueprints) {
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: `⚙️ Compiling theoretical concept into executable skill: [${bp.suggestedToolName}]…`,
+          })
+          emit('research:upgrade', { stage: 'compiling', toolName: bp.suggestedToolName })
+
+          try {
+            // Author the tool directly from the blueprint's mechanics.
+            const tool = await authorFromBlueprint(bp.suggestedToolName, bp.mechanics, bp.justification)
+            if (!tool) {
+              emit('research:thought', {
+                agent: 'Evolution',
+                text: `❌ Failed to parse code for [${bp.suggestedToolName}].`,
+              })
+              createdTools.push({ name: bp.suggestedToolName, success: false })
+              continue
+            }
+
+            // Test in the sandbox.
+            emit('research:thought', {
+              agent: 'Evolution',
+              text: `🔬 Sandbox Test: compiling ${tool.name}.py via python3 -m py_compile…`,
+            })
+            const test = testTool(tool.name, tool.code)
+            let finalCode = tool.code
+            let testStatus: 'passed' | 'failed' | 'patched' = test.passed ? 'passed' : 'failed'
+
+            if (!test.passed) {
+              // Try one patch attempt.
+              emit('research:thought', {
+                agent: 'Evolution',
+                text: `🔧 Self-Correction: compile error — patching ${tool.name}…`,
+              })
+              const { patchTool } = await import('./agents/evolution')
+              const patched = await patchTool(tool.name, tool.code, test.error || '', bp.mechanics)
+              if (patched) {
+                const retest = testTool(tool.name, patched.code)
+                if (retest.passed) {
+                  finalCode = patched.code
+                  testStatus = 'patched'
+                } else {
+                  rollbackTool(tool.name)
+                  emit('research:thought', {
+                    agent: 'Evolution',
+                    text: `❌ ${tool.name} failed after patch — rolled back.`,
+                  })
+                  createdTools.push({ name: bp.suggestedToolName, success: false })
+                  continue
+                }
+              } else {
+                rollbackTool(tool.name)
+                createdTools.push({ name: bp.suggestedToolName, success: false })
+                continue
+              }
+            }
+
+            // Register to durable registry.
+            const plugin: Plugin = {
+              id: uid(),
+              name: tool.name,
+              description: tool.description,
+              language: tool.language,
+              code: finalCode,
+              createdAt: Date.now(),
+              gapAnalysis: bp.mechanics.slice(0, 200),
+              testStatus,
+              executionStatus: 'not_run',
+              usageCount: 0,
+              lastUsed: null,
+              successRate: 1.0,
+            }
+
+            // Hot-swap execute.
+            const sampleArg = task.subQueries[0] || query
+            const exec = await runEvolvedTool(plugin.name, sampleArg)
+            plugin.executionStatus = exec.ok ? 'ok' : 'error'
+            plugin.executionResult = (exec.ok ? exec.stdout : exec.stderr).slice(0, 200)
+            plugin.usageCount = 1
+            plugin.lastUsed = Date.now()
+            plugin.successRate = exec.ok ? 1.0 : 0.0
+
+            registerTool(pluginRegistryMeta, plugin)
+            pluginRegistry = reconstructPlugins(pluginRegistryMeta)
+            broadcastPlugins(socket)
+            task.plugin = plugin
+            emit('research:plugin', { plugin })
+            createdTools.push({ name: plugin.name, success: true })
+
+            emit('research:thought', {
+              agent: 'Evolution',
+              text: `✨ Permanently registered: [${plugin.name}] — ${exec.ok ? 'compiled, tested & executed' : 'compiled & tested (runtime warning)'} 🧬`,
+            })
+            emit('research:upgrade', { stage: 'compiled', toolName: plugin.name, success: true })
+          } catch (e) {
+            emit('research:thought', {
+              agent: 'Evolution',
+              text: `❌ Failed to compile [${bp.suggestedToolName}]: ${(e as Error).message}`,
+            })
+            createdTools.push({ name: bp.suggestedToolName, success: false })
+          }
+          await sleep(300)
+        }
+
+        // Step 3: Build the upgrade report.
+        task.draft = buildUpgradeReport(query, blueprints, createdTools)
+        upgradeCompleted = true
+        emit('research:thought', {
+          agent: 'Coordinator',
+          text: `🧬 UPGRADE COMPLETE: ${createdTools.filter((t) => t.success).length}/${createdTools.length} skill(s) permanently compiled and registered.`,
+        })
+        emit('research:upgrade', { stage: 'done', createdTools })
+
+        // Skip to OPSEC audit + final — bypass normal critic/reflection/evolution.
+        // (Jump directly to the OPSEC audit phase below.)
+      } else if (!degraded) {
+        emit('research:thought', {
+          agent: 'Coordinator',
+          text: '🧬 No blueprints extracted from literature. Falling back to standard synthesis.',
+        })
+        degraded = false // fall through to normal path
+      }
+    }
+
+    // -------- ACTOR-CRITIC LOOP (skipped for successful UPGRADE runs) --------
+    if (!upgradeCompleted) {
     let iteration = 0
     let lastFeedback = ''
 
@@ -428,6 +602,7 @@ async function runResearch(socket: any, query: string) {
       })
     }
     await sleep(400)
+    } // end if (!upgradeCompleted)
 
     // -------- PHASE 5: OPSEC AUDIT (Defensive Security) --------
     // Run the opsec_log_scrubber on the final report to strip credentials,

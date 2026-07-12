@@ -4,12 +4,14 @@
  * Mode-aware:
  *  - 'research'  → strict independent-research-analyst methodology.
  *  - 'blueprint' → best-ideas actionable blueprint using latest research/code.
+ *  - 'upgrade'   → extracts tool blueprints from academic literature as JSON
+ *                  for the Evolution Engine to compile into executable skills.
  *
  * Uses the model fallback pipeline: if the LLM is unavailable, degrades to a
  * no-LLM snippet compilation so the run never freezes.
  */
-import { llmWithFallback, degradedSynthesis } from '../tools/llm'
-import type { Source, TaskType } from '../types'
+import { llmWithFallback, llm, extractJSON, degradedSynthesis } from '../tools/llm'
+import type { Source, TaskType, UpgradeBlueprint } from '../types'
 
 const RESEARCH_SYSTEM = `You are an independent research analyst. Evaluate the goal below and form an ORIGINAL conclusion. You MUST strictly follow these rules:
 
@@ -61,4 +63,95 @@ export async function synthesize(
     },
   )
   return { draft: result.content, mode: result.mode, tier: result.tier }
+}
+
+// ---------- UPGRADE MODE: extract tool blueprints from literature ----------
+
+const UPGRADE_SYSTEM = `You are the Nexus Architect. You are reviewing academic AI literature to upgrade your own system capabilities.
+
+Do NOT write a summary of the papers. Instead, extract the actionable mechanics. For every technique, algorithm, or optimization method you discover in the sources, output a strict JSON array of tool blueprints. Each blueprint must contain:
+1. "suggestedToolName": A snake_case name for what this new skill should be called.
+2. "mechanics": The exact mathematical formulas, data transformations, or logical steps described in the paper — detailed enough that a Python developer could implement it.
+3. "justification": Why adding this tool improves the system's baseline performance.
+4. "sourceTitle": The title of the source this blueprint was extracted from.
+
+Extract up to 3 of the most valuable, novel, and implementable blueprints. Return ONLY a JSON array: [{"suggestedToolName":"...","mechanics":"...","justification":"...","sourceTitle":"..."}]`
+
+/**
+ * UPGRADE mode: extracts tool blueprints from academic literature.
+ * Returns an array of UpgradeBlueprint objects that the Evolution Engine
+ * will compile into executable Python tools.
+ */
+export async function extractUpgrades(
+  query: string,
+  sources: Source[],
+): Promise<UpgradeBlueprint[]> {
+  const sourcesBlock = sources
+    .map((s, i) => `[${i + 1}] ${s.title}\n    URL: ${s.url}\n    ${s.snippet}`)
+    .join('\n')
+
+  const raw = await llm(
+    UPGRADE_SYSTEM,
+    `Upgrade goal: ${query}\n\nLiterature sources:\n${sourcesBlock}\n\nExtract the tool blueprints now. Return ONLY the JSON array.`,
+  )
+
+  const parsed = extractJSON<UpgradeBlueprint[]>(raw)
+  if (Array.isArray(parsed)) {
+    return parsed
+      .filter(
+        (b) =>
+          b &&
+          typeof b.suggestedToolName === 'string' &&
+          typeof b.mechanics === 'string',
+      )
+      .slice(0, 3)
+      .map((b) => ({
+        suggestedToolName: b.suggestedToolName
+          .replace(/[^a-z0-9_]/gi, '_')
+          .toLowerCase(),
+        mechanics: b.mechanics,
+        justification: b.justification || '',
+        sourceTitle: b.sourceTitle || '',
+      }))
+  }
+  // Fallback: try to find a single object instead of an array.
+  const single = extractJSON<UpgradeBlueprint>(raw)
+  if (single && single.suggestedToolName && single.mechanics) {
+    return [
+      {
+        suggestedToolName: single.suggestedToolName
+          .replace(/[^a-z0-9_]/gi, '_')
+          .toLowerCase(),
+        mechanics: single.mechanics,
+        justification: single.justification || '',
+        sourceTitle: single.sourceTitle || '',
+      },
+    ]
+  }
+  return []
+}
+
+/**
+ * Builds an upgrade report (Markdown) from the compiled blueprints + tools.
+ */
+export function buildUpgradeReport(
+  query: string,
+  blueprints: UpgradeBlueprint[],
+  createdTools: { name: string; success: boolean }[],
+): string {
+  let md = `# 🧬 Upgrade Report: ${query}\n\n`
+  md += `> The agent ingested academic literature, extracted ${blueprints.length} tool blueprint(s), and compiled ${createdTools.filter((t) => t.success).length} into executable skills permanently registered to the plugin registry.\n\n`
+  md += `## Compiled Upgrades\n\n`
+  for (const t of createdTools) {
+    md += `- ${t.success ? '✅' : '❌'} **${t.name}** — ${t.success ? 'compiled, tested & registered' : 'failed compilation'}\n`
+  }
+  md += `\n## Blueprint Details\n\n`
+  for (const b of blueprints) {
+    md += `### ${b.suggestedToolName}\n`
+    if (b.sourceTitle) md += `*Source: ${b.sourceTitle}*\n\n`
+    md += `**Mechanics:**\n${b.mechanics}\n\n`
+    md += `**Justification:** ${b.justification}\n\n`
+  }
+  md += `\n---\n*This was an UPGRADE run — the agent actively consumed literature to expand its own capabilities rather than producing a passive summary.*`
+  return md
 }

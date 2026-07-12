@@ -102,18 +102,42 @@
     "name": "ua_rotator",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 1,
+    "usageCount": 4,
     "created": 1783822606744,
-    "lastUsed": 1783822720921,
+    "lastUsed": 1783825193524,
     "successRate": 1
   },
   "opsec_log_scrubber": {
     "name": "opsec_log_scrubber",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 1,
+    "usageCount": 4,
     "created": 1783822606744,
-    "lastUsed": 1783822720742,
+    "lastUsed": 1783825193486,
     "successRate": 1
+  },
+  "inmate_record_extractor": {
+    "name": "inmate_record_extractor",
+    "description": "Extract inmate records from law enforcement databases and correctional facility records",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783824022123,
+    "lastUsed": 1783824022203,
+    "successRate": 1,
+    "gapAnalysis": "inmate_record_extractor for law enforcement databases and correctional facility records",
+    "testStatus": "passed",
+    "executionStatus": "ok"
+  },
+  "extract_agent_self_improvement_methodologies": {
+    "name": "extract_agent_self_improvement_methodologies",
+    "description": "Extract self-improvement methodologies from AI agent papers on arXiv",
+    "language": "python",
+    "usageCount": 1,
+    "created": 1783824298248,
+    "lastUsed": 1783824306252,
+    "successRate": 0,
+    "gapAnalysis": "extract_agent_self_improvement_methodologies_from_arxiv_papers",
+    "testStatus": "passed",
+    "executionStatus": "error"
   }
 }
