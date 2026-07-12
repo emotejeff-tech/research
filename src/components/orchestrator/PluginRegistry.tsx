@@ -90,7 +90,7 @@ export default function PluginRegistry() {
   const glow = usePhaseGlow(['generation'])
 
   return (
-    <GlassCard className={`flex flex-col ${glow}`}>
+    <GlassCard premium className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<Sparkles className="h-4 w-4" />}
         title="Plugin Evolution Registry"

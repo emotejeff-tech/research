@@ -9,6 +9,8 @@ interface GlassCardProps extends MotionProps {
   className?: string
   strong?: boolean
   hover?: boolean
+  /** Premium glass variant: stronger blur/saturate, deeper shadow. */
+  premium?: boolean
 }
 
 export function GlassCard({
@@ -16,12 +18,13 @@ export function GlassCard({
   className,
   strong,
   hover,
+  premium,
   ...rest
 }: GlassCardProps) {
   return (
     <motion.div
       className={cn(
-        strong ? 'glass-strong' : 'glass',
+        premium ? 'glass-panel-premium' : strong ? 'glass-strong' : 'glass',
         hover && 'glass-hover',
         'rounded-2xl',
         className,

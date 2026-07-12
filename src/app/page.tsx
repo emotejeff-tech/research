@@ -167,7 +167,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <GlassCard className={`flex h-full flex-col ${graphGlow}`}>
+            <GlassCard premium className={`flex h-full flex-col ${graphGlow}`}>
               <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-400/15 text-teal-300">
                   <Layers className="h-4 w-4" />

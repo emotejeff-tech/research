@@ -51,7 +51,7 @@ export async function synthesize(
   feedback: string,
   _iteration: number,
   taskType: TaskType = 'research',
-): Promise<{ draft: string; mode: 'primary' | 'degraded' }> {
+): Promise<{ draft: string; mode: 'primary' | 'degraded'; tier: 'primary' | 'local' | 'degraded' }> {
   const result = await llmWithFallback(
     systemFor(taskType),
     buildUser(query, sources, feedback, taskType),
@@ -60,5 +60,5 @@ export async function synthesize(
       degraded: degradedSynthesis(query, sources),
     },
   )
-  return { draft: result.content, mode: result.mode }
+  return { draft: result.content, mode: result.mode, tier: result.tier }
 }

@@ -98,6 +98,8 @@ interface OrchestratorState {
   } | null
   /** 'primary' = served by LLM; 'degraded' = no-LLM fallback active. */
   routingMode: 'primary' | 'degraded'
+  /** Which inference tier served the run: primary cloud / local model / degraded no-LLM. */
+  routingTier: 'primary' | 'local' | 'degraded'
   routingReason: string | null
   /** Detected by the Coordinator: research (independent analysis) vs blueprint (best-ideas design). */
   taskType: TaskType
@@ -148,6 +150,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   finalReport: '',
   finalMeta: null,
   routingMode: 'primary',
+  routingTier: 'primary',
   routingReason: null,
   taskType: 'research',
   error: null,
@@ -257,6 +260,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
     socket.on('research:routing', (d: any) => {
       set((s) => ({
         routingMode: d.mode as 'primary' | 'degraded',
+        routingTier: (d.tier as 'primary' | 'local' | 'degraded') || (d.mode === 'degraded' ? 'degraded' : 'primary'),
         routingReason: d.reason || null,
         log: [
           ...s.log,
@@ -265,7 +269,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
             ts: Date.now(),
             kind: 'thought',
             agent: 'Router',
-            text: `Model routing → ${d.mode}${d.reason ? ` (${d.reason})` : ''}`,
+            text: `Model routing → ${d.tier || d.mode}${d.reason ? ` (${d.reason})` : ''}`,
           },
         ],
       }))
@@ -359,6 +363,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       finalReport: '',
       finalMeta: null,
       routingMode: 'primary',
+      routingTier: 'primary',
       routingReason: null,
       taskType: 'research',
       error: null,
@@ -390,6 +395,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       finalReport: '',
       finalMeta: null,
       routingMode: 'primary',
+      routingTier: 'primary',
       routingReason: null,
       taskType: 'research',
       error: null,

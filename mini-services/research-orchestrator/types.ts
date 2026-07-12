@@ -47,6 +47,8 @@ export interface LLMResult {
   content: string
   /** 'primary' = served by the language model; 'degraded' = no-LLM fallback. */
   mode: 'primary' | 'degraded'
+  /** Which inference tier served this call. */
+  tier: 'primary' | 'local' | 'degraded'
 }
 
 export type Emit = (event: string, payload: any) => void

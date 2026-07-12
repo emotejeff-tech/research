@@ -128,3 +128,31 @@ Work Log:
 
 Stage Summary:
 - Autonomous improvement tracking is live. Every completed run persists a RunLog to telemetry.jsonl and broadcasts telemetry:update; the frontend graphs convergence speed, fact density, and execution efficiency over time with trend deltas, and the data survives restarts. Browser-verified with 4 real runs (live update + reload persistence). The user can now watch the agents self-optimize across runs.
+
+---
+Task ID: 5
+Agent: orchestrator (main)
+Task: Phase 2 Refinement — (1) multi-tier LLM pipeline with local-model fallback tier, (2) premium glassmorphic + refined phase-glow palette, (3) phase-glow wrapper hook alignment.
+
+Work Log:
+- Step 1 (directory architecture): confirmed already in place from Task 2 (agents/{planner,researcher,synthesizer,critic,evolution}.ts + tools/{sdk,llm,web_search}.ts + index.ts + types.ts). No rework needed.
+- tools/llm.ts: restructured from 2-tier (primary→degraded) to 3-tier pipeline matching the blueprint's "primary cloud gateway vs local hardware fallback" topology:
+  - Tier 1 primary: z-ai cloud gateway (retry+backoff).
+  - Tier 2 local: new localLLM() — OpenAI-compatible fetch to LOCAL_LLM_BASE_URL (Ollama/LM Studio), env-gated + 4s fast-fail so it never stalls when unconfigured/unreachable. Configurable model via LOCAL_LLM_MODEL.
+  - Tier 3 degraded: no-LLM snippet compilation (existing).
+  - llmWithFallback() steps tier1→tier2(if configured)→tier3, recording which tier served the call.
+  - LLMResult gained a `tier` field ('primary'|'local'|'degraded').
+- agents/synthesizer.ts: propagates tier from LLMResult; orchestrator emits research:routing with {mode, tier, reason} — distinct messages for local-tier engagement vs full degradation. Router thoughts surface "served by local model tier" when tier 2 engages.
+- Frontend store: added routingTier state ('primary'|'local'|'degraded'), captured from research:routing; reset on start/reset.
+- Step 2 (premium glass + glow): globals.css gained .glass-panel-premium (blur 20px, saturate 200%, deeper shadow, smooth filter transition). Refined the phase-glow palette to the blueprint's colors with stronger 35px drop-shadows + matching border tints: planning=sky(#38bdf8), discovery=emerald(#10b981), synthesis=violet(#a78bfa), critique=amber(#f59e0b), generation/evolution=pink(#ec4899), final=emerald. (Blue/sky explicitly requested by user for planning — permitted.)
+- Step 3 (glow hook): usePhaseGlow kept its array-based signature for backward compat; added usePhaseGlowFor(single) convenience overload matching the blueprint's API shape. Glow now also tints the panel border via the CSS class.
+- Applied .glass-panel-premium (via GlassCard `premium` prop, added to GlassCard) to all key panels: Execution Graph, StreamingLog, CriticLoop, PluginRegistry, FinalReport, ImprovementGraph.
+- ResearchConsole routing chip now 3-state: "primary" (emerald) / "local model" (sky) / "degraded" (amber) with tier-specific tooltips, so the user can see at a glance which inference tier served the run.
+- Agent Browser self-verification (via gateway :81):
+  - Page loads cleanly, no console/runtime errors. Telemetry persisted (5 runs from JSONL loaded on connect).
+  - Ran "Is quantum computing a near-term threat to RSA encryption?": primary tier held end-to-end ("Draft 1 produced via primary tier", "Draft 2 produced via primary tier"), 53.1s, 2 critique iterations, DELIVERED. Research-mode Critic still caught non-primary sources (LinkedIn/Reddit). Telemetry live-updated to 6 RUNS.
+  - Premium glass + refined glow render correctly (sky glow on planning, emerald on discovery, etc.).
+  - Lint clean.
+
+Stage Summary:
+- 3-tier inference pipeline live: primary z-ai → local Ollama-compatible (env-gated, fast-fail) → degraded no-LLM. The local tier is architecturally complete and will engage automatically if LOCAL_LLM_BASE_URL is set; in this environment (no Ollama) it skips cleanly to degraded. Premium glass + refined phase-glow palette (sky/emerald/violet/amber/pink) applied to all panels with a 3-state routing chip showing the active tier. Browser-verified; lint clean.

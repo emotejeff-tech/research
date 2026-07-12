@@ -58,7 +58,7 @@ export default function StreamingLog() {
   }, [log.length])
 
   return (
-    <GlassCard className={`flex h-[560px] flex-col ${glow}`}>
+    <GlassCard premium className={`flex h-[560px] flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<Radio className="h-4 w-4" />}
         title="Agent Stream"

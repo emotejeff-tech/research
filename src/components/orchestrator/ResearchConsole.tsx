@@ -56,6 +56,7 @@ export default function ResearchConsole() {
   const phase = useOrchestrator((s) => s.phase)
   const phaseTitle = useOrchestrator((s) => s.phaseTitle)
   const routingMode = useOrchestrator((s) => s.routingMode)
+  const routingTier = useOrchestrator((s) => s.routingTier)
   const taskType = useOrchestrator((s) => s.taskType)
   const planningGlow = usePhaseGlow(['planning'])
 
@@ -120,13 +121,24 @@ export default function ResearchConsole() {
               </span>
             )}
             <span
-              className={`flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-medium ${
-                degraded ? 'bg-amber-400/10 text-amber-300' : 'bg-emerald-400/10 text-emerald-300'
-              }`}
-              title={degraded ? 'No-LLM fallback pipeline active' : 'Primary LLM pipeline active'}
+              className={cn(
+                'flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-medium',
+                routingTier === 'degraded'
+                  ? 'bg-amber-400/10 text-amber-300'
+                  : routingTier === 'local'
+                    ? 'bg-sky-400/10 text-sky-300'
+                    : 'bg-emerald-400/10 text-emerald-300',
+              )}
+              title={
+                routingTier === 'degraded'
+                  ? 'All inference tiers exhausted — no-LLM fallback active'
+                  : routingTier === 'local'
+                    ? 'Primary cloud gateway unavailable — served by local model tier (Ollama / LM Studio)'
+                    : 'Primary cloud LLM pipeline active'
+              }
             >
               <Cpu className="h-3 w-3" />
-              {degraded ? 'fallback' : 'primary'}
+              {routingTier === 'degraded' ? 'degraded' : routingTier === 'local' ? 'local model' : 'primary'}
             </span>
             {running && (
               <span className="flex items-center gap-2 rounded-full bg-amber-400/10 px-3 py-1.5 text-[11px] font-medium text-amber-300">

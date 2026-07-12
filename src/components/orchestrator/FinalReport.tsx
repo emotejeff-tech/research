@@ -38,7 +38,7 @@ export default function FinalReport() {
   const isBlueprint = taskType === 'blueprint'
 
   return (
-    <GlassCard className={`flex flex-col ${glow}`}>
+    <GlassCard premium className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={isBlueprint ? <Wrench className="h-4 w-4" /> : <Microscope className="h-4 w-4" />}
         title={isBlueprint ? 'Actionable Blueprint Output' : 'Independent Research Analysis'}

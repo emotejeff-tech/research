@@ -184,7 +184,7 @@ export default function ImprovementGraph() {
   const hasData = logs.length > 0
 
   return (
-    <GlassCard className={`flex flex-col ${glow}`}>
+    <GlassCard premium className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<Activity className="h-4 w-4" />}
         title="Autonomous Performance Optimization"

@@ -194,7 +194,7 @@ async function runResearch(socket: any, query: string) {
         })
         emit('research:iteration', { iteration, role: 'actor' })
 
-        const { draft, mode } = await synthesize(
+        const { draft, mode, tier } = await synthesize(
           query,
           task.sources,
           lastFeedback,
@@ -208,11 +208,12 @@ async function runResearch(socket: any, query: string) {
           task.draft = draft
           emit('research:routing', {
             mode: 'degraded',
-            reason: 'synthesis LLM exhausted (402 / credits / rate-limit)',
+            tier: 'degraded',
+            reason: 'all inference tiers exhausted (402 / credits / rate-limit, no local model)',
           })
           emit('research:thought', {
             agent: 'Router',
-            text: 'Synthesis LLM exhausted — switching to degraded snippet-compilation mode. The run will deliver a sourced report without LLM synthesis.',
+            text: 'All inference tiers exhausted — switching to degraded snippet-compilation mode. The run will deliver a sourced report without LLM synthesis.',
           })
           emit('research:thought', {
             agent: 'Synthesis',
@@ -221,10 +222,24 @@ async function runResearch(socket: any, query: string) {
           break // skip critic loop in degraded mode
         }
 
+        // Tier 2 (local model) engaged — surface it so the UI can show the routing.
+        if (tier === 'local') {
+          task.routingMode = 'primary' // still LLM-served, just local
+          emit('research:routing', {
+            mode: 'primary',
+            tier: 'local',
+            reason: 'primary cloud gateway unavailable — served by local model tier',
+          })
+          emit('research:thought', {
+            agent: 'Router',
+            text: 'Primary cloud gateway unavailable — served by the local model tier (Ollama / LM Studio).',
+          })
+        }
+
         task.draft = draft
         emit('research:thought', {
           agent: 'Synthesis',
-          text: `Draft ${iteration} produced (${draft.length} chars).`,
+          text: `Draft ${iteration} produced (${draft.length} chars) via ${tier} tier.`,
         })
         await sleep(300)
 

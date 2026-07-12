@@ -16,7 +16,7 @@ export default function CriticLoop() {
   const MAX = 3
 
   return (
-    <GlassCard className={`flex flex-col ${glow}`}>
+    <GlassCard premium className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<ShieldCheck className="h-4 w-4" />}
         title="Actor–Critic Verification Loop"
