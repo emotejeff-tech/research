@@ -2,9 +2,10 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
-import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles } from 'lucide-react'
+import { FileText, ExternalLink, Clock, ShieldCheck, Database, Sparkles, AlertTriangle } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
+import { usePhaseGlow } from './usePhaseGlow'
 
 function Stat({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color: string }) {
   return (
@@ -24,14 +25,18 @@ export default function FinalReport() {
   const finalReport = useOrchestrator((s) => s.finalReport)
   const sources = useOrchestrator((s) => s.sources)
   const finalMeta = useOrchestrator((s) => s.finalMeta)
+  const routingMode = useOrchestrator((s) => s.routingMode)
+  const routingReason = useOrchestrator((s) => s.routingReason)
   const phase = useOrchestrator((s) => s.phase)
   const error = useOrchestrator((s) => s.error)
   const running = useOrchestrator((s) => s.running)
+  const glow = usePhaseGlow(['synthesis', 'final'])
 
   const show = finalReport || error || running
+  const degraded = routingMode === 'degraded'
 
   return (
-    <GlassCard className="flex flex-col">
+    <GlassCard className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<FileText className="h-4 w-4" />}
         title="Synthesized Research Output"
@@ -39,8 +44,14 @@ export default function FinalReport() {
         accent="#34d399"
         right={
           finalMeta ? (
-            <span className="rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-300">
-              delivered
+            <span
+              className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+                degraded
+                  ? 'bg-amber-400/10 text-amber-300'
+                  : 'bg-emerald-400/10 text-emerald-300'
+              }`}
+            >
+              {degraded ? 'degraded' : 'delivered'}
             </span>
           ) : running ? (
             <span className="flex items-center gap-1.5 rounded-full bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-300">
@@ -118,6 +129,28 @@ export default function FinalReport() {
                   color="#fb923c"
                 />
               </div>
+
+              {/* Degraded-mode banner */}
+              {degraded && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start gap-2.5 rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-3"
+                >
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                  <div className="text-[12px] leading-snug text-amber-100/90">
+                    <strong className="font-semibold">Degraded mode active.</strong>{' '}
+                    The primary language model was unavailable (credits exhausted
+                    or rate-limited), so this report was compiled directly from
+                    live web sources without LLM synthesis.
+                    {routingReason && (
+                      <span className="mt-0.5 block text-[11px] text-amber-200/60">
+                        Reason: {routingReason}
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              )}
 
               {/* Report */}
               {finalReport ? (

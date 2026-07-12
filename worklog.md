@@ -51,3 +51,27 @@ Work Log:
 
 Stage Summary:
 - System fully functional end-to-end through the gateway. Multi-agent orchestration, actor-critic self-critique, and self-teaching plugin evolution all verified working with a real LLM-driven run. No lint errors, no runtime errors. Dev server (3000) + orchestrator mini-service (3003) both running.
+
+---
+Task ID: 2
+Agent: orchestrator (main)
+Task: Implement Phase 2 blueprint refinements — (1) agents/+tools/ directory architecture, (2) per-phase ambient glow on active panels, (3) model fallback pipeline so 402/credit exhaustion never freezes a run.
+
+Work Log:
+- Refactored the single-file orchestrator into the blueprint's `backend/agents` + `backend/tools` layout:
+  - agents/{planner,researcher,synthesizer,critic,evolution}.ts
+  - tools/{sdk,llm,web_search}.ts
+  - shared types.ts + util.ts
+  - index.ts is now a thin server + orchestration loop calling the agents.
+- tools/llm.ts implements the model fallback pipeline (Step 4): `llm()` (primary, retry+backoff) → `llmWithFallback()` returns degraded on exhaustion → `degradedSynthesis()` compiles a cited Markdown report from raw web snippets with NO llm. Mirrors the litellm model_pipeline concept, adapted to z-ai-web-dev-sdk (no Ollama available → degraded no-LLM path is the fallback).
+- Orchestrator wires degraded mode through every phase: planner fail → single-query discovery (search still runs); synthesis fail → degraded snippet compilation + skip critic loop; critic fail → accept draft; evolution fail → skip plugin. Emits a new `research:routing` event ({mode,reason}) so the UI can react. Final payload now carries `routingMode` + `degraded`.
+- Frontend Step 3 glow: added `.agent-glow` + per-phase `drop-shadow` classes (planning=emerald, discovery=teal, synthesis=amber, critique=rose, generation=orange, final=emerald) with a 2.6s breathe pulse + 0.6s filter transition in globals.css. New `usePhaseGlow(roles)` hook applies the active phase's glow to the matching panel: ResearchConsole(planning), Execution Graph(all active phases), StreamingLog(discovery), CriticLoop(critique), PluginRegistry(generation), FinalReport(synthesis/final).
+- UI routing indicators: ResearchConsole now shows a "primary"/"fallback" Cpu chip + amber "degraded" badge; FinalReport shows a "degraded"/"delivered" badge and an amber degraded-mode banner with the failure reason; store tracks routingMode/routingReason and logs Router thoughts.
+- Fixed a bootstrap bug: tools/sdk.ts initially failed to write (dir missing) → "Cannot find module './sdk'"; recreated the file and cleanly restarted the mini-service.
+- Agent Browser self-verification (via gateway :81):
+  - Normal run (perovskite solar cells): primary routing held, Coordinator→3 branches→12 sources→3 critique iterations→plugin `perovskite_research_fetcher` spawned (registry 3→4)→DELIVERED in 51.8s. No errors.
+  - Degraded run (forced 402 via env-gated hook): Router emitted "Model routing → degraded", planner fell back to single-query discovery, search found 4 sources, synthesis compiled degraded draft, plugin skipped gracefully, run COMPLETED in 3.8s (no freeze) with degraded badge + banner. Reverted the hook afterward.
+  - Final reload: lint clean, page loads, socket "orchestrator live", primary routing, 3 seed plugins, no console/runtime errors.
+
+Stage Summary:
+- Phase 2 blueprint fully implemented & verified. The orchestrator now matches the agents/+tools/ architecture, active panels pulse with phase-colored ambient glow, and the system never freezes on LLM exhaustion — it degrades to a sourced no-LLM report and surfaces the mode in the UI. Both primary and degraded paths browser-verified end-to-end.

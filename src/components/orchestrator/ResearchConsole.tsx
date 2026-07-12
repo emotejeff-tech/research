@@ -2,8 +2,9 @@
 
 import { useState, type FormEvent } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { Rocket, Loader2, Sparkles, RotateCcw } from 'lucide-react'
+import { Rocket, Loader2, Sparkles, RotateCcw, Cpu, AlertTriangle } from 'lucide-react'
 import { useOrchestrator, PHASE_LABELS, type Phase } from '@/lib/orchestrator-store'
+import { usePhaseGlow } from './usePhaseGlow'
 import { cn } from '@/lib/utils'
 
 const EXAMPLES = [
@@ -54,6 +55,8 @@ export default function ResearchConsole() {
   const running = useOrchestrator((s) => s.running)
   const phase = useOrchestrator((s) => s.phase)
   const phaseTitle = useOrchestrator((s) => s.phaseTitle)
+  const routingMode = useOrchestrator((s) => s.routingMode)
+  const planningGlow = usePhaseGlow(['planning'])
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -62,12 +65,13 @@ export default function ResearchConsole() {
   }
 
   const phaseIndex = PHASE_FLOW.findIndex((p) => p.key === phase)
+  const degraded = routingMode === 'degraded'
 
   return (
     <TiltCard className="glass-strong relative overflow-hidden rounded-3xl p-1.5">
       {/* glow border */}
       <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-400/10 via-amber-400/5 to-rose-400/10" />
-      <div className="relative rounded-[20px] bg-black/30 p-5 sm:p-7">
+      <div className={cn('relative rounded-[20px] bg-black/30 p-5 sm:p-7', planningGlow)}>
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-400/15 text-emerald-300">
@@ -82,12 +86,32 @@ export default function ResearchConsole() {
               </div>
             </div>
           </div>
-          {running && (
-            <span className="flex items-center gap-2 rounded-full bg-amber-400/10 px-3 py-1.5 text-[11px] font-medium text-amber-300">
-              <Loader2 className="h-3 w-3 animate-spin" />
-              {PHASE_LABELS[phase]} active
+          <div className="flex items-center gap-2">
+            {degraded && (
+              <span
+                className="flex items-center gap-1.5 rounded-full bg-amber-400/10 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-amber-300"
+                title="Primary LLM unavailable — running on no-LLM fallback"
+              >
+                <AlertTriangle className="h-3 w-3" />
+                degraded
+              </span>
+            )}
+            <span
+              className={`flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-medium ${
+                degraded ? 'bg-amber-400/10 text-amber-300' : 'bg-emerald-400/10 text-emerald-300'
+              }`}
+              title={degraded ? 'No-LLM fallback pipeline active' : 'Primary LLM pipeline active'}
+            >
+              <Cpu className="h-3 w-3" />
+              {degraded ? 'fallback' : 'primary'}
             </span>
-          )}
+            {running && (
+              <span className="flex items-center gap-2 rounded-full bg-amber-400/10 px-3 py-1.5 text-[11px] font-medium text-amber-300">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                {PHASE_LABELS[phase]} active
+              </span>
+            )}
+          </div>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-3">

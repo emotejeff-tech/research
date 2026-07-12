@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Sparkles, Code2, ChevronDown, Terminal, Clock } from 'lucide-react'
 import { useOrchestrator, type Plugin } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
+import { usePhaseGlow } from './usePhaseGlow'
 
 function timeAgo(ts: number) {
   const diff = Date.now() - ts
@@ -86,9 +87,10 @@ export default function PluginRegistry() {
   const plugins = useOrchestrator((s) => s.plugins)
   const taskPlugin = useOrchestrator((s) => s.plugin)
   const freshId = taskPlugin?.id
+  const glow = usePhaseGlow(['generation'])
 
   return (
-    <GlassCard className="flex flex-col">
+    <GlassCard className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<Sparkles className="h-4 w-4" />}
         title="Plugin Evolution Registry"

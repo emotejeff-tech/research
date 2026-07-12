@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useOrchestrator, type LogEntry } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
+import { usePhaseGlow } from './usePhaseGlow'
 
 const ICONS: Record<LogEntry['kind'], typeof Brain> = {
   phase: Flag,
@@ -49,6 +50,7 @@ export default function StreamingLog() {
   const log = useOrchestrator((s) => s.log)
   const running = useOrchestrator((s) => s.running)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const glow = usePhaseGlow(['discovery'])
 
   useEffect(() => {
     const el = scrollRef.current
@@ -56,7 +58,7 @@ export default function StreamingLog() {
   }, [log.length])
 
   return (
-    <GlassCard className="flex h-[560px] flex-col">
+    <GlassCard className={`flex h-[560px] flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<Radio className="h-4 w-4" />}
         title="Agent Stream"

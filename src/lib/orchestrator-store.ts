@@ -55,6 +55,7 @@ export interface HistoryItem {
   iterations: number
   sources: number
   finalReport: string
+  routingMode: 'primary' | 'degraded'
   startedAt: number
   finishedAt: number | null
 }
@@ -74,7 +75,15 @@ interface OrchestratorState {
   currentIteration: number
   plugin: Plugin | null
   finalReport: string
-  finalMeta: { iterations: number; durationMs: number; sourceCount: number } | null
+  finalMeta: {
+    iterations: number
+    durationMs: number
+    sourceCount: number
+    degraded: boolean
+  } | null
+  /** 'primary' = served by LLM; 'degraded' = no-LLM fallback active. */
+  routingMode: 'primary' | 'degraded'
+  routingReason: string | null
   error: string | null
 
   log: LogEntry[]
@@ -118,6 +127,8 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   plugin: null,
   finalReport: '',
   finalMeta: null,
+  routingMode: 'primary',
+  routingReason: null,
   error: null,
   log: [],
   plugins: [],
@@ -221,6 +232,23 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       }))
     })
 
+    socket.on('research:routing', (d: any) => {
+      set((s) => ({
+        routingMode: d.mode as 'primary' | 'degraded',
+        routingReason: d.reason || null,
+        log: [
+          ...s.log,
+          {
+            id: uid(),
+            ts: Date.now(),
+            kind: 'thought',
+            agent: 'Router',
+            text: `Model routing → ${d.mode}${d.reason ? ` (${d.reason})` : ''}`,
+          },
+        ],
+      }))
+    })
+
     socket.on('research:final', (d: any) => {
       set((s) => ({
         running: false,
@@ -232,10 +260,12 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
         sources: d.sources,
         critiqueRounds: d.critiqueRounds,
         currentIteration: d.iterations,
+        routingMode: (d.routingMode as 'primary' | 'degraded') || 'primary',
         finalMeta: {
           iterations: d.iterations,
           durationMs: d.durationMs,
           sourceCount: d.sources?.length || 0,
+          degraded: !!d.degraded,
         },
         log: [
           ...s.log,
@@ -243,7 +273,9 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
             id: uid(),
             ts: Date.now(),
             kind: 'final',
-            text: `Research complete in ${(d.durationMs / 1000).toFixed(1)}s · ${d.iterations} critique iteration(s).`,
+            text: `Research complete in ${(d.durationMs / 1000).toFixed(1)}s · ${d.iterations} critique iteration(s)${
+              d.degraded ? ' · degraded mode' : ''
+            }.`,
           },
         ],
       }))
@@ -290,6 +322,8 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       plugin: null,
       finalReport: '',
       finalMeta: null,
+      routingMode: 'primary',
+      routingReason: null,
       error: null,
       log: [
         {
@@ -318,6 +352,8 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       plugin: null,
       finalReport: '',
       finalMeta: null,
+      routingMode: 'primary',
+      routingReason: null,
       error: null,
       log: [],
     })

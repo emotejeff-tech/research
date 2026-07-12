@@ -4,17 +4,19 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ShieldCheck, RefreshCw, Check, AlertTriangle, ArrowRight } from 'lucide-react'
 import { useOrchestrator } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
+import { usePhaseGlow } from './usePhaseGlow'
 
 export default function CriticLoop() {
   const rounds = useOrchestrator((s) => s.critiqueRounds)
   const currentIteration = useOrchestrator((s) => s.currentIteration)
   const phase = useOrchestrator((s) => s.phase)
   const running = useOrchestrator((s) => s.running)
+  const glow = usePhaseGlow(['critique'])
 
   const MAX = 3
 
   return (
-    <GlassCard className="flex flex-col">
+    <GlassCard className={`flex flex-col ${glow}`}>
       <GlassPanelHeader
         icon={<ShieldCheck className="h-4 w-4" />}
         title="Actor–Critic Verification Loop"

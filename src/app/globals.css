@@ -266,6 +266,41 @@
 }
 .animate-float { animation: float-y 6s ease-in-out infinite; }
 
+/* ============================================================
+   PHASE GLOW (Step 3) — pulsating ambient glow behind the
+   active glass panel, driven by the current agent phase.
+   ============================================================ */
+.agent-glow {
+  transition: filter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: filter;
+}
+.agent-glow-planning {
+  filter: drop-shadow(0 0 22px rgba(52, 211, 153, 0.42));
+}
+.agent-glow-discovery {
+  filter: drop-shadow(0 0 22px rgba(94, 234, 212, 0.42));
+}
+.agent-glow-synthesis {
+  filter: drop-shadow(0 0 22px rgba(251, 191, 36, 0.42));
+}
+.agent-glow-critique {
+  filter: drop-shadow(0 0 22px rgba(251, 113, 133, 0.42));
+}
+.agent-glow-generation {
+  filter: drop-shadow(0 0 22px rgba(251, 146, 60, 0.42));
+}
+.agent-glow-final {
+  filter: drop-shadow(0 0 22px rgba(52, 211, 153, 0.42));
+}
+/* gentle pulse layered on top of the static drop-shadow */
+@keyframes glow-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+.agent-glow {
+  animation: glow-breathe 2.6s ease-in-out infinite;
+}
+
 /* reactflow overrides for glass nodes */
 .react-flow__attribution { display: none; }
 .react-flow__edge-path { stroke-width: 2; }
