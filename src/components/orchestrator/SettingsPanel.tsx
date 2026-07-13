@@ -66,6 +66,9 @@ export default function SettingsPanel() {
     primary: overrides.primary ?? settings?.primary ?? false,
     maxContextTokens: overrides.maxContextTokens ?? settings?.maxContextTokens ?? 8192,
     temperature: overrides.temperature ?? settings?.temperature ?? 0.7,
+    jsonMode: overrides.jsonMode ?? settings?.jsonMode ?? true,
+    planningModel: overrides.planningModel ?? settings?.planningModel ?? '',
+    planningEndpoint: overrides.planningEndpoint ?? settings?.planningEndpoint ?? '',
     tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
     exaApiKey: overrides.exaApiKey ?? settings?.exaApiKey ?? '',
     youcomApiKey: overrides.youcomApiKey ?? settings?.youcomApiKey ?? '',
@@ -245,6 +248,52 @@ export default function SettingsPanel() {
                     <option value={1.5}>1.5 (wild)</option>
                     <option value={2.0}>2.0 (chaotic)</option>
                   </select>
+                </div>
+              </div>
+
+              {/* JSON Mode toggle */}
+              <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                <div>
+                  <div className="text-[12px] font-medium text-white/80">JSON Mode</div>
+                  <p className="text-[10px] text-white/40">
+                    Forces the model to return valid JSON for Critic, Evolution, and Planner calls. Prevents pipeline parse errors with local models.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.jsonMode}
+                  onCheckedChange={(v) => setField('jsonMode', v)}
+                />
+              </div>
+
+              {/* Hybrid routing: lightweight planning model (saves VRAM) */}
+              <div className="rounded-xl border border-violet-400/15 bg-violet-400/[0.04] p-3">
+                <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-violet-300/70">
+                  Hybrid Routing (optional) - lightweight model for Planning/Discovery
+                </div>
+                <p className="mb-2 text-[9px] text-white/35">
+                  Route Coordinator/Planner calls to a smaller, faster model to save VRAM. Leave empty to use the primary model for everything.
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="mb-1 block text-[10px] text-white/40">Planning Model Name</label>
+                    <Input
+                      type="text"
+                      value={form.planningModel || ''}
+                      onChange={(e) => setField('planningModel', e.target.value)}
+                      placeholder="deepseek-r1:7b (optional)"
+                      className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-[10px] text-white/40">Planning Endpoint (optional)</label>
+                    <Input
+                      type="text"
+                      value={form.planningEndpoint || ''}
+                      onChange={(e) => setField('planningEndpoint', e.target.value)}
+                      placeholder="http://localhost:11434/v1 (optional)"
+                      className="glass border-white/15 bg-white/5 font-mono text-[11px] text-white/90 placeholder:text-white/25"
+                    />
+                  </div>
                 </div>
               </div>
 

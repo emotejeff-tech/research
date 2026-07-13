@@ -23,7 +23,7 @@ export interface SaboteurInjection {
 }
 
 export async function generatePoisonedSource(query: string): Promise<SaboteurInjection | null> {
-  const raw = await llm(SYSTEM, `Research topic: ${query}\n\nGenerate one poisoned source to test the Critic.`)
+  const raw = await llm(SYSTEM, `Research topic: ${query}\n\nGenerate one poisoned source to test the Critic.`, 2, true)
   const parsed = extractJSON<{
     title?: string
     url?: string

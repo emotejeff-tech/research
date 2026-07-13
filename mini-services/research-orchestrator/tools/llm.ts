@@ -14,7 +14,7 @@
  */
 import { getZAI } from './sdk'
 import { sleep, extractJSON } from '../util'
-import { getLocalLLMConfig, isLocalTierActive, isLocalPrimary } from './settings'
+import { getLocalLLMConfig, getPlanningModelConfig, isLocalTierActive, isLocalPrimary } from './settings'
 import type { LLMResult, Source } from '../types'
 
 export { extractJSON }
@@ -30,13 +30,22 @@ export async function llm(
   systemPrompt: string,
   userPrompt: string,
   retries = 2,
+  useJsonMode?: boolean,
 ): Promise<string> {
   // If local is set as primary, use it directly with retries (skip Z.ai config requirement).
   if (isLocalPrimary()) {
+    // Check if this is a planning/discovery call — use the lightweight planning model if configured
+    const planningConfig = getPlanningModelConfig()
+    const isPlanningCall = systemPrompt.includes('Coordinator') || systemPrompt.includes('Planner') || systemPrompt.includes('Decompose')
+
     let lastErr: any
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
-        return await localLLM(systemPrompt, userPrompt)
+        if (isPlanningCall && planningConfig) {
+          // Use the lightweight planning model
+          return await localLLMWithModel(systemPrompt, userPrompt, planningConfig.baseURL, planningConfig.model, useJsonMode)
+        }
+        return await localLLM(systemPrompt, userPrompt, useJsonMode)
       } catch (e) {
         lastErr = e
         console.error(`[llm] local attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
@@ -79,9 +88,71 @@ export async function llm(
  * the text on success, or throws if unconfigured / unreachable / empty.
  * Designed to fail fast (LOCAL_LLM_TIMEOUT_MS) so the pipeline moves on.
  */
+/**
+ * Call a local model with a specific endpoint+model (for hybrid routing).
+ * Used by the planning model shortcut.
+ */
+async function localLLMWithModel(
+  systemPrompt: string,
+  userPrompt: string,
+  baseURL: string,
+  model: string,
+  useJsonMode?: boolean,
+): Promise<string> {
+  const config = getLocalLLMConfig()
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
+
+  const requestBody: any = {
+    model,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    stream: false,
+    options: {
+      num_ctx: config.maxContextTokens,
+      temperature: config.temperature,
+    },
+  }
+
+  const shouldUseJson = useJsonMode ?? config.jsonMode
+  if (shouldUseJson) {
+    requestBody.response_format = { type: 'json_object' }
+  }
+
+  try {
+    const res = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${config.apiKey}`,
+      },
+      body: JSON.stringify(requestBody),
+      signal: controller.signal,
+    })
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => '')
+      throw new Error(`planning model HTTP ${res.status}: ${errBody.slice(0, 200)}`)
+    }
+    const data: any = await res.json()
+    const content = data?.choices?.[0]?.message?.content
+    if (content && content.trim().length > 0) return content.trim()
+    throw new Error('Empty planning model response')
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+/**
+ * Local LLM call with JSON mode support.
+ * When useJsonMode is true, adds response_format: { type: 'json_object' }
+ * so the model returns valid JSON (critical for Critic, Evolution, Planner).
+ */
 export async function localLLM(
   systemPrompt: string,
   userPrompt: string,
+  useJsonMode?: boolean,
 ): Promise<string> {
   const config = getLocalLLMConfig()
   if (!config.baseURL) {
@@ -89,6 +160,27 @@ export async function localLLM(
   }
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
+
+  // Build request body
+  const requestBody: any = {
+    model: config.model,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    stream: false,
+    options: {
+      num_ctx: config.maxContextTokens,
+      temperature: config.temperature,
+    },
+  }
+
+  // Add JSON response format if enabled (Ollama supports this, LM Studio too)
+  const shouldUseJson = useJsonMode ?? config.jsonMode
+  if (shouldUseJson) {
+    requestBody.response_format = { type: 'json_object' }
+  }
+
   try {
     const res = await fetch(`${config.baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
@@ -96,18 +188,7 @@ export async function localLLM(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${config.apiKey}`,
       },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        stream: false,
-        options: {
-          num_ctx: config.maxContextTokens,
-          temperature: config.temperature,
-        },
-      }),
+      body: JSON.stringify(requestBody),
       signal: controller.signal,
     })
     if (!res.ok) {
@@ -143,17 +224,18 @@ export type TaskComplexity = 'simple' | 'standard' | 'heavy'
 export async function llmWithFallback(
   systemPrompt: string,
   userPrompt: string,
-  opts: { retries?: number; degraded?: string; complexity?: TaskComplexity } = {},
+  opts: { retries?: number; degraded?: string; complexity?: TaskComplexity; useJsonMode?: boolean } = {},
 ): Promise<LLMResult> {
   const complexity = opts.complexity || 'standard'
   const retries = opts.retries ?? (complexity === 'simple' ? 1 : complexity === 'heavy' ? 3 : 2)
+  const useJson = opts.useJsonMode
 
   // If local provider is set as PRIMARY, try it with retries (skip Z.ai entirely).
   if (isLocalPrimary()) {
     let lastErr: any
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
-        const content = await localLLM(systemPrompt, userPrompt)
+        const content = await localLLM(systemPrompt, userPrompt, useJson)
         return { content, mode: 'primary', tier: 'local' }
       } catch (e) {
         lastErr = e

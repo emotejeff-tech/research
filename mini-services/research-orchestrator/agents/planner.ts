@@ -27,7 +27,7 @@ STEP 2 — Decompose the goal into 3 precise web search sub-queries that, when a
 Return ONLY valid JSON: {"taskType":"research"|"blueprint"|"upgrade","subqueries":["q1","q2","q3"]}.`
 
 export async function plan(query: string): Promise<PlanResult> {
-  const raw = await llm(SYSTEM, `Research goal: ${query}`)
+  const raw = await llm(SYSTEM, `Research goal: ${query}`, 2, true)
   const parsed = extractJSON<{ taskType?: string; subqueries?: string[] }>(raw)
   const taskType: TaskType =
     parsed?.taskType === 'blueprint'

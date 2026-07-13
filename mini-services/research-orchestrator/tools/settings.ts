@@ -32,6 +32,11 @@ export interface LLMSettings {
   maxContextTokens: number
   /** Temperature for generation (0-2). */
   temperature: number
+  /** Force JSON response format for structured prompts (Critic, Evolution). */
+  jsonMode: boolean
+  /** Optional: separate lightweight model for Planning/Discovery (saves VRAM). */
+  planningModel?: string
+  planningEndpoint?: string
   /** Search API keys (optional — enable multi-provider search aggregation). */
   tavilyApiKey?: string
   exaApiKey?: string
@@ -120,6 +125,9 @@ const DEFAULT_SETTINGS: LLMSettings = {
   primary: false,
   maxContextTokens: 8192,
   temperature: 0.7,
+  jsonMode: true,
+  planningModel: '',
+  planningEndpoint: '',
 }
 
 let settings: LLMSettings = { ...DEFAULT_SETTINGS }
@@ -242,12 +250,24 @@ export function isLocalPrimary(): boolean {
 /**
  * Get the effective local LLM config.
  */
-export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number } {
+export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number; jsonMode: boolean } {
   return {
     baseURL: settings.baseURL || '',
     apiKey: settings.apiKey || 'none',
     model: settings.model || 'local-model',
     maxContextTokens: settings.maxContextTokens || 8192,
     temperature: settings.temperature ?? 0.7,
+    jsonMode: settings.jsonMode ?? true,
   }
+}
+
+/** Get config for the lightweight planning model (if configured separately). */
+export function getPlanningModelConfig(): { baseURL: string; model: string } | null {
+  if (settings.planningEndpoint && settings.planningModel) {
+    return {
+      baseURL: settings.planningEndpoint,
+      model: settings.planningModel,
+    }
+  }
+  return null
 }

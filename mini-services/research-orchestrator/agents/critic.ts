@@ -57,6 +57,7 @@ export async function critique(
       retries: 2,
       degraded: '{"verdict":"pass","issues":[],"notes":"Critic LLM unavailable — draft accepted without verification (degraded)."}',
       complexity: 'standard',
+      useJsonMode: true,
     },
   )
 

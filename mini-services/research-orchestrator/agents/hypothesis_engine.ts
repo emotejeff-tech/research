@@ -24,7 +24,7 @@ export interface Hypothesis {
 }
 
 export async function generateHypotheses(query: string): Promise<Hypothesis[]> {
-  const raw = await llm(SYSTEM, `Research question: ${query}\n\nGenerate 3 mutually exclusive hypotheses with disproof queries.`)
+  const raw = await llm(SYSTEM, `Research question: ${query}\n\nGenerate 3 mutually exclusive hypotheses with disproof queries.`, 2, true)
   const parsed = extractJSON<{ hypotheses?: Hypothesis[] }>(raw)
   if (Array.isArray(parsed?.hypotheses)) {
     return parsed!.hypotheses.slice(0, 3).map((h) => ({

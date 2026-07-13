@@ -52,6 +52,7 @@ export async function analyzeGap(
   const raw = await llm(
     GAP_SYSTEM,
     `Research goal: ${query}\nSub-queries explored: ${subQueries.join('; ')}\nSources gathered:\n${sourcesDigest}\nExisting tools in registry: ${existingTools.length ? existingTools.join(', ') : 'none'}\n\nIdentify the single most valuable missing capability.`,
+    2, true,
   )
   const parsed = extractJSON<{ capability?: string; rationale?: string }>(raw)
   return {
@@ -87,6 +88,7 @@ export async function authorTool(
   const raw = await llm(
     AUTHOR_SYSTEM,
     `Missing capability to fulfill: ${capability}\nResearch context: ${query}\n\nGenerate the Python tool now.`,
+    2, true,
   )
   return parsePlugin(raw)
 }
@@ -105,6 +107,7 @@ export async function authorFromBlueprint(
   const raw = await llm(
     AUTHOR_SYSTEM,
     `Implement this specific algorithm/technique as a Python tool:\n\nTool name: ${suggestedName}\nMechanics to implement: ${mechanics}\nJustification: ${justification}\n\nGenerate the Python tool now. The tool name MUST be "${suggestedName}".`,
+    2, true,
   )
   const parsed = parsePlugin(raw)
   if (parsed) {

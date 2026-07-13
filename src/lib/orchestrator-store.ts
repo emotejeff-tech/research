@@ -164,6 +164,9 @@ interface OrchestratorState {
     primary: boolean
     maxContextTokens: number
     temperature: number
+    jsonMode: boolean
+    planningModel?: string
+    planningEndpoint?: string
     tavilyApiKey?: string
     exaApiKey?: string
     youcomApiKey?: string
