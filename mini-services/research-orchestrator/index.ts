@@ -43,6 +43,7 @@ import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tool
 import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
 import { announce, isVoiceEnabled } from './tools/voicebox'
 import { discoverEnvKeys, runHealthChecks } from './tools/health_check'
+import { warmupLocalModel } from './tools/llm'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
@@ -119,6 +120,7 @@ async function runResearch(socket: any, query: string) {
       agent: 'Coordinator',
       text: `Breaking down the research goal: "${query}" into a focused execution graph.`,
     })
+    emit('research:thought', { agent: 'System', text: '⏳ Model is generating... (local models can take 30-120s per call)' })
     announcePhase(socket, 'Research initiated. Coordinator is decomposing your query.')
     await sleep(500)
 
@@ -1129,6 +1131,9 @@ httpServer.listen(PORT, () => {
     console.log(`[health] ${online} online, ${offline} offline, ${unconfigured} unconfigured`)
     latestHealthStatuses = statuses
   }).catch(() => { /* best-effort */ })
+  // Warmup: pre-load the local model into VRAM so the first query is fast.
+  warmupLocalModel()
+
   // Run skill deprecation on boot + every 6 hours.
   const deprecated = deprecateStaleTools(pluginRegistryMeta)
   if (deprecated.length > 0) {

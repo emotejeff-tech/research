@@ -11,8 +11,19 @@
 import { multiSearch } from '../tools/search_providers'
 import { getCachedResults, cacheResults } from '../tools/search_cache'
 import { validateLinks, sortByCredibility, getCredibilityScore } from '../tools/link_checker'
+import { getSettings } from '../tools/settings'
 import type { Source, Emit } from '../types'
 import { sleep } from '../util'
+
+/** Smart source trimming: reduce source count based on context window size. */
+function getOptimalSourceCount(): number {
+  const settings = getSettings()
+  const ctx = settings.maxContextTokens || 8192
+  // Roughly: each source takes ~100 tokens (title + snippet + citation).
+  // Leave room for system prompt + user prompt + generation.
+  const maxByContext = Math.floor((ctx - 2000) / 150)
+  return Math.min(maxByContext, 12) // cap at 12 sources max
+}
 
 export async function discover(subQueries: string[], emit: Emit): Promise<Source[]> {
   // PARALLEL BRANCH EXECUTION — all sub-queries searched simultaneously.
@@ -121,6 +132,16 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
         emit('research:source', { source: src })
       }
     } catch { /* best-effort */ }
+  }
+
+  // Smart context trimming: if we have too many sources for the context window, keep only the top-credible ones.
+  const maxSources = getOptimalSourceCount()
+  if (sources.length > maxSources) {
+    sources = sortByCredibility(sources).slice(0, maxSources)
+    emit('research:thought', {
+      agent: 'Discovery',
+      text: `Context-aware trimming: kept top ${maxSources} most credible sources (based on ${getSettings().maxContextTokens}-token context window).`,
+    })
   }
 
   emit('research:thought', {

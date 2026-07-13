@@ -145,9 +145,13 @@ async function localLLMWithModel(
 }
 
 /**
- * Local LLM call with JSON mode support.
+ * Local LLM call with JSON mode support + heartbeat + smart retry.
  * When useJsonMode is true, adds response_format: { type: 'json_object' }
  * so the model returns valid JSON (critical for Critic, Evolution, Planner).
+ *
+ * Includes:
+ *  - Heartbeat callback every 10s (so UI doesn't look frozen during long generation)
+ *  - Smart retry: if first call returns non-JSON when JSON was expected, retry with simplified prompt
  */
 export async function localLLM(
   systemPrompt: string,
@@ -158,10 +162,47 @@ export async function localLLM(
   if (!config.baseURL) {
     throw new Error('No local LLM configured — set a provider in Settings')
   }
+
+  const shouldUseJson = useJsonMode ?? config.jsonMode
+
+  // First attempt with full prompt
+  let result = await callLocalModel(config, systemPrompt, userPrompt, shouldUseJson)
+
+  // Smart retry: if JSON was expected but response isn't valid JSON, retry with a simplified prompt
+  if (shouldUseJson && result) {
+    const { extractJSON } = await import('../util')
+    if (!extractJSON(result)) {
+      console.warn('[llm] response was not valid JSON — retrying with simplified prompt...')
+      const simplifiedSystem = 'Return ONLY a valid JSON object. No markdown, no explanation, no code fences. Just raw JSON.'
+      const simplifiedUser = `${systemPrompt}\n\n${userPrompt}\n\nRespond with ONLY the JSON object.`
+      const retryResult = await callLocalModel(config, simplifiedSystem, simplifiedUser, true)
+      if (retryResult) {
+        if (extractJSON(retryResult)) {
+          return retryResult
+        }
+      }
+      // Return original even if not JSON — the caller has fallback parsing
+    }
+  }
+
+  return result
+}
+
+/** Core function that makes the actual HTTP call to the local model. */
+async function callLocalModel(
+  config: { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number },
+  systemPrompt: string,
+  userPrompt: string,
+  useJsonMode: boolean,
+): Promise<string> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
 
-  // Build request body
+  // Heartbeat: log every 10s so the orchestrator console shows the model is still working
+  const heartbeat = setInterval(() => {
+    console.log(`[llm] model "${config.model}" still generating... (${new Date().toLocaleTimeString()})`)
+  }, 10000)
+
   const requestBody: any = {
     model: config.model,
     messages: [
@@ -175,9 +216,7 @@ export async function localLLM(
     },
   }
 
-  // Add JSON response format if enabled (Ollama supports this, LM Studio too)
-  const shouldUseJson = useJsonMode ?? config.jsonMode
-  if (shouldUseJson) {
+  if (useJsonMode) {
     requestBody.response_format = { type: 'json_object' }
   }
 
@@ -204,6 +243,26 @@ export async function localLLM(
     throw new Error('Empty local LLM response')
   } finally {
     clearTimeout(timer)
+    clearInterval(heartbeat)
+  }
+}
+
+/** Warmup: send a tiny prompt to pre-load the model into VRAM. */
+export async function warmupLocalModel(): Promise<boolean> {
+  if (!isLocalPrimary()) return false
+  try {
+    console.log('[llm] warming up local model (pre-loading into VRAM)...')
+    await callLocalModel(
+      getLocalLLMConfig(),
+      'You are a test. Respond with "OK".',
+      'Say OK.',
+      false,
+    )
+    console.log('[llm] model warmup complete — first query will be fast.')
+    return true
+  } catch (e) {
+    console.warn('[llm] warmup failed (model may still be loading):', (e as Error)?.message)
+    return false
   }
 }
 
