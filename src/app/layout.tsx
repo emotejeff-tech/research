@@ -14,23 +14,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NEXUS — Autonomous Research Engine",
+  title: "INTELLAGENT — Autonomous Research Engine",
   description: "Split-agent autonomous research system: a Coordinator, Discovery, Synthesis & Evolution agents with a self-critiquing Actor-Critic loop and a self-teaching plugin registry.",
   keywords: ["autonomous agents", "actor-critic", "research", "multi-agent", "LangGraph", "glassmorphism", "3D"],
-  authors: [{ name: "NEXUS Engine" }],
+  authors: [{ name: "INTELLAGENT Engine" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
   },
   openGraph: {
-    title: "NEXUS — Autonomous Research Engine",
+    title: "INTELLAGENT — Autonomous Research Engine",
     description: "Split-agent autonomous research with self-critique & plugin evolution.",
     url: "https://chat.z.ai",
-    siteName: "NEXUS",
+    siteName: "INTELLAGENT",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "NEXUS — Autonomous Research Engine",
+    title: "INTELLAGENT — Autonomous Research Engine",
     description: "Split-agent autonomous research with self-critique & plugin evolution.",
   },
 };

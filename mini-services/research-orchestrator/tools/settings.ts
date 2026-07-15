@@ -82,7 +82,7 @@ export const PROVIDER_PRESETS: Record<
   ollama: {
     label: 'Ollama',
     defaultURL: 'http://localhost:11434/v1',
-    defaultKey: 'ollama',
+    defaultKey: '',
     defaultModel: 'llama3.2',
     needsKey: false,
     help: 'Local Ollama server. Install from ollama.com, then pull a model with `ollama pull llama3.2`.',
@@ -90,7 +90,7 @@ export const PROVIDER_PRESETS: Record<
   lmstudio: {
     label: 'LM Studio',
     defaultURL: 'http://localhost:1234/v1',
-    defaultKey: 'lm-studio',
+    defaultKey: '',
     defaultModel: 'local-model',
     needsKey: false,
     help: 'Local LM Studio server. Start the dev server in LM Studio → Local Server tab.',

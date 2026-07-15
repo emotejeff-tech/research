@@ -212,12 +212,14 @@ async function callLocalModel(
   }
 
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    if (config.apiKey) headers.Authorization = `Bearer ${config.apiKey}`
+
     const res = await fetch(`${config.baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: config.apiKey ? `Bearer ${config.apiKey}` : undefined,
-      },
+      headers,
       body: JSON.stringify(requestBody),
       signal: controller.signal,
     })

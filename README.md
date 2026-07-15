@@ -7,7 +7,7 @@
 
 <div align="center">
 
-# 🔬 Research Orchestrator
+# 🔬 INTELLAGENT
 
 <h3><em>An autonomous multi-agent research engine that critiques its own mind and teaches itself new tools.</em></h3>
 
