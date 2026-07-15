@@ -2,9 +2,9 @@
  * tools/settings.ts — Persistent LLM provider settings.
  *
  * Stores the user's preferred LLM backend (Ollama / LM Studio / OpenRouter /
- * llama.cpp / Custom) with base URL, API key, and selected model. Persists to
- * settings.json so the configuration survives restarts. Provides model
- * auto-fetching from the provider's /v1/models or /api/tags endpoint.
+ * llama.cpp / Custom / AudioBox) with base URL, API key, and selected model.
+ * Persists to settings.json so the configuration survives restarts.
+ * Provides model auto-fetching from the provider's /v1/models or /api/tags endpoint.
  */
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { dirname, join } from 'path'
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const SETTINGS_PATH = join(__dirname, '..', 'settings.json')
 
-export type ProviderType = 'zai' | 'ollama' | 'lmstudio' | 'openrouter' | 'llamacpp' | 'custom'
+export type ProviderType = 'zai' | 'ollama' | 'lmstudio' | 'openrouter' | 'llamacpp' | 'custom' | 'audiobox'
 
 export interface LLMSettings {
   /** Active provider. 'zai' = use the built-in z-ai SDK (default). */
@@ -58,6 +58,8 @@ export interface LLMSettings {
   voiceBoxEnabled?: boolean
   ttsModel?: string
   ttsVoice?: string
+  ttsVoices?: string[]
+  ttsModels?: string[]
   whisperModel?: string
 }
 
@@ -114,6 +116,14 @@ export const PROVIDER_PRESETS: Record<
     needsKey: false,
     help: 'Any OpenAI-compatible endpoint (vLLM, text-generation-webui, etc.).',
   },
+  audiobox: {
+    label: 'AudioBox (Local TTS + Whisper)',
+    defaultURL: 'http://localhost:17493',
+    defaultKey: '',
+    defaultModel: 'kokoro',
+    needsKey: false,
+    help: 'Local AudioBox server. Start with `python -m voicebox.server` or your custom AudioBox setup.',
+  },
 }
 
 const DEFAULT_SETTINGS: LLMSettings = {
@@ -128,6 +138,14 @@ const DEFAULT_SETTINGS: LLMSettings = {
   jsonMode: true,
   planningModel: '',
   planningEndpoint: '',
+  voiceBoxUrl: 'http://localhost:17493',
+  voiceBoxApiKey: '',
+  voiceBoxEnabled: true,
+  ttsModel: 'kokoro',
+  ttsVoice: 'af_heart',
+  ttsVoices: ['af_heart', 'bf_heart', 'af_alloy', 'bf_alloy'],
+  ttsModels: ['kokoro', 'f5-tts', 'vits'],
+  whisperModel: 'whisper-1',
 }
 
 let settings: LLMSettings = { ...DEFAULT_SETTINGS }
@@ -140,7 +158,7 @@ export function loadSettings() {
       console.log(`[settings] loaded provider=${settings.provider} model=${settings.model || '(none)'} enabled=${settings.enabled}`)
     } else {
       settings = { ...DEFAULT_SETTINGS }
-      console.log('[settings] no settings file, using defaults (zai built-in)')
+      console.log('[settings] no settings file, using defaults (local-first)')
     }
   } catch (e) {
     console.error('[settings] load failed:', (e as Error).message)
@@ -148,11 +166,8 @@ export function loadSettings() {
   }
 }
 
-/** Save settings to disk. Writes the COMPLETE settings object — no merging.
- * This ensures all fields from the frontend form are saved every time. */
+/** Save settings to disk. Writes the COMPLETE settings object — no merging. */
 export function saveSettings(newSettings: Partial<LLMSettings>): LLMSettings {
-  // Start with defaults, then overlay EVERYTHING from the incoming data.
-  // This ensures old/corrupted settings.json fields are overwritten.
   settings = {
     ...DEFAULT_SETTINGS,
     ...newSettings,
@@ -186,14 +201,14 @@ export function getSettings(): LLMSettings {
 /**
  * Fetch available models from the configured provider.
  * - Ollama: GET /api/tags (native format)
+ * - AudioBox: GET /api/voices (native format)
  * - Others: GET /v1/models (OpenAI-compatible format)
- * Returns a list of model IDs.
  */
 export async function fetchModels(
   provider: ProviderType,
   baseURL: string,
   apiKey: string,
-): Promise<{ models: string[]; error?: string }> {
+): Promise<{ models: string[]; voices?: string[]; error?: string }> {
   if (!baseURL && provider !== 'zai') {
     return { models: [], error: 'No base URL configured' }
   }
@@ -215,6 +230,18 @@ export async function fetchModels(
       return { models }
     }
 
+    // AudioBox has a native /api/voices endpoint.
+    if (provider === 'audiobox') {
+      const res = await fetch(`${url}/api/voices`, {
+        headers,
+        signal: AbortSignal.timeout(5000),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data: any = await res.json()
+      const voices = (data?.voices || data?.data || []).map((v: any) => v.name || v.id || v).filter(Boolean)
+      return { models: [data?.default_model || 'kokoro' as string], voices }
+    }
+
     // All other providers use the OpenAI-compatible /v1/models endpoint.
     const res = await fetch(`${url}/models`, {
       headers,
@@ -232,7 +259,7 @@ export async function fetchModels(
 
 /**
  * Check if the local tier should be used. Auto-detects: if a non-zai provider
- * is configured with a baseURL + model, it's active. No need to manually toggle.
+ * is configured with a baseURL + model, it's active.
  */
 export function isLocalTierActive(): boolean {
   return settings.provider !== 'zai' && !!settings.baseURL && !!settings.model
@@ -247,9 +274,7 @@ export function isLocalPrimary(): boolean {
   return settings.provider !== 'zai' && !!settings.baseURL && !!settings.model
 }
 
-/**
- * Get the effective local LLM config.
- */
+/** Get the effective local LLM config. */
 export function getLocalLLMConfig(): { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number; jsonMode: boolean } {
   return {
     baseURL: settings.baseURL || '',

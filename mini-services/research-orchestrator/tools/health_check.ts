@@ -133,24 +133,13 @@ export async function runHealthChecks(): Promise<HealthStatus[]> {
     }))
   }
 
-  // Database providers
-  if (s.pineconeApiKey) {
-    checks.push(Promise.resolve({
-      name: 'Pinecone',
-      type: 'database' as const,
-      status: 'online' as const,
-    }))
-  }
-  if (s.supabaseUrl) {
-    checks.push(
-      ping(s.supabaseUrl, 2000).then((r) => ({
-        name: 'Supabase',
-        type: 'database' as const,
-        status: r.ok ? ('online' as const) : ('offline' as const),
-        latencyMs: r.latencyMs,
-      })),
-    )
-  }
+  // Local memory store
+  checks.push(Promise.resolve({
+    name: 'Local TF-IDF Memory',
+    type: 'database' as const,
+    status: 'online' as const,
+    detail: 'No Pinecone/Supabase required — local memory is always available',
+  }))
 
   // Voice
   if (s.voiceBoxUrl) {

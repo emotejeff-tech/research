@@ -82,7 +82,7 @@ Traditional LLM pipelines are **single-pass**: prompt → response. They halluci
 | 🧬 **Self-Teaching Evolution** | When a capability gap is detected, Evolution agent authors a Python tool, sandbox-tests it, caches it to `custom_plugins/` registry |
 | 🔄 **Hybrid LLM Routing** | Primary (OpenRouter/Anthropic) → Local (Ollama) → Degraded (no-LLM snippet compile) with `research:routing` events |
 | 🛡️ **OPSEC & Safety** | Automatic PII scrubbing, User-Agent rotation, adversarial **Saboteur** injects poisoned sources to stress-test Critic |
-| 🧠 **RAG Memory** | Vector memory (Pinecone/Supabase) stores past conclusions; retrieved before new searches |
+| 🧠 **RAG Memory** | Local TF-IDF memory stores past conclusions; retrieved before new searches |
 | 🐝 **Swarm Planner** | For blueprint/design tasks, spawns 3 parallel planners (Security/Performance/UX) |
 | 🔬 **Hypothesis Engine** | Generates 3 mutually exclusive hypotheses + disproof queries to neutralize confirmation bias |
 | 🎙️ **Voice I/O** | Whisper STT + VoiceBox TTS — speak your query, hear the report |
@@ -134,7 +134,7 @@ Traditional LLM pipelines are **single-pass**: prompt → response. They halluci
 | **Backend** | Bun + TypeScript, Socket.io server on :3003 |
 | **LLM Providers** | OpenRouter, Anthropic, OpenAI, Ollama (local), custom OpenAI-compatible |
 | **Search** | Tavily, Exa, You.com, TinyFish, Nimbler (pluggable) |
-| **Memory** | Pinecone / Supabase (pgvector) for RAG |
+| **Memory** | Local TF-IDF + BM25 memory (no Pinecone/Supabase) |
 | **Sandbox** | Daytona / E2B / Python `py_compile` for plugin testing |
 | **Voice** | VoiceBox (Whisper STT + TTS) |
 | **Observability** | Custom telemetry + health checks (LLM, Search, Vector, Sandbox) |
@@ -181,9 +181,9 @@ TAVILY_API_KEY=tvly-...
 # TINYFISH_API_KEY=...
 # NIMBLER_API_KEY=...
 
-# ─── Vector Memory (optional but recommended) ───
+# ─── Local Memory (built in — no Pinecone/Supabase) ───
 PINECONE_API_KEY=...
-PINECONE_INDEX=research-memory
+NO CLOUD MEMORY REQUIRED — local TF-IDF/BM25 memory is built in
 # OR
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_KEY=...
@@ -289,7 +289,7 @@ research/
 │       │   ├── plugin_registry.ts
 │       │   ├── plugin_runner.ts
 │       │   ├── search_cache.ts
-│       │   ├── vector_memory.ts
+│       │   ├── local_memory.ts        # local TF-IDF/BM25 memory store
 │       │   ├── settings.ts
 │       │   ├── health_check.ts
 │       │   ├── meta_prompts.ts

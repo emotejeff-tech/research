@@ -36,18 +36,58 @@ import {
 } from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 import { loadSearchCache, getCachedResults, cacheResults, getCacheStats } from './tools/search_cache'
-import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats } from './tools/vector_memory'
+import { initLocalMemory, storeConclusion, retrieveRelevant, getMemoryStats } from './tools/local_memory'
 import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
-import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
-import { announce, isVoiceEnabled } from './tools/voicebox'
+import { loadSettings, saveSettings, getSettings, fetchModels as fetchLLMMModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
+import { announce, isVoiceEnabled, fetchVoices } from './tools/voicebox'
 import { discoverEnvKeys, runHealthChecks } from './tools/health_check'
 import { warmupLocalModel } from './tools/llm'
 import type { UpgradeBlueprint } from './types'
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
+
+// ---------- Auto-detect local services ----------
+async function autoDetectLocalServices() {
+  try {
+    const s = getSettings()
+    // Try to fetch available voices from Audiobox
+    try {
+      const voices = await fetchVoices(s.voiceBoxUrl || '', s.voiceBoxApiKey || '')
+      const voiceNames = voices.map((v) => typeof v === 'string' ? v : v.id || v.name).filter(Boolean)
+      if (voiceNames.length > 0 && !s.ttsVoice) {
+        s.ttsVoice = voiceNames[0]
+        s.ttsVoices = voiceNames
+        saveSettings(s)
+        console.log(`[voicebox] auto-detected voices: ${voiceNames.join(', ')}`)
+      }
+    } catch (e) {
+      console.warn('[voicebox] auto-detect voices failed:', (e as Error)?.message)
+    }
+    // Try to fetch available models from local LLM providers
+    try {
+      const models = await fetchLLMMModels(s.provider, s.baseURL || '', s.apiKey || '')
+      if (models.models.length > 0 && !s.model) {
+        s.model = models.models[0]
+        s.baseURL = s.baseURL || PROVIDER_PRESETS[s.provider].defaultURL
+        s.apiKey = s.apiKey || PROVIDER_PRESETS[s.provider].defaultKey
+        s.enabled = true
+        s.primary = true
+        saveSettings(s)
+        console.log(`[llm] auto-detected models: ${models.models.join(', ')}`)
+      }
+    } catch (e) {
+      console.warn('[llm] auto-detect models failed:', (e as Error)?.message)
+    }
+  } catch (e) {
+    console.error('[auto-detect] failed:', (e as Error)?.message)
+  }
+}
+
+// Start local service detection on boot
+autoDetectLocalServices().catch((e) => console.error('[auto-detect] unhandled:', (e as Error)?.message))
 
 // ---------- Persistent execution memory ----------
 const tasks = new Map<string, TaskState>()
@@ -1083,7 +1123,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('settings:fetchModels', async (data: { provider: ProviderType; baseURL: string; apiKey: string }) => {
-    const result = await fetchModels(data.provider, data.baseURL, data.apiKey)
+    const result = await fetchLLMMModels(data.provider, data.baseURL, data.apiKey)
     socket.emit('settings:models', { models: result.models, error: result.error })
   })
 
@@ -1112,7 +1152,7 @@ io.on('connection', (socket) => {
 httpServer.listen(PORT, () => {
   initTelemetry()
   loadSearchCache()
-  loadVectorMemory()
+  initLocalMemory()
   loadMetaPrompts()
   loadSettings()
 

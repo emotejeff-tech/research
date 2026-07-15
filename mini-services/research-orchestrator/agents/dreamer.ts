@@ -1,82 +1,108 @@
 /**
- * agents/dreamer.ts — The Dreamer.
+ * agents/dreamer.ts — The Dreamer agent.
  *
- * After the Actor-Critic loop converges, the Dreamer reflects deeply on ALL
- * the data and dreams on the possibilities: what's the best possible outcome?
- * What new goals or ideas does the evidence suggest? What relevant papers
- * could advance the blueprint? It searches for those papers live.
- *
- * This is the "dream on the possibilities" stage — the agent lets its
- * imagination roam beyond strict synthesis to discover better ideas, options,
- * and forward-looking directions grounded in the evidence.
+ * Generates creative hypotheses and "dreams" from the current research
+ * synthesis. Uses llmWithFallback so it works with local LLMs.
+ * Falls back to a deterministic heuristic mode when the LLM is unavailable.
  */
-import { llm, extractJSON } from '../tools/llm'
-import { webSearch } from '../tools/web_search'
-import type { Source, Dream, TaskType } from '../types'
+import { llmWithFallback, extractJSON } from '../tools/llm'
+import type { Source, TaskType } from '../types'
 
-const DREAMER_SYSTEM = `You are the Dreamer agent — a visionary research strategist. Given the research goal, the final synthesis, and all gathered sources, you must DREAM on the possibilities and dig deep for the best possible outcomes.
+const DREAMER_SYSTEM = `You are the Dreamer agent in a multi-agent research system.
+Your job is to generate creative, actionable "dreams" — novel hypotheses,
+research directions, and speculative insights — based on the evidence gathered.
 
-Reflect on ALL the data. Let your imagination roam to discover better ideas, options, and directions the evidence points toward. Then:
+Rules:
+1. Ground dreams in the evidence. Don't invent facts.
+2. Be specific and actionable.
+3. Suggest 3-5 dreams, each with:
+   - name: short descriptive name
+   - hypothesis: the core idea
+   - rationale: why this makes sense based on the evidence
+   - nextStep: what to do next to validate this dream
+4. Return ONLY valid JSON array.
 
-1. **Best Possible Outcome**: What is the most optimistic yet evidence-grounded outcome this research could lead to? Dream big but stay tethered to the data.
-2. **New Goals**: What new goals or research directions does this open up? What should be investigated next?
-3. **Possibilities**: What speculative but plausible possibilities emerge? What could this enable that nobody has tried yet?
-4. **Papers**: What academic papers or technical references would advance this blueprint? Name specific paper topics/titles that exist or should exist.
-5. **Reflection**: A synthesis of your dreaming — what did the data + dreams reveal when you reflected on everything together?
+Example format:
+[
+  {
+    "name": "Dream Name",
+    "hypothesis": "A clear, testable hypothesis",
+    "rationale": "Why this follows from the evidence",
+    "nextStep": "The concrete next action to validate it"
+  }
+]`
 
-Return ONLY valid JSON:
-{"bestOutcome":"...","newGoals":["...","..."],"possibilities":["...","..."],"papers":[{"title":"...","relevance":"..."}],"reflection":"..."}`
+export interface Dream {
+  name: string
+  hypothesis: string
+  rationale: string
+  nextStep: string
+}
+
+/** Build the user prompt for the dreamer. */
+function buildDreamPrompt(query: string, taskType: TaskType, sources: Source[], draft: string): string {
+  const sourcesBlock = sources
+    .slice(0, 10)
+    .map((s, i) => `[${i + 1}] ${s.title}\n    URL: ${s.url}\n    ${s.snippet}`)
+    .join('\n')
+
+  return `Goal: ${query}\nTask type: ${taskType}\n\nCurrent synthesis:\n${draft.slice(0, 4000)}\n\nSources:\n${sourcesBlock}\n\nGenerate 3-5 creative, evidence-grounded dreams for this research direction. Return ONLY the JSON array.`
+}
+
+/** Build a deterministic fallback dream when LLM is unavailable. */
+function buildFallbackDream(query: string, taskType: TaskType, sources: Source[], draft: string): Dream[] {
+  const sourceCount = sources.length
+  const draftLength = draft.length
+  const dreamCount = sourceCount > 0 ? Math.min(3, sourceCount) : 2
+
+  return [
+    {
+      name: 'Evidence-Gap Exploration',
+      hypothesis: `The current evidence suggests a meaningful gap in ${query.slice(0, 80)} that could be explored further.`,
+      rationale: `Based on ${sourceCount} sources and a ${draftLength} character synthesis, the strongest next step is to identify what evidence is missing rather than what is already known.`,
+      nextStep: 'Search for conflicting evidence or negative results related to this topic.'
+    },
+    {
+      name: 'Cross-Domain Synthesis',
+      hypothesis: 'Applying concepts from a related domain could reveal a novel solution path for this problem.',
+      rationale: `The research direction "${query}" intersects with multiple domains. A cross-domain transfer might surface an approach that a single-domain analysis would miss.`,
+      nextStep: 'Identify one adjacent field that uses similar techniques and adapt them to this problem.'
+    }
+  ].slice(0, dreamCount)
+}
 
 export async function dream(
   query: string,
-  synthesis: string,
-  sources: Source[],
   taskType: TaskType,
-): Promise<Dream | null> {
-  const sourcesDigest = sources
-    .slice(0, 10)
-    .map((s, i) => `[${i + 1}] ${s.title} (${s.host}) — ${s.snippet.slice(0, 120)}`)
-    .join('\n')
+  sources: Source[],
+  draft: string,
+): Promise<Dream[]> {
+  const prompt = buildDreamPrompt(query, taskType, sources, draft)
+  const degraded = JSON.stringify(buildFallbackDream(query, taskType, sources, draft))
 
-  const raw = await llm(
-    DREAMER_SYSTEM,
-    `Research goal: ${query}\nTask type: ${taskType}\n\nFinal synthesis:\n${synthesis}\n\nSources gathered:\n${sourcesDigest}\n\nDream deeply. Reflect on everything. Return the JSON.`,
-  )
+  try {
+    const result = await llmWithFallback(
+      DREAMER_SYSTEM,
+      prompt,
+      {
+        retries: 2,
+        degraded,
+        complexity: 'heavy',
+        useJsonMode: true,
+      },
+    )
 
-  const parsed = extractJSON<{
-    bestOutcome?: string
-    newGoals?: string[]
-    possibilities?: string[]
-    papers?: { title?: string; relevance?: string }[]
-    reflection?: string
-  }>(raw)
-
-  if (!parsed) return null
-
-  // Search the web for the top paper topic to enrich with real references.
-  let enrichedPapers = (parsed.papers || [])
-    .filter((p) => p.title)
-    .map((p) => ({ title: p.title!, relevance: p.relevance || '' }))
-
-  if (enrichedPapers.length > 0 && enrichedPapers.length < 4) {
-    try {
-      const results = await webSearch(`academic paper ${enrichedPapers[0].title}`, 3)
-      for (const r of results.slice(0, 2)) {
-        enrichedPapers.push({
-          title: r.title,
-          relevance: `Live result: ${r.host} — ${r.snippet.slice(0, 80)}`,
-        })
-      }
-    } catch {
-      /* search is best-effort */
+    const parsed = extractJSON<Dream[]>(result.content)
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed
+        .filter((d) => d && typeof d.name === 'string' && typeof d.hypothesis === 'string')
+        .slice(0, 5)
     }
-  }
 
-  return {
-    bestOutcome: parsed.bestOutcome || '',
-    newGoals: Array.isArray(parsed.newGoals) ? parsed.newGoals : [],
-    possibilities: Array.isArray(parsed.possibilities) ? parsed.possibilities : [],
-    papers: enrichedPapers,
-    reflection: parsed.reflection || '',
+    // If JSON parsing fails, fall back to heuristic dreams.
+    return buildFallbackDream(query, taskType, sources, draft)
+  } catch (e) {
+    console.warn(`[dreamer] LLM dream generation failed, using fallback: ${(e as Error).message}`)
+    return buildFallbackDream(query, taskType, sources, draft)
   }
 }

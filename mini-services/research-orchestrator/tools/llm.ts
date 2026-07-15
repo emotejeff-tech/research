@@ -1,16 +1,18 @@
 /**
- * tools/llm.ts — Multi-tier language model pipeline.
+ * tools/llm.ts — Multi-tier language model pipeline with robust local fallback.
  *
- * Topology (Step 4 "Local Fallback Setup", refined to a 3-tier pipeline):
- *   Tier 1 — primary:   z-ai-web-dev-sdk cloud gateway (with retry + backoff)
- *   Tier 2 — local:     OpenAI-compatible local model (Ollama / LM Studio),
- *                       env-gated via LOCAL_LLM_BASE_URL. Skipped fast when
- *                       unconfigured or unreachable so runs never stall.
- *   Tier 3 — degraded:  no-LLM structured snippet compilation.
+ * Topology:
+ *   Tier 1 — primary:   user's configured provider (local or cloud)
+ *   Tier 2 — local:     Ollama / LM Studio / llama.cpp / custom OpenAI-compatible
+ *   Tier 3 — degraded:  no-LLM structured snippet compilation
  *
- * If premium third-party keys hit 402 / credit-exhaustion, the engine steps
- * down to the local tier, and only if that is also unavailable does it fall
- * to the degraded no-LLM path — execution never halts.
+ * Key improvements for local LLM support:
+ *   - Ollama direct mode (no /v1 prefix needed)
+ *   - Better timeout handling with AbortController
+ *   - JSON response format support for structured prompts
+ *   - Smart retry with simplified prompts for JSON
+ *   - Graceful degradation when all tiers fail
+ *   - Warmup for local models to preload into VRAM
  */
 import { getZAI } from './sdk'
 import { sleep, extractJSON } from '../util'
@@ -19,12 +21,44 @@ import type { LLMResult, Source } from '../types'
 
 export { extractJSON }
 
-// ---------- Tier configuration ----------
-const LOCAL_LLM_TIMEOUT_MS = 120000 // 120s — local models can be VERY slow (first load, large context)
+// ---------- Configuration ----------
+const LOCAL_LLM_TIMEOUT_MS = 180000 // 180s — local models can be VERY slow
+const LOCAL_LLM_RETRY_BACKOFF = 3000 // ms between retries
+const LOCAL_LLM_HEARTBEAT_MS = 15000 // ms — log heartbeat every 15s
 
-// ---------- Tier 1: primary (z-ai cloud, or local if set as primary) ----------
-/** Primary LLM call with exponential-backoff retries. Throws on total failure.
- * If the user set a local provider as PRIMARY in Settings, uses that instead of Z.ai.
+/** Normalize a base URL — strip trailing slash and handle Ollama direct mode. */
+function normalizeBaseURL(baseURL: string): string {
+  let normalized = baseURL.replace(/\/$/, '')
+  // Ollama direct mode: if it ends with /v1, strip it for /api/chat
+  if (normalized.endsWith('/v1')) {
+    normalized = normalized.slice(0, -3)
+  }
+  return normalized
+}
+
+/** Check if the base URL is for Ollama (direct or v1-compatible). */
+function isOllamaURL(baseURL: string): boolean {
+  return baseURL.includes('localhost:11434') || baseURL.includes('0.0.0.0:11434') || baseURL.includes('127.0.0.1:11434')
+}
+
+/** Get the correct chat endpoint based on provider type. */
+function getChatEndpoint(baseURL: string): string {
+  return isOllamaURL(baseURL)
+    ? `${normalizeBaseURL(baseURL)}/api/chat`
+    : `${normalizeBaseURL(baseURL)}/chat/completions`
+}
+
+/** Get the correct models endpoint based on provider type. */
+function getModelsEndpoint(baseURL: string): string {
+  return isOllamaURL(baseURL)
+    ? `${normalizeBaseURL(baseURL)}/api/tags`
+    : `${normalizeBaseURL(baseURL)}/models`
+}
+
+// ---------- Tier 1: primary (configured provider) ----------
+/** Primary LLM call with exponential-backoff retries.
+ * If local is set as PRIMARY, use it directly. Otherwise use the configured
+ * cloud provider (Z.ai by default).
  */
 export async function llm(
   systemPrompt: string,
@@ -32,29 +66,22 @@ export async function llm(
   retries = 2,
   useJsonMode?: boolean,
 ): Promise<string> {
-  // If local is set as primary, use it directly with retries (skip Z.ai config requirement).
+  // If local is set as primary, use it directly with retries.
   if (isLocalPrimary()) {
-    // Check if this is a planning/discovery call — use the lightweight planning model if configured
-    const planningConfig = getPlanningModelConfig()
-    const isPlanningCall = systemPrompt.includes('Coordinator') || systemPrompt.includes('Planner') || systemPrompt.includes('Decompose')
-
     let lastErr: any
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
-        if (isPlanningCall && planningConfig) {
-          // Use the lightweight planning model
-          return await localLLMWithModel(systemPrompt, userPrompt, planningConfig.baseURL, planningConfig.model, useJsonMode)
-        }
         return await localLLM(systemPrompt, userPrompt, useJsonMode)
       } catch (e) {
         lastErr = e
-        console.error(`[llm] local attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
-        if (attempt < retries) await sleep(1000 * (attempt + 1))
+        console.error(`[llm] local primary attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
+        if (attempt < retries) await sleep(LOCAL_LLM_RETRY_BACKOFF * (attempt + 1))
       }
     }
     throw lastErr
   }
 
+  // Otherwise use the configured cloud provider.
   let lastErr: any
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -72,7 +99,7 @@ export async function llm(
     } catch (e) {
       lastErr = e
       console.error(
-        `[llm] attempt ${attempt + 1}/${retries + 1} failed:`,
+        `[llm] cloud attempt ${attempt + 1}/${retries + 1} failed:`,
         (e as Error)?.message,
       )
       if (attempt < retries) await sleep(800 * (attempt + 1))
@@ -81,16 +108,10 @@ export async function llm(
   throw lastErr
 }
 
-// ---------- Tier 2: local model (Ollama / LM Studio / OpenRouter / llama.cpp) ----------
+// ---------- Tier 2: local model (Ollama / LM Studio / llama.cpp / custom) ----------
 /**
- * Attempts a local or remote OpenAI-compatible inference endpoint, using the
- * provider settings configured via the UI (or env vars as fallback). Returns
- * the text on success, or throws if unconfigured / unreachable / empty.
- * Designed to fail fast (LOCAL_LLM_TIMEOUT_MS) so the pipeline moves on.
- */
-/**
- * Call a local model with a specific endpoint+model (for hybrid routing).
- * Used by the planning model shortcut.
+ * Attempts a local or remote OpenAI-compatible inference endpoint.
+ * Designed to fail fast with clear error messages.
  */
 async function localLLMWithModel(
   systemPrompt: string,
@@ -99,7 +120,6 @@ async function localLLMWithModel(
   model: string,
   useJsonMode?: boolean,
 ): Promise<string> {
-  const config = getLocalLLMConfig()
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
 
@@ -110,35 +130,33 @@ async function localLLMWithModel(
       { role: 'user', content: userPrompt },
     ],
     stream: false,
-    options: {
-      num_ctx: config.maxContextTokens,
-      temperature: config.temperature,
-    },
+    temperature: 0.7,
   }
 
-  const shouldUseJson = useJsonMode ?? config.jsonMode
+  const shouldUseJson = useJsonMode ?? false
   if (shouldUseJson) {
     requestBody.response_format = { type: 'json_object' }
   }
 
   try {
-    const res = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
+    const res = await fetch(getChatEndpoint(baseURL), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify(requestBody),
       signal: controller.signal,
     })
+
     if (!res.ok) {
       const errBody = await res.text().catch(() => '')
-      throw new Error(`planning model HTTP ${res.status}: ${errBody.slice(0, 200)}`)
+      throw new Error(`local model HTTP ${res.status}: ${errBody.slice(0, 300)}`)
     }
+
     const data: any = await res.json()
     const content = data?.choices?.[0]?.message?.content
     if (content && content.trim().length > 0) return content.trim()
-    throw new Error('Empty planning model response')
+    throw new Error('Empty local model response')
   } finally {
     clearTimeout(timer)
   }
@@ -150,8 +168,10 @@ async function localLLMWithModel(
  * so the model returns valid JSON (critical for Critic, Evolution, Planner).
  *
  * Includes:
- *  - Heartbeat callback every 10s (so UI doesn't look frozen during long generation)
- *  - Smart retry: if first call returns non-JSON when JSON was expected, retry with simplified prompt
+ *  - Heartbeat callback every 15s (so UI doesn't look frozen during long generation)
+ *  - Smart retry: if JSON was expected but response isn't valid JSON, retry with
+ *    a simplified prompt
+ *  - Ollama direct mode (no /v1 prefix needed)
  */
 export async function localLLM(
   systemPrompt: string,
@@ -168,7 +188,9 @@ export async function localLLM(
   // First attempt with full prompt
   let result = await callLocalModel(config, systemPrompt, userPrompt, shouldUseJson)
 
-  // Smart retry: if JSON was expected but response isn't valid JSON, retry with a simplified prompt
+  // Smart retry: if JSON was expected but response isn't valid JSON, retry
+  // with a simplified prompt. This is critical for local models that don't
+  // respect response_format reliably.
   if (shouldUseJson && result) {
     const { extractJSON } = await import('../util')
     if (!extractJSON(result)) {
@@ -190,7 +212,7 @@ export async function localLLM(
 
 /** Core function that makes the actual HTTP call to the local model. */
 async function callLocalModel(
-  config: { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number },
+  config: { baseURL: string; apiKey: string; model: string; maxContextTokens: number; temperature: number; jsonMode: boolean },
   systemPrompt: string,
   userPrompt: string,
   useJsonMode: boolean,
@@ -198,10 +220,10 @@ async function callLocalModel(
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
 
-  // Heartbeat: log every 10s so the orchestrator console shows the model is still working
+  // Heartbeat: log every 15s so the orchestrator console shows the model is still working
   const heartbeat = setInterval(() => {
     console.log(`[llm] model "${config.model}" still generating... (${new Date().toLocaleTimeString()})`)
-  }, 10000)
+  }, LOCAL_LLM_HEARTBEAT_MS)
 
   const requestBody: any = {
     model: config.model,
@@ -210,10 +232,8 @@ async function callLocalModel(
       { role: 'user', content: userPrompt },
     ],
     stream: false,
-    options: {
-      num_ctx: config.maxContextTokens,
-      temperature: config.temperature,
-    },
+    temperature: config.temperature,
+    max_tokens: Math.min(config.maxContextTokens, 4096),
   }
 
   if (useJsonMode) {
@@ -221,22 +241,24 @@ async function callLocalModel(
   }
 
   try {
-    const res = await fetch(`${config.baseURL.replace(/\/$/, '')}/chat/completions`, {
+    const res = await fetch(getChatEndpoint(config.baseURL), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
+        Authorization: config.apiKey ? `Bearer ${config.apiKey}` : undefined,
       },
       body: JSON.stringify(requestBody),
       signal: controller.signal,
     })
+
     if (!res.ok) {
       const errBody = await res.text().catch(() => '')
       if (res.status === 404) {
-        throw new Error(`model "${config.model}" not found (HTTP 404). Run: ollama list — to see installed models, or: ollama pull ${config.model}`)
+        throw new Error(`model "${config.model}" not found. Run: ollama list — to see installed models, or: ollama pull ${config.model}`)
       }
-      throw new Error(`local LLM HTTP ${res.status}: ${errBody.slice(0, 200)}`)
+      throw new Error(`local LLM HTTP ${res.status}: ${errBody.slice(0, 300)}`)
     }
+
     const data: any = await res.json()
     const content = data?.choices?.[0]?.message?.content
     if (content && content.trim().length > 0) return content.trim()
@@ -276,8 +298,8 @@ export async function warmupLocalModel(): Promise<boolean> {
 export type TaskComplexity = 'simple' | 'standard' | 'heavy'
 
 /** Multi-tier fallback pipeline: primary → local → degraded.
- * If the user set a local provider as PRIMARY (in Settings), use it first.
- * Otherwise: Z.ai cloud → local → degraded.
+ * If the user set a local provider as PRIMARY, use it first.
+ * Otherwise: configured provider → local → degraded.
  * Complexity controls retry count (simple=1, standard=2, heavy=3).
  */
 export async function llmWithFallback(
@@ -289,7 +311,7 @@ export async function llmWithFallback(
   const retries = opts.retries ?? (complexity === 'simple' ? 1 : complexity === 'heavy' ? 3 : 2)
   const useJson = opts.useJsonMode
 
-  // If local provider is set as PRIMARY, try it with retries (skip Z.ai entirely).
+  // If local provider is set as PRIMARY, try it with retries (skip cloud entirely).
   if (isLocalPrimary()) {
     let lastErr: any
     for (let attempt = 0; attempt <= retries; attempt++) {
@@ -299,29 +321,29 @@ export async function llmWithFallback(
       } catch (e) {
         lastErr = e
         console.error(`[llm] local primary attempt ${attempt + 1}/${retries + 1} failed:`, (e as Error)?.message)
-        if (attempt < retries) await sleep(2000 * (attempt + 1))
+        if (attempt < retries) await sleep(LOCAL_LLM_RETRY_BACKOFF * (attempt + 1))
       }
     }
     console.error('[llm] local primary exhausted after retries — falling to degraded.')
-    // Don't try Z.ai — it's not configured. Go straight to degraded.
+    // Don't try cloud — it's not configured. Go straight to degraded.
     return { content: opts.degraded || '', mode: 'degraded', tier: 'degraded' }
   }
 
-  // Tier 1 — Z.ai cloud gateway.
+  // Tier 1 — configured cloud provider.
   try {
-    const content = await llm(systemPrompt, userPrompt, retries)
+    const content = await llm(systemPrompt, userPrompt, retries, useJson)
     return { content, mode: 'primary', tier: 'primary' }
   } catch (e) {
     console.error(
-      '[llm] tier1 (zai cloud) exhausted — stepping down:',
+      '[llm] tier1 (cloud) exhausted — stepping down:',
       (e as Error)?.message,
     )
   }
 
-  // Tier 2 — local/remote model (only if not already tried as primary).
-  if (isLocalTierActive() && !isLocalPrimary()) {
+  // Tier 2 — local model (only if not already tried as primary).
+  if (isLocalTierActive()) {
     try {
-      const content = await localLLM(systemPrompt, userPrompt)
+      const content = await localLLM(systemPrompt, userPrompt, useJson)
       console.warn('[llm] tier2 (local) served the request — primary was unavailable.')
       return { content, mode: 'primary', tier: 'local' }
     } catch (e) {

@@ -5,8 +5,10 @@
  * Instant, Z.ai) and merges + deduplicates results. Each provider is
  * rate-limited independently. Providers without API keys are skipped.
  *
- * This decouples search from the Z.ai SDK — if Z.ai is unavailable, the
- * other providers still return results.
+ * Local-first:
+ * - DuckDuckGo works without a key
+ * - arXiv API works without a key for academic research
+ * - Local cache replay works when all providers fail
  */
 import type { Source } from '../types'
 import { uid } from '../util'
@@ -28,6 +30,7 @@ const RATE_LIMITS: Record<string, number> = {
   tinyfish: 500,
   nimbler: 500,
   duckduckgo: 1000,
+  arxiv: 500,
 }
 
 const lastCallTime: Record<string, number> = {}
@@ -230,6 +233,49 @@ async function searchNimbler(query: string, num: number, apiKey: string): Promis
   return sources
 }
 
+// ---------- Provider: arXiv (no key needed, academic research) ----------
+async function searchArxiv(query: string, num: number): Promise<Source[]> {
+  await rateLimit('arxiv')
+  const searchQuery = query.replace(/\s+/g, '+').slice(0, 200)
+  const url = `http://export.arxiv.org/api/query?search_query=all:${searchQuery}&start=0&max_results=${num}`
+  const res = await fetch(url, {
+    signal: AbortSignal.timeout(8000),
+  })
+  if (!res.ok) throw new Error(`arXiv HTTP ${res.status}`)
+  const data: any = await res.text()
+  const sources: Source[] = []
+
+  // Parse XML manually (no dependencies)
+  const entries = data.match(/<entry>([\s\S]*?)<\/entry>/g) || []
+  for (const entry of entries.slice(0, num)) {
+    const title = extractXml(entry, 'title')?.trim().replace(/\s+/g, ' ') || 'Untitled'
+    const summary = extractXml(entry, 'summary')?.trim().replace(/\s+/g, ' ') || ''
+    const id = extractXml(entry, 'id') || ''
+    const authors = extractXml(entry, 'author')
+    const published = extractXml(entry, 'published') || ''
+    const host = 'arxiv.org'
+
+    if (id) {
+      sources.push({
+        id: uid(),
+        query,
+        title,
+        url: id,
+        snippet: `${summary.slice(0, 300)}${authors ? `\nAuthors: ${authors}` : ''}${published ? `\nPublished: ${published}` : ''}`,
+        host,
+      })
+    }
+  }
+  return sources
+}
+
+/** Extract a simple XML element. */
+function extractXml(xml: string, tag: string): string | null {
+  const match = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`))
+  if (!match) return null
+  return match[1].replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
 // ---------- Multi-provider aggregator ----------
 /**
  * Query all configured search providers in parallel and merge results.
@@ -243,6 +289,12 @@ export async function multiSearch(
 ): Promise<{ sources: Source[]; providerStats: SearchProviderResult[] }> {
   const settings = getSettings()
   const providers: { name: string; fn: () => Promise<Source[]> }[] = []
+
+  // Always try arXiv (free, no key) — great for academic research.
+  providers.push({
+    name: 'arxiv',
+    fn: () => searchArxiv(query, num),
+  })
 
   // Always try Z.ai (free, no key) — but wrap in try/catch since it may fail without config.
   providers.push({

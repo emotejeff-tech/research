@@ -6,7 +6,8 @@
  *  - Auto-validating link checker: HEAD requests filter out 404s
  *  - Source credibility weighting: arxiv > blogs
  *  - Offline cache replay: if all search providers fail, use cached results
- *  - Multi-provider aggregation: Brave, Tavily, Exa, You.com, etc.
+ *  - Multi-provider aggregation: Brave, Tavily, Exa, You.com, arXiv, etc.
+ *  - Local-first: arXiv + DuckDuckGo work without API keys
  */
 import { multiSearch } from '../tools/search_providers'
 import { getCachedResults, cacheResults } from '../tools/search_cache'
@@ -115,7 +116,7 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
     })
   }
 
-  // Academic paper pass (also parallel).
+  // Academic paper pass (also parallel) — uses arXiv API without key.
   const academicQuery = `${subQueries[0]} research paper arxiv`
   const cachedAcademic = getCachedResults(academicQuery)
   if (cachedAcademic) {

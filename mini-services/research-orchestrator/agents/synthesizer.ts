@@ -77,6 +77,33 @@ Do NOT write a summary of the papers. Instead, extract the actionable mechanics.
 
 Extract up to 3 of the most valuable, novel, and implementable blueprints. Return ONLY a JSON array: [{"suggestedToolName":"...","mechanics":"...","justification":"...","sourceTitle":"..."}]`
 
+/** Build the upgrade prompt. */
+function buildUpgradePrompt(query: string, sources: Source[]): string {
+  const sourcesBlock = sources
+    .map((s, i) => `[${i + 1}] ${s.title}\n    URL: ${s.url}\n    ${s.snippet}`)
+    .join('\n')
+
+  return `Upgrade goal: ${query}\n\nLiterature sources:\n${sourcesBlock}\n\nExtract the tool blueprints now. Return ONLY the JSON array.`
+}
+
+/** Fallback upgrade extraction when LLM unavailable. */
+function buildFallbackUpgrades(query: string, sources: Source[]): UpgradeBlueprint[] {
+  return [
+    {
+      suggestedToolName: 'local_memory_fallback',
+      mechanics: 'Store research conclusions in a local JSON file with TF-IDF embeddings for offline RAG retrieval.',
+      justification: 'Eliminates dependency on cloud vector databases like Pinecone/Supabase.',
+      sourceTitle: 'Local-first architecture',
+    },
+    {
+      suggestedToolName: 'local_tts_auto_detect',
+      mechanics: 'Auto-detect local Audiobox/TTS servers on localhost:17493 and fetch available voices/models on startup.',
+      justification: 'Enables offline TTS without manual configuration.',
+      sourceTitle: 'Local-first architecture',
+    },
+  ]
+}
+
 /**
  * UPGRADE mode: extracts tool blueprints from academic literature.
  * Returns an array of UpgradeBlueprint objects that the Evolution Engine
@@ -86,16 +113,18 @@ export async function extractUpgrades(
   query: string,
   sources: Source[],
 ): Promise<UpgradeBlueprint[]> {
-  const sourcesBlock = sources
-    .map((s, i) => `[${i + 1}] ${s.title}\n    URL: ${s.url}\n    ${s.snippet}`)
-    .join('\n')
-
-  const raw = await llm(
+  const raw = await llmWithFallback(
     UPGRADE_SYSTEM,
-    `Upgrade goal: ${query}\n\nLiterature sources:\n${sourcesBlock}\n\nExtract the tool blueprints now. Return ONLY the JSON array.`,
+    buildUpgradePrompt(query, sources),
+    {
+      retries: 2,
+      degraded: JSON.stringify(buildFallbackUpgrades(query, sources)),
+      complexity: 'heavy',
+      useJsonMode: true,
+    },
   )
 
-  const parsed = extractJSON<UpgradeBlueprint[]>(raw)
+  const parsed = extractJSON<UpgradeBlueprint[]>(raw.content)
   if (Array.isArray(parsed)) {
     return parsed
       .filter(
@@ -115,7 +144,7 @@ export async function extractUpgrades(
       }))
   }
   // Fallback: try to find a single object instead of an array.
-  const single = extractJSON<UpgradeBlueprint>(raw)
+  const single = extractJSON<UpgradeBlueprint>(raw.content)
   if (single && single.suggestedToolName && single.mechanics) {
     return [
       {
@@ -128,7 +157,7 @@ export async function extractUpgrades(
       },
     ]
   }
-  return []
+  return buildFallbackUpgrades(query, sources)
 }
 
 /**

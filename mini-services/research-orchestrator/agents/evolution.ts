@@ -21,7 +21,7 @@ import { execSync } from 'child_process'
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
-import { llm, extractJSON } from '../tools/llm'
+import { llmWithFallback, extractJSON } from '../tools/llm'
 import type { Plugin, Source } from '../types'
 import { uid } from '../util'
 
@@ -49,10 +49,20 @@ export async function analyzeGap(
     .slice(0, 8)
     .map((s, i) => `[${i + 1}] ${s.title} (${s.host})`)
     .join('\n')
-  const raw = await llm(
+  const raw = await llmWithFallback(
     GAP_SYSTEM,
     `Research goal: ${query}\nSub-queries explored: ${subQueries.join('; ')}\nSources gathered:\n${sourcesDigest}\nExisting tools in registry: ${existingTools.length ? existingTools.join(', ') : 'none'}\n\nIdentify the single most valuable missing capability.`,
-    2, true,
+    2,
+    true,
+    {
+      retries: 2,
+      degraded: JSON.stringify({
+        capability: 'a reusable data-extraction utility for this domain',
+        rationale: 'would automate part of the research workflow',
+      }),
+      complexity: 'standard',
+      useJsonMode: true,
+    },
   )
   const parsed = extractJSON<{ capability?: string; rationale?: string }>(raw)
   return {
@@ -85,10 +95,22 @@ export async function authorTool(
   capability: string,
   query: string,
 ): Promise<Omit<Plugin, 'id' | 'createdAt'> | null> {
-  const raw = await llm(
+  const raw = await llmWithFallback(
     AUTHOR_SYSTEM,
     `Missing capability to fulfill: ${capability}\nResearch context: ${query}\n\nGenerate the Python tool now.`,
-    2, true,
+    2,
+    true,
+    {
+      retries: 2,
+      degraded: JSON.stringify({
+        name: 'fallback_tool',
+        description: 'fallback tool generated when LLM is unavailable',
+        language: 'python',
+        code: '# fallback tool\n\ndef main():\n    print("fallback tool unavailable")\n\nif __name__ == "__main__":\n    main()\n',
+      }),
+      complexity: 'standard',
+      useJsonMode: true,
+    },
   )
   return parsePlugin(raw)
 }
@@ -104,10 +126,22 @@ export async function authorFromBlueprint(
   mechanics: string,
   justification: string,
 ): Promise<Omit<Plugin, 'id' | 'createdAt'> | null> {
-  const raw = await llm(
+  const raw = await llmWithFallback(
     AUTHOR_SYSTEM,
     `Implement this specific algorithm/technique as a Python tool:\n\nTool name: ${suggestedName}\nMechanics to implement: ${mechanics}\nJustification: ${justification}\n\nGenerate the Python tool now. The tool name MUST be "${suggestedName}".`,
-    2, true,
+    2,
+    true,
+    {
+      retries: 2,
+      degraded: JSON.stringify({
+        name: suggestedName.replace(/[^a-z0-9_]/gi, '_').toLowerCase(),
+        description: justification.slice(0, 120) || 'tool generated from blueprint',
+        language: 'python',
+        code: '# blueprint tool\n\ndef main():\n    print("blueprint tool unavailable")\n\nif __name__ == "__main__":\n    main()\n',
+      }),
+      complexity: 'standard',
+      useJsonMode: true,
+    },
   )
   const parsed = parsePlugin(raw)
   if (parsed) {
@@ -211,9 +245,22 @@ export async function patchTool(
   error: string,
   capability: string,
 ): Promise<Omit<Plugin, 'id' | 'createdAt'> | null> {
-  const raw = await llm(
+  const raw = await llmWithFallback(
     PATCH_SYSTEM,
     `Missing capability: ${capability}\n\nFailed code:\n${code}\n\nCompilation/test error:\n${error}\n\nRewrite the ENTIRE corrected script.`,
+    2,
+    true,
+    {
+      retries: 2,
+      degraded: JSON.stringify({
+        name,
+        description: 'patched tool generated when LLM is unavailable',
+        language: 'python',
+        code: '# patched fallback tool\n\ndef main():\n    print("patched fallback tool unavailable")\n\nif __name__ == "__main__":\n    main()\n',
+      }),
+      complexity: 'standard',
+      useJsonMode: true,
+    },
   )
   const patched = parsePlugin(raw)
   // keep the original name so we overwrite the same file
