@@ -196,5 +196,1719 @@
     "results": [],
     "timestamp": 1783853740819,
     "hitCount": 1
+  },
+  "decentralized ai inference network design zero-knowledge proof authentication protocols latest research": {
+    "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+    "results": [
+      {
+        "id": "b0cysrp5",
+        "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+        "title": "Towards Verifiable AI with Lightweight Cryptographic Proofs of Inference",
+        "url": "https://eprint.iacr.org/2026/541.pdf",
+        "snippet": "### Towards Verifiable AI with Lightweight Cryptographic Proofs of Inference ⋆\n\nPranay Anchuri1, Matteo Campanelli1,2, Paul Cesaretti3, Rosario Gennaro1,3,4, Tushar M. Jois3,4, Hasan S. Kayman4 and Tugce Ozdemir3\n\n1 Offchain Labs 2 University of Tartu, Estonia 3 CUNY Graduate Center 4 City College o",
+        "host": "eprint.iacr.org"
+      },
+      {
+        "id": "hr7a5h45",
+        "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+        "title": "VeriLLM: A Lightweight Framework for Publicly Verifiable Decentralized Inference",
+        "url": "https://arxiv.org/html/2509.24257",
+        "snippet": "# VeriLLM: A Lightweight Framework for Publicly Verifiable Decentralized Inference\n\nArXiv.org, 2025. Preprint. 0 citations.\n\n## Abstract\n\nDecentralized inference provides a scalable and resilient paradigm for serving large language models (LLMs), enabling fragmented global resource utilization and r",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "1agfwz8m",
+        "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+        "title": "DeepProve: Verifiable End-to-End Large Language Model Inference",
+        "url": "https://eprint.iacr.org/2026/1112",
+        "snippet": "DeepProve: Verifiable End-to-End Large Language Model Inference\n\n#### Paper 2026/1112\n\n### DeepProve: Verifiable End-to-End Large Language Model Inference\n\nhttps://eprint.iacr.org/2026/1112.pdf\n\n##### Abstract\n\nLarge Language Models (LLMs) are frontier deep learning systems that have achieved remark",
+        "host": "eprint.iacr.org"
+      },
+      {
+        "id": "cws9oh1z",
+        "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+        "title": "Tunable Zero-Knowledge Proof of Inference in Machine Learning via Protocols over Z2k",
+        "url": "https://dl.acm.org/doi/10.1007/978-3-032-22931-1_12",
+        "snippet": "# Tunable Zero-Knowledge Proof of Inference in Machine Learning via Protocols over Z2k\n\nPublished: 2026-07-01T19:48:44+00:00\nSource: dl.acm.org (dl.acm.org)\nLanguage: en\n\n## Story\n\nPreviously implemented zero-knowledge proof of inference (zk-PoI) frameworks all have both their discretization ring an",
+        "host": "dl.acm.org"
+      },
+      {
+        "id": "hos5jq8b",
+        "query": "decentralized AI inference network design zero-knowledge proof authentication protocols latest research",
+        "title": "Untitled",
+        "url": "https://fc22.ifca.ai/preproceedings/122.pdf",
+        "snippet": "Zero Knowledge Proofs towards Verifiable\nDecentralized AI Pipelines\nNitin Singh, Pankaj Dayama, and Vinayaka Pandit\nIBM Research Lab, India\n{nitisin1,pankajdayama,pvinayak}@in.ibm.com\nAbstract. We are witnessing the emergence of decentralized AI pipelines\nwherein different organisations are involved",
+        "host": "fc22.ifca.ai"
+      }
+    ],
+    "timestamp": 1783910144035,
+    "hitCount": 1
+  },
+  "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in ai inference networks": {
+    "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+    "results": [
+      {
+        "id": "plorqi64",
+        "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+        "title": "PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving",
+        "url": "https://www.usenix.org/system/files/nsdi26-fang.pdf",
+        "snippet": "#### This paper is included in the Proceedings of the 23rd USENIX Symposium on Networked Systems Design and Implementation. May 4–6, 2026 • Renton, WA, USA\n\nISBN 978-1-939133-54-0\n\nOpen access to the Proceedings of the 23rd USENIX Symposium on Networked Systems Design and Implementation is sponsored",
+        "host": "www.usenix.org"
+      },
+      {
+        "id": "vrpp3gjs",
+        "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+        "title": "Towards Distributed Inference of LLMs on a P2P Network",
+        "url": "https://arxiv.org/html/2606.17059v1",
+        "snippet": "Towards Distributed Inference of LLMs on a P2P Network\n\narXiv is now an independent nonprofit! Learn more×\n\n# Towards Distributed Inference of LLMs on a P2P Network\n\nShabari S Nair Krishanu Saini\n\n###### Abstract\n\nPrefix caching can reduce LLM inference latency by reusing KV caches across requests w",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "j9q6aj8n",
+        "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+        "title": "HyperCluster: Decentralized Large Language Model Inference over Peer-to-Peer Wireless Networks",
+        "url": "https://openreview.net/pdf?id=NJz796yuDX",
+        "snippet": "HyperCluster: Decentralized Large Language Model Inference over Peer-to-Peer Wireless Networks Vyoman Jain, Samarth P, Akepati Ramya Sri, Sanjiv Raghunandan, Richa Sharma Department of Computer Science PES University Bengaluru, India { PES2UG22CS672, PES2UG22CS495, PES2UG22CS045, PES2UG22CS504} @pes",
+        "host": "openreview.net"
+      },
+      {
+        "id": "65rlokld",
+        "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+        "title": "Distributed Generative Inference of LLM at Internet Scales with Multi-Dimensional Communication Optimization",
+        "url": "https://arxiv.org/pdf/2604.21072",
+        "snippet": "# Distributed Generative Inference of LLM at Internet Scales with Multi-Dimensional Communication Optimization\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nDecentralized LLM inference distributes computation among heterogeneous nodes across the internet, offering a perform",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "vypl930l",
+        "query": "latest research decentralized peer-to-peer request routing protocols for low latency and throughput in AI inference networks",
+        "title": "Lodestar: An Online-Learning LLM Inference Router",
+        "url": "https://arxiv.org/html/2606.00946",
+        "snippet": "# Lodestar: An Online-Learning LLM Inference Router\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nEfficiently serving large language model (LLM) inference tasks is crucial both for user-perceived latency such as time-to-first-token (TTFT) and for GPU utilization. However, L",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783910150319,
+    "hitCount": 1
+  },
+  "leading open-source decentralized ai inference frameworks and their consensus models": {
+    "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+    "results": [
+      {
+        "id": "fwwzns1d",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+        "title": "gonka-ai/gonka",
+        "url": "https://github.com/gonka-ai/gonka/",
+        "snippet": "# Repository: gonka-ai/gonka\n\nGonka AI Compute\n\n- Stars: 548\n- Forks: 117\n- Watchers: 15\n- Open issues: 154\n- Primary language: Jupyter Notebook\n- Languages: Jupyter Notebook (52.7%), Go (35.2%), Kotlin (5.7%), Python (3.5%), Shell (1.2%), JavaScript (0.6%), Rust (0.6%), Makefile (0.2%), Solidity (0",
+        "host": "github.com"
+      },
+      {
+        "id": "1x1pitfd",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+        "title": "Consensus | OpenGradient Docs",
+        "url": "https://docs.opengradient.ai/learn/network/consensus.html",
+        "snippet": "Consensus | OpenGradient Docs\n\n# Consensus ​\n\nOpenGradient's blockchain layer serves as the verification and settlement layer for AI inference and applications - it is not intended as a general-purpose smart contract platform. The network uses CometBFT consensus with Cosmos SDK and EVM compatibility",
+        "host": "docs.opengradient.ai"
+      },
+      {
+        "id": "esdb8cf7",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+        "title": "hetu-project/prakasa",
+        "url": "https://github.com/hetu-project/prakasa",
+        "snippet": "# Repository: hetu-project/prakasa\n\nA decentralized, privacy-preserving P2P GPU inference network built on Parallax, leveraging the Nostr protocol for resilient orchestration and the RIM system for trustless economic settlement and reputation accumulation.\n\n- Stars: 1\n- Forks: 2\n- Watchers: 0\n- Open",
+        "host": "github.com"
+      },
+      {
+        "id": "boqoef5i",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+        "title": "FerrumVir/arc-chain",
+        "url": "https://github.com/FerrumVir/arc-chain",
+        "snippet": "# Repository: FerrumVir/arc-chain\n\nWorld's first L1 blockchain with deterministic on-chain AI inference verified through multi-node consensus. Bitwise identical outputs across every chip, every architecture.\n\n- Stars: 17\n- Forks: 4\n- Watchers: 1\n- Open issues: 9\n- Primary language: Rust\n- Languages:",
+        "host": "github.com"
+      },
+      {
+        "id": "o0fxk47a",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models",
+        "title": "OpenGradient",
+        "url": "https://opengradient.foundation/opengradient-whitepaper.pdf",
+        "snippet": "### OpenGradient Decentralized Infrastructure for Verifiable AI Execution\n\nWhitepaper | March 2026\n\nhttps://opengradient.ai \nhttps://docs.opengradient.ai \nhttps://github.com/OpenGradient \n© 2026 OpenGradient. All rights reserved. \n\n## Abstract\n\nArtificial intelligence infrastructure is rapidly conso",
+        "host": "opengradient.foundation"
+      }
+    ],
+    "timestamp": 1783910153751,
+    "hitCount": 1
+  },
+  "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ml networks": {
+    "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+    "results": [
+      {
+        "id": "sytj5xz5",
+        "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+        "title": "Decentralized Federated Learning: A Survey on Security and Privacy",
+        "url": "https://arxiv.org/html/2401.17319",
+        "snippet": "# Decentralized Federated Learning: A Survey on Security and Privacy\n\nIEEE Transactions on Big Data, 2024. Preprint. 120 citations.\n\n## Authors\n\n- Ehsan Hallaji (University of Windsor): h-index 15; 857 citations; corresponding author\n- Roozbeh Razavi‐Far (University of New Brunswick): h-index 34; 3,",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "itr344pj",
+        "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+        "title": "Dual watermark authentication defense for federated learning: lossless integrity verification against model poisoning | Cybersecurity | Springer Nature Link",
+        "url": "https://link.springer.com/article/10.1186/s42400-026-00623-1",
+        "snippet": "# Dual watermark authentication defense for federated learning: lossless integrity verification against model poisoning | Cybersecurity | Springer Nature Link\n\nPublished: 2026-06-29T00:00:00\nSource: link.springer.com (link.springer.com)\nLanguage: en\n\n## Story\n\nDual watermark authentication defense f",
+        "host": "link.springer.com"
+      },
+      {
+        "id": "htl1kjrg",
+        "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+        "title": "Fenics: A Modular Framework for Security Evaluation in Decentralized Federated Learning",
+        "url": "https://research.chalmers.se/publication/547916/file/547916_Fulltext.pdf",
+        "snippet": "## Fenics: A Modular Framework for Security Evaluation in Decentralized Federated Learning\n\n### Downloaded from: https://research.chalmers.se, 2026-07-09 14:19 UTC\n\nCitation for the original published paper (version of record): \nSaha, S., Nova, S., Duvignau, R. et al (2025). Fenics: A Modular Framew",
+        "host": "research.chalmers.se"
+      },
+      {
+        "id": "v058voek",
+        "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+        "title": "Threat Modeling AI/ML Systems and Dependencies | Microsoft Learn",
+        "url": "https://learn.microsoft.com/en-us/security/engineering/threat-modeling-aiml",
+        "snippet": "Threat Modeling AI/ML Systems and Dependencies | Microsoft Learn\n\nAsk Learn\n\nAsk Learn\n\n# Threat Modeling AI/ML Systems and Dependencies\n\nBy Andrew Marshall, Jugal Parikh, Emre Kiciman and Ram Shankar Siva Kumar\n\nSpecial Thanks to Raul Rojas and the AETHER Security Engineering Workstream\n\nNovember 2",
+        "host": "learn.microsoft.com"
+      },
+      {
+        "id": "5vncm9l8",
+        "query": "security threat modeling adversarial attacks attack surface consistent model integrity decentralized ML networks",
+        "title": "[2205.08443] On the (In)security of Peer-to-Peer Decentralized Machine Learning",
+        "url": "https://ar5iv.labs.arxiv.org/html/2205.08443",
+        "snippet": "[2205.08443] On the (In)security of Peer-to-Peer Decentralized Machine Learning\n\n# On the (In)security of Peer-to-Peer Decentralized Machine Learning\n\nDario Pasquini SPRING Lab; EPFL, Switzerland dario.pasquini@epfl.ch Mathilde Raynal SPRING Lab; EPFL, Switzerland mathilde.raynal@epfl.ch Carmela Tro",
+        "host": "ar5iv.labs.arxiv.org"
+      }
+    ],
+    "timestamp": 1783910153915,
+    "hitCount": 1
+  },
+  "bandwidth and compute bottlenecks affecting large language model inference at network edge scales": {
+    "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+    "results": [
+      {
+        "id": "47x50kq4",
+        "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+        "title": "Network Edge Inference for Large Language Models: Principles, Techniques, and Opportunities | ACM Computing Surveys",
+        "url": "https://dl.acm.org/doi/10.1145/3809166",
+        "snippet": "Network Edge Inference for Large Language Models: Principles, Techniques, and Opportunities | ACM Computing Surveys skip to main content\n\nContents\n\n## Abstract\n\nLarge language models (LLMs) have advanced rapidly, emerging as versatile tools across fields thanks to their exceptional language understa",
+        "host": "dl.acm.org"
+      },
+      {
+        "id": "co3ardj2",
+        "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+        "title": "Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles",
+        "url": "https://arxiv.org/html/2605.19775v1",
+        "snippet": "Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles\n\n# Understanding Inference Scaling for LLMs: Bottlenecks, Trade-offs, and Performance Principles\n\nMoiz Arif1, Avinash Maurya2, Sudharshan Vazhkudai1, Bogdan Nicolae2\n\n###### Abstract\n\nThe transition from st",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "zcp2ky09",
+        "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+        "title": "Edge-First Language Model Inference: Models, Metrics, and Tradeoffs",
+        "url": "https://arxiv.org/html/2505.16508",
+        "snippet": "# Edge-First Language Model Inference: Models, Metrics, and Tradeoffs\n\nArXiv.org, 2025. Preprint. 1 citation.\n\n## Authors\n\n- Si Young Jang: h-index 12; 608 citations; corresponding author\n- Roberto Morabito: h-index 31; 3,905 citations\n\n## Topics\n\nBig Data and Digital Economy, Software System Perfor",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "7f36p5sj",
+        "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+        "title": "Edge-Centric Generative AI: A Survey on Efficient Inference for Large Language Models in Resource-Constrained Environments",
+        "url": "https://content.scirp.org/pdf/jcc_1733489.pdf",
+        "snippet": "Journal of Computer and Communications, 2026, 14(4), 238-253 https://www.scirp.org/journal/jcc ISSN Online: 2327-5227 ISSN Print: 2327-5219\n\nDOI: 10.4236/jcc.2026.144012 Apr. 30, 2026 238 Journal of Computer and Communications\n\n## Edge-Centric Generative AI: A Survey on Efficient Inference for Large",
+        "host": "content.scirp.org"
+      },
+      {
+        "id": "kgxy8s2e",
+        "query": "bandwidth and compute bottlenecks affecting large language model inference at network edge scales",
+        "title": "Technology solutions targeting the performance of gen-AI inference in resource constrained platforms",
+        "url": "https://arxiv.org/html/2604.11128v1",
+        "snippet": "Technology solutions targeting the performance of gen-AI inference in resource constrained platforms\n\nDNN Deep Neural Network CNN Convolutional Neural Network AI Artificial Intelligence LLM Large Language Model GPU Graphics Processing Unit SM Streaming Multiprocessor HBM High-Bandwidth Memory ML Mac",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783910154253,
+    "hitCount": 1
+  },
+  "trustless incentive schemes for distributed model serving security audit standards": {
+    "query": "trustless incentive schemes for distributed model serving security audit standards",
+    "results": [
+      {
+        "id": "ob0mfgza",
+        "query": "trustless incentive schemes for distributed model serving security audit standards",
+        "title": "ERC-7992: Verifiable ML Model Inference (ZKML)",
+        "url": "https://eips.ethereum.org/EIPS/eip-7992",
+        "snippet": "ERC-7992: Verifiable ML Model Inference (ZKML)\n\n⚠️ Draft Standards Track: ERC\n\n# ERC-7992: Verifiable ML Model Inference (ZKML)\n\n### Interfaces for registering ML model commitments and verifying zero-knowledge proofs of their inferences on-chain.\n\n| Authors | Aryaethn (@aryaethn) |\n| --- | --- |\n| C",
+        "host": "eips.ethereum.org"
+      },
+      {
+        "id": "8d09y1lg",
+        "query": "trustless incentive schemes for distributed model serving security audit standards",
+        "title": "TRUST: A Framework for Decentralized AI Service v.0.1",
+        "url": "https://arxiv.org/html/2604.27132",
+        "snippet": "# TRUST: A Framework for Decentralized AI Service v.0.1\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nLarge Reasoning Models (LRMs) and Multi-Agent Systems (MAS) in high-stakes domains demand reliable verification, yet centralized approaches suffer four limitations: (1) Rob",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "mzf8ycs5",
+        "query": "trustless incentive schemes for distributed model serving security audit standards",
+        "title": "Untitled",
+        "url": "https://cloudsecurityalliance.org/artifacts/aicmv1-1-auditing-guidelines-for-model-providers-mp",
+        "snippet": "---\ntitle: AICMv1.1 Auditing Guidelines for Model Providers (MP) | CSA\nimage: https://cloudsecurityalliance.org/assets/csa-official-document-6f88cdb6662bc8c41fcc211bf9984918c1754dc2585f4bf497b64de0a2dc8af9.png\n---\n\n![Control Framework Tag](https://cloudsecurityalliance.org/assets/research/control-fr",
+        "host": "cloudsecurityalliance.org"
+      },
+      {
+        "id": "662i727p",
+        "query": "trustless incentive schemes for distributed model serving security audit standards",
+        "title": "Trusting What You Cannot See: Auditable Fine-Tuning and Inference for Proprietary AI",
+        "url": "https://arxiv.org/pdf/2603.07466",
+        "snippet": "# Trusting What You Cannot See: Auditable Fine-Tuning and Inference for Proprietary AI\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Authors\n\n- Heng Jin: h-index 2; 6 citations; corresponding author\n- Chaoyu Zhang: h-index 0; 0 citations\n- Hexuan Yu: h-index 5; 92 citations\n- Shangha",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "tjj76r84",
+        "query": "trustless incentive schemes for distributed model serving security audit standards",
+        "title": "Attestable Audits: Verifiable AI Safety Benchmarks Using Trusted Execution Environments",
+        "url": "https://arxiv.org/html/2506.23706",
+        "snippet": "# Attestable Audits: Verifiable AI Safety Benchmarks Using Trusted Execution Environments\n\nArXiv.org, 2025. Preprint. 0 citations.\n\n## Abstract\n\nBenchmarks are important measures to evaluate safety and compliance of AI models at scale. However, they typically do not offer verifiable results and lack",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783910154254,
+    "hitCount": 1
+  },
+  "leading open-source decentralized ai inference frameworks and their consensus models research paper arxiv": {
+    "query": "leading open-source decentralized AI inference frameworks and their consensus models research paper arxiv",
+    "results": [
+      {
+        "id": "m0euauwi",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models research paper arxiv",
+        "title": "Fortytwo: Swarm Inference with Peer-Ranked Consensus",
+        "url": "https://arxiv.org/html/2510.24801v1",
+        "snippet": "Fortytwo: Swarm Inference with Peer-Ranked Consensus \n\n# Fortytwo: Swarm Inference with Peer-Ranked Consensus\n\nVladyslav Larin vlarin@fortytwo.network &Ihor Naumenko inaumenko@fortytwo.network &Aleksei Ivashov aivashov@fortytwo.network &Ivan Nikitin inikitin@fortytwo.network &Alexander Firsov afirso",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "mdbyso6p",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models research paper arxiv",
+        "title": "PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving",
+        "url": "https://arxiv.org/html/2504.20101v4",
+        "snippet": "PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving\n\n# PlanetServe: A Decentralized, Scalable, and Privacy-Preserving Overlay for Democratizing Large Language Model Serving\n\nFei Fang Co-primary authors.University of California, Santa ",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "x89p6v2g",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models research paper arxiv",
+        "title": "PolyLink: A Blockchain Based Decentralized Edge AI Platform for LLM Inference",
+        "url": "https://arxiv.org/html/2510.02395v1",
+        "snippet": "PolyLink: A Blockchain Based Decentralized Edge AI Platform for LLM Inference\n\n# PolyLink: A Blockchain Based Decentralized Edge AI Platform for LLM Inference\n\nHongbo Liu1, Jiannong Cao1, Bo Yang2, Dongbin Bai1, Yinfeng Cao*1, Xiaoming Shen1, Yinan Zhang1 Jinwen Liang1, Shan Jiang3, Mingjin Zhang*1 ",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "5afhh9eo",
+        "query": "leading open-source decentralized AI inference frameworks and their consensus models research paper arxiv",
+        "title": "VeriLLM: A Lightweight Framework for Publicly Verifiable Decentralized Inference",
+        "url": "https://arxiv.org/html/2509.24257",
+        "snippet": "# VeriLLM: A Lightweight Framework for Publicly Verifiable Decentralized Inference\n\nArXiv.org, 2025. Preprint. 0 citations.\n\n## Abstract\n\nDecentralized inference provides a scalable and resilient paradigm for serving large language models (LLMs), enabling fragmented global resource utilization and r",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783910172903,
+    "hitCount": 1
+  },
+  "manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic lnp formulations": {
+    "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+    "results": [
+      {
+        "id": "ondjuk7f",
+        "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+        "title": "Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers | Drug Discovery News",
+        "url": "https://www.drugdiscoverynews.com/viral-vs-non-viral-gene-delivery-a-critical-choice-for-gene-therapy-developers-16819",
+        "snippet": "Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers | Drug Discovery News\n\n# Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers\n\nNavigating the shift from viral efficacy to non-viral scalability: A technical guide on COGS, cargo, and regulat",
+        "host": "www.drugdiscoverynews.com"
+      },
+      {
+        "id": "ibxduc1r",
+        "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+        "title": "Choosing the right delivery vehicle: navigating the trade-offs between LNPs and viral vectors - Bioanalysis Zone",
+        "url": "https://www.bioanalysis-zone.com/qps_gtdseriers_choosing-the-right-delivery-vehicle-navigating-the-trade-offs-between-lnps-and-viral-vectors/",
+        "snippet": "Choosing the right delivery vehicle: navigating the trade-offs between LNPs and viral vectors - Bioanalysis Zone\n\nBioanalysis Zone is part of Taylor & Francis Group.\n\n- Taylor & Francis\n- About us\n- Our journals\n- Our Digital Hubs\n\nTaylor & Francis Group is a trading division of Informa that operate",
+        "host": "www.bioanalysis-zone.com"
+      },
+      {
+        "id": "3rae6u18",
+        "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+        "title": "Industrial Perspective on the Manufacturing of Lipid Nanoparticles for Nucleic Acid Delivery",
+        "url": "https://www.mdpi.com/1999-4923/18/4/489",
+        "snippet": "Industrial Perspective on the Manufacturing of Lipid Nanoparticles for Nucleic Acid Delivery\n\nNext Article in Journal\n\nThe Effect of Liraglutide on the Hypolipidemic, Anti-Inflammatory, and Antioxidant Properties of Atorvastatin Mediated via the Nrf2/HO-1 Signaling Pathway: In Vivo and In Silico Val",
+        "host": "www.mdpi.com"
+      },
+      {
+        "id": "dh6uert9",
+        "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+        "title": "Adenoviral Vector COVID-19 Vaccines: Process and Cost Analysis",
+        "url": "https://psecommunity.org/wp-content/plugins/wpor/includes/file/2302/LAPSE-2023.5421-1v1.pdf",
+        "snippet": "### processes\n\nArticle\n\n## Adenoviral Vector COVID-19 Vaccines: Process and Cost Analysis\n\nRafael G. Ferreira 1,* , Neal F. Gordon 2, Rick Stock 2 and Demetri Petrides 3\n\nCitation: Ferreira, R.G.; Gordon, N.F.; Stock, R.; Petrides, D. Adenoviral Vector COVID-19 Vaccines: Process and Cost Analysis. P",
+        "host": "psecommunity.org"
+      },
+      {
+        "id": "l1qcow7t",
+        "query": "Manufacturing scalability, storage stability requirements and cost-per-dose analysis for therapeutic production of viral capsids vs synthetic LNP formulations",
+        "title": "Lipid Nanoparticles vs. Viral Vectors for Gene Delivery: Which Platform Is Better?",
+        "url": "https://www.pharmasalmanac.com/articles/lipid-nanoparticles-vs-viral-vectors-for-gene-delivery-which-platform-is-better",
+        "snippet": "Lipid Nanoparticles vs. Viral Vectors for Gene Delivery: Which Platform Is Better?\n\nSubscribe for the newsletter\n\n## Subscribe for the Newsletter\n\nClose\n\n# Lipid Nanoparticles vs. Viral Vectors for Gene Delivery: Which Platform Is Better?\n\nJun 12, 2026PAO-26-PF-11\n\nCell and Gene Therapy Lipid Nanopa",
+        "host": "www.pharmasalmanac.com"
+      }
+    ],
+    "timestamp": 1783925031058,
+    "hitCount": 1
+  },
+  "clinical trial safety and immunogenicity profiles comparing crispr-grna delivery via adeno-associated virus (aav2) versus lipid nanoparticles (lnps)": {
+    "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+    "results": [
+      {
+        "id": "nqj70xz5",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+        "title": "Viral and nonviral nanocarriers for in vivo CRISPR-based gene editing",
+        "url": "https://www.sciopen.com/local/article_pdf/10.1007/s12274-024-6748-5.pdf",
+        "snippet": "## Viral and nonviral nanocarriers for in vivo CRISPR-based gene editing\n\nZhongyuan Guo 1,§, Audrey T. Zhu 1,§, Ronnie H. Fang 1,2 (✉), and Liangfang Zhang 1(✉) \n1 Aiiso Yufeng Li Family Department of Chemical and Nano Engineering, University of California San Diego, La Jolla, CA 92093, USA \n2 Divis",
+        "host": "www.sciopen.com"
+      },
+      {
+        "id": "wakj6kcq",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+        "title": "AAV2 delivery of the saCas9 gene results in presentation of an HLA-A∗02:01-restricted T cell epitope potent to induce T cell cytotoxicity",
+        "url": "https://doi.org/10.1016/j.omtm.2025.101506",
+        "snippet": "# AAV2 delivery of the saCas9 gene results in presentation of an HLA-A∗02:01-restricted T cell epitope potent to induce T cell cytotoxicity\n\nMolecular Therapy — Methods & Clinical Development, 2025. 2 citations.\n\n## Authors\n\n- Susana S. Najera (Center for Biologics Evaluation and Research): h-index ",
+        "host": "doi.org"
+      },
+      {
+        "id": "vw6mjj3m",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+        "title": "rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9647052/",
+        "snippet": "rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis - PMC\n\nFront Immunol\n\n. 2022 Oct 27;13:1001263. doi: 10.3389/fimmu.2022.1001263\n\n# rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis\n\n3,4,*\n\n- Author information\n- Article notes\n",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "yvlq9j0h",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+        "title": "AAV-CRISPR Gene Editing Is Negated by Pre-existing Immunity to Cas9 - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7264438/",
+        "snippet": "AAV-CRISPR Gene Editing Is Negated by Pre-existing Immunity to Cas9 - PMC\n\nMol Ther\n\n. 2020 Apr 19;28(6):1432–1441. doi: 10.1016/j.ymthe.2020.04.017\n\n# AAV-CRISPR Gene Editing Is Negated by Pre-existing Immunity to Cas9\n\n1, Mark R Tanner\n\n2, Ciaran M Lee\n\n1, Ayrea E Hurley\n\n2, Marco De Giorgi\n\n2, Ke",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "39eh8641",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs)",
+        "title": "Cas9-specific immune responses compromise local and systemic AAV CRISPR therapy in multiple dystrophic canine models | Nature Communications",
+        "url": "https://www.nature.com/articles/s41467-021-26830-7",
+        "snippet": "Cas9-specific immune responses compromise local and systemic AAV CRISPR therapy in multiple dystrophic canine models | Nature Communications\n\n### Subjects\n\n- CRISPR-Cas9 genome editing\n- Neuromuscular disease\n\n## Abstract\n\nAdeno-associated virus (AAV)-mediated CRISPR-Cas9 editing holds promise to tr",
+        "host": "www.nature.com"
+      }
+    ],
+    "timestamp": 1783925032884,
+    "hitCount": 1
+  },
+  "clinical trials where aav outperformed lnp in deep tissue delivery or large transgene expression": {
+    "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+    "results": [
+      {
+        "id": "eszyksky",
+        "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+        "title": "The best of both worlds: AAV-mediated gene transfer empowered by LNP delivery of  Sleeping Beauty  transposase for durable transgene expression  in vivo",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11489527/",
+        "snippet": "The best of both worlds: AAV-mediated gene transfer empowered by LNP delivery of Sleeping Beauty transposase for durable transgene expression in vivo - PMC[Skip to main content](#main-content)\n![](https://pmc.ncbi.nlm.nih.gov/static/img/us_flag.svg)\nAn official website of the United States governmen",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "scde2rz0",
+        "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+        "title": "Systemic and Persistent Muscle Gene Expression in Rhesus Monkeys with a Liver De-Targeted Adeno-Associated Virus Vector",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5444483/",
+        "snippet": "Systemic and Persistent Muscle Gene Expression in Rhesus Monkeys with a Liver De-Targeted Adeno-Associated Virus Vector - PMC[Skip to main content](#main-content)\n![](https://pmc.ncbi.nlm.nih.gov/static/img/us_flag.svg)\nAn official website of the United States government\nHere's how you know\nHere's h",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "p3brdzz2",
+        "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+        "title": "Improving the precision of AAV lung gene therapy for SP-B deficiency using computationally derived lung-specific promoters - Gene Therapy",
+        "url": "https://www.nature.com/articles/s41434-026-00629-x",
+        "snippet": "# Improving the precision of AAV lung gene therapy for SP-B deficiency using computationally derived lung-specific promoters - Gene Therapy\n\nPublished: 2026-06-30T00:00:00\nSource: nature.com (nature.com)\nLanguage: en\n\n## Story\n\nRecombinant adeno-associated virus (rAAV) platforms have achieved signif",
+        "host": "www.nature.com"
+      },
+      {
+        "id": "0it5l5wh",
+        "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+        "title": "AAV vs. Non-Viral Gene Delivery: Which Is Better for In Vivo Gene Therapy?",
+        "url": "https://www.pharmasalmanac.com/articles/aav-vs-non-viral-gene-delivery-which-is-better-for-in-vivo-gene-therapy",
+        "snippet": "AAV vs. Non-Viral Gene Delivery: Which Is Better for In Vivo Gene Therapy?\n\nSubscribe for the newsletter\n\n## Subscribe for the Newsletter\n\nClose\n\n# AAV vs. Non-Viral Gene Delivery: Which Is Better for In Vivo Gene Therapy?\n\nApr 3, 2026PAO-26-PF-01\n\nCell and Gene Therapy Pathfinder\n\n### Key Takeaways",
+        "host": "www.pharmasalmanac.com"
+      },
+      {
+        "id": "ez8ncz7p",
+        "query": "clinical trials where AAV outperformed LNP in deep tissue delivery or large transgene expression",
+        "title": "deb_pone.0052189 1..11",
+        "url": "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0052189&type=printable",
+        "snippet": "Comparative Analysis of DNA Nanoparticles and AAVs\nfor Ocular Gene Delivery\nZongchao Han1, Shannon M. Conley1, Rasha Makkia1, Junjing Guo1, Mark J. Cooper2, Muna I. Naash1*\n1 Department of Cell Biology, University of Oklahoma Health Sciences Center, Oklahoma City, Oklahoma, United States of America,",
+        "host": "journals.plos.org"
+      }
+    ],
+    "timestamp": 1783925041045,
+    "hitCount": 1
+  },
+  "long-term efficacy data and transduction efficiency retention over months/years across liver and cns targets in human phase ii-iii crispr gene therapy trials": {
+    "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+    "results": [
+      {
+        "id": "sr6ue8l5",
+        "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+        "title": "Building CRISPR Gene Therapies for the Central Nervous System A Review - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11164426/",
+        "snippet": "Building CRISPR Gene Therapies for the Central Nervous System A Review - PMC\n\nJAMA Neurol\n\n. Author manuscript; available in PMC: 2025 Mar 1.\n\nPublished in final edited form as: JAMA Neurol. 2024 Mar 1;81(3):283–290. doi: 10.1001/jamaneurol.2023.4983\n\n# Building CRISPR Gene Therapies for the Central",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "bc7wv5b9",
+        "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+        "title": "Completion of phase 2b trial of etranacogene dezaparvovec gene therapy in patients with hemophilia B over 5 years - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12275190/",
+        "snippet": "Completion of phase 2b trial of etranacogene dezaparvovec gene therapy in patients with hemophilia B over 5 years - PMC\n\nBlood Adv\n\n. 2025 Apr 8;9(14):3543–3552. doi: 10.1182/bloodadvances.2024015291\n\n# Completion of phase 2b trial of etranacogene dezaparvovec gene therapy in patients with hemophili",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "ynx4xb6w",
+        "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+        "title": "Advancing gene editing therapeutics: Clinical trials and innovative delivery systems across diverse diseases: Molecular Therapy Nucleic Acids",
+        "url": "https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(25)00220-3",
+        "snippet": "Advancing gene editing therapeutics: Clinical trials and innovative delivery systems across diverse diseases: Molecular Therapy Nucleic Acids\n\nOutline\n\nShare\n\n#### Share\n\nAdd to my reading list\n\nMore\n\nMore\n\nPrevious article Next article\n\n## Abstract\n\nGene editing is a groundbreaking therapeutic appr",
+        "host": "www.cell.com"
+      },
+      {
+        "id": "h1zqq39c",
+        "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+        "title": "Lentiviral Gene Therapy for Cerebral Adrenoleukodystrophy | New England Journal of Medicine",
+        "url": "https://www.nejm.org/doi/full/10.1056/NEJMoa2400442",
+        "snippet": "Lentiviral Gene Therapy for Cerebral Adrenoleukodystrophy | New England Journal of Medicine\n\nopen AI companion\n\nContents\n\n## Abstract\n\n### Background\n\nCerebral adrenoleukodystrophy is a severe form of X-linked adrenoleukodystrophy characterized by white-matter disease, loss of neurologic function, a",
+        "host": "www.nejm.org"
+      },
+      {
+        "id": "jfaatjqf",
+        "query": "Long-term efficacy data and transduction efficiency retention over months/years across liver and CNS targets in human Phase II-III CRISPR gene therapy trials",
+        "title": "Liver‐directed gene therapy for inherited metabolic diseases",
+        "url": "https://discovery.ucl.ac.uk/id/eprint/10185756/1/Liver%20directed%20gene%20therapy%20for%20inherited%20metabolic%20diseases.pdf",
+        "snippet": "REVIEW\n\n## Liver-directed gene therapy for inherited metabolic diseases\n\nJulien Baruteau 1,2,3 | Nicola Brunetti-Pierri 4,5,6 | Paul Gissen 1,2,3\n\n1Department of Paediatric Metabolic \nMedicine, Great Ormond Street Hospital \nfor Children NHS Trust, London, UK \n2University College London Great \nOrmond",
+        "host": "discovery.ucl.ac.uk"
+      }
+    ],
+    "timestamp": 1783925041046,
+    "hitCount": 1
+  },
+  "regulatory and commercial bottlenecks of high-purity aav manufacturing compared to lnp production costs": {
+    "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+    "results": [
+      {
+        "id": "3vh88zdn",
+        "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+        "title": "Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers | Drug Discovery News",
+        "url": "https://www.drugdiscoverynews.com/viral-vs-non-viral-gene-delivery-a-critical-choice-for-gene-therapy-developers-16819",
+        "snippet": "Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers | Drug Discovery News\n\n# Viral vs. Non-Viral Gene Delivery: A Critical Choice for Gene Therapy Developers\n\nNavigating the shift from viral efficacy to non-viral scalability: A technical guide on COGS, cargo, and regulat",
+        "host": "www.drugdiscoverynews.com"
+      },
+      {
+        "id": "24mzbz2f",
+        "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+        "title": "Are LNPs the new AAV?  | Cellgenetherapyreview.com",
+        "url": "https://www.cellgenetherapyreview.com/3975-Featured-Articles/621087-Are-LNPs-the-new-AAV/",
+        "snippet": "Are LNPs the new AAV? | Cellgenetherapyreview.com\n\n# Are LNPs the new AAV?\n\nLipid nanoparticles are poised to become the first commercially approved nonviral in vivo gene therapy vector\n\nFacebook\n\n- Email\n\nIn vivo gene therapies have delivered astonishing results where few or no treatments have exis",
+        "host": "www.cellgenetherapyreview.com"
+      },
+      {
+        "id": "23bj8t1z",
+        "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+        "title": "Frontiers | Advancing AAV vector manufacturing: challenges, innovations, and future directions for gene therapy",
+        "url": "https://www.frontiersin.org/journals/molecular-medicine/articles/10.3389/fmmed.2025.1709095/full",
+        "snippet": "Frontiers | Advancing AAV vector manufacturing: challenges, innovations, and future directions for gene therapy\n\n#### Gene and Virotherapy\n\nPublished inFrontiers in Molecular Medicine\n\n## REVIEW article\n\nFront. Mol. Med., 03 December 2025\n\nSec. Gene and Virotherapy\n\nVolume 5 - 2025 | https://doi.org",
+        "host": "www.frontiersin.org"
+      },
+      {
+        "id": "jwb33fan",
+        "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+        "title": "Process economics evaluation and optimization of adeno‐associated virus downstream processing",
+        "url": "https://doi.org/10.1002/bit.28402",
+        "snippet": "# Process economics evaluation and optimization of adeno‐associated virus downstream processing\n\nBiotechnology and Bioengineering, 2023. 28 citations.\n\n## Authors\n\n- Annabel Lyle (Biochemical Society): h-index 1; 28 citations\n- Christos Stamatis (Biochemical Society): h-index 5; 242 citations\n- Thom",
+        "host": "doi.org"
+      },
+      {
+        "id": "qarzwjv7",
+        "query": "regulatory and commercial bottlenecks of high-purity AAV manufacturing compared to LNP production costs",
+        "title": "The state of technological advancement to address challenges in the manufacture of rAAV gene therapies",
+        "url": "https://web.mit.edu/braatzgroup/Destro_BiotechnolAdv_2024.pdf",
+        "snippet": "Research review paper \nThe state of technological advancement to address challenges in the \nmanufacture of rAAV gene therapies \nFrancesco Destro a,1, Weida Wu b,c,1, Prasanna Srinivasan d,1, John Joseph d,1, \nVivekananda Bal a,1, Caleb Neufeld d, Jacqueline M. Wolfrum d, Scott R. Manalis b,c,e, \nAnt",
+        "host": "web.mit.edu"
+      }
+    ],
+    "timestamp": 1783925041046,
+    "hitCount": 1
+  },
+  "[systematic review of liver gene therapy comparing lnp vs aav efficacy]": {
+    "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+    "results": [
+      {
+        "id": "b6g894cr",
+        "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+        "title": "Viral and non-viral vectors in gene therapy: current state and clinical perspectives - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12271757/",
+        "snippet": "Viral and non-viral vectors in gene therapy: current state and clinical perspectives - PMC\n\neBioMedicine\n\n. 2025 Jul 1;118:105834. doi: 10.1016/j.ebiom.2025.105834\n\n# Viral and non-viral vectors in gene therapy: current state and clinical perspectives\n\na,b,c,d,e,f,∗\n\n- Author information\n- Article n",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "59kws22v",
+        "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+        "title": "The deLIVERed promises of gene therapy: Past, present, and future of liver-directed gene therapy",
+        "url": "https://doi.org/10.1016/j.ymthe.2025.03.041",
+        "snippet": "# The deLIVERed promises of gene therapy: Past, present, and future of liver-directed gene therapy\n\nMolecular Therapy, 2025. Review. 13 citations.\n\n## Abstract\n\nGene therapy has revolutionized modern medicine by offering innovative treatments for genetic and acquired diseases. The liver has been and",
+        "host": "doi.org"
+      },
+      {
+        "id": "q3bf7ezz",
+        "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+        "title": "Liver-directed Gene Therapy: Approaches and Challenges",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9353592/",
+        "snippet": "Liver-directed Gene Therapy: Approaches and Challenges - PMC[Skip to main content](#main-content)\n![](https://pmc.ncbi.nlm.nih.gov/static/img/us_flag.svg)\nAn official website of the United States government\nHere's how you know\nHere's how you know\n![](https://pmc.ncbi.nlm.nih.gov/static/img/icon-dot-",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "w44ixz0x",
+        "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+        "title": "Nucleic acid therapeutics for liver diseases: A decade of technological convergence and clinical challenges - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12496246/",
+        "snippet": "Nucleic acid therapeutics for liver diseases: A decade of technological convergence and clinical challenges - PMC\n\nILIVER\n\n. 2025 Jun 18;4(3):100178. doi: 10.1016/j.iliver.2025.100178\n\n# Nucleic acid therapeutics for liver diseases: A decade of technological convergence and clinical challenges\n\na,1,",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "zmjmamjr",
+        "query": "[systematic review of liver gene therapy comparing LNP vs AAV efficacy]",
+        "title": "Lipid-nanoparticle-enabled nucleic acid therapeutics for liver disorders - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11252464/",
+        "snippet": "Lipid-nanoparticle-enabled nucleic acid therapeutics for liver disorders - PMC\n\nActa Pharm Sin B\n\n. 2024 Apr 22;14(7):2885–2900. doi: 10.1016/j.apsb.2024.04.015\n\n# Lipid-nanoparticle-enabled nucleic acid therapeutics for liver disorders\n\nPorkizhi Arjunan\n\na,b, Durga Kathirvelu\n\na, Gokulnath Mahaling",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      }
+    ],
+    "timestamp": 1783925041047,
+    "hitCount": 1
+  },
+  "clinical trial safety and immunogenicity profiles comparing crispr-grna delivery via adeno-associated virus (aav2) versus lipid nanoparticles (lnps) research paper arxiv": {
+    "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs) research paper arxiv",
+    "results": [
+      {
+        "id": "y82b5oej",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs) research paper arxiv",
+        "title": "Viral and nonviral nanocarriers for in vivo CRISPR-based gene editing",
+        "url": "https://www.sciopen.com/local/article_pdf/10.1007/s12274-024-6748-5.pdf",
+        "snippet": "## Viral and nonviral nanocarriers for in vivo CRISPR-based gene editing\n\nZhongyuan Guo 1,§, Audrey T. Zhu 1,§, Ronnie H. Fang 1,2 (✉), and Liangfang Zhang 1(✉) \n1 Aiiso Yufeng Li Family Department of Chemical and Nano Engineering, University of California San Diego, La Jolla, CA 92093, USA \n2 Divis",
+        "host": "www.sciopen.com"
+      },
+      {
+        "id": "6j66nhia",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs) research paper arxiv",
+        "title": "rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis - PMC",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9647052/",
+        "snippet": "rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis - PMC\n\nFront Immunol\n\n. 2022 Oct 27;13:1001263. doi: 10.3389/fimmu.2022.1001263\n\n# rAAV immunogenicity, toxicity, and durability in 255 clinical trials: A meta-analysis\n\n3,4,*\n\n- Author information\n- Article notes\n",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      },
+      {
+        "id": "1236hqiv",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs) research paper arxiv",
+        "title": "Comparing CRISPR-Cas9 Gene Therapy Delivery Systems: Implications and Optimization for Hyperargininemia",
+        "url": "https://precisionnanomedicine.com/article/153885-comparing-crispr-cas9-gene-therapy-delivery-systems-implications-and-optimization-for-hyperargininemia.pdf",
+        "snippet": "Prnano.com, https://doi.org/10.33218/001c.153885 Andover House, N. Andover, MA USA The official Journal of CLINAM – ISSN:2639-9431 (online) License: CC BY-NC 4.0 1634\n\nOpen Access Review\n\nPrecis. Nanomed. 2025, 8(4):1634-1644\n\nComparing CRISPR-Cas9 Gene Therapy Delivery Systems: Implications \nand Op",
+        "host": "precisionnanomedicine.com"
+      },
+      {
+        "id": "ahd0uwn0",
+        "query": "Clinical trial safety and immunogenicity profiles comparing CRISPR-gRNA delivery via Adeno-Associated Virus (AAV2) versus Lipid Nanoparticles (LNPs) research paper arxiv",
+        "title": "Lipid-Nanoparticle-Based Delivery of CRISPR/Cas9 Genome ...",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9176214/",
+        "snippet": "Lipid-Nanoparticle-Based Delivery of CRISPR/Cas9 Genome-Editing Components - PMC\n\nMol Pharm\n\n. 2022 May 20;19(6):1669–1686. doi: 10.1021/acs.molpharmaceut.1c00916\n\n# Lipid-Nanoparticle-Based Delivery of CRISPR/Cas9 Genome-Editing Components\n\n§, Sarah B Thomson\n\n§, Blair R Leavitt\n\n†,‡, Colin J D Ros",
+        "host": "pmc.ncbi.nlm.nih.gov"
+      }
+    ],
+    "timestamp": 1783925061240,
+    "hitCount": 1
+  },
+  "current state-of-the-art open-source architecture alternatives to openclaw focusing on extraction efficiency, data handling security, and privacy compliance standards": {
+    "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+    "results": [
+      {
+        "id": "7c3wednw",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+        "title": "sphragis-oss/sphragis",
+        "url": "https://github.com/sphragis-oss/sphragis",
+        "snippet": "# Repository: sphragis-oss/sphragis\n\nEU AI Act compliance gateway for Claude Code and OpenAI/Anthropic-compatible LLMs: redacts PII locally and keeps a tamper-evident, hash-chained audit log.\n\n- Stars: 4\n- Forks: 0\n- Watchers: 0\n- Open issues: 5\n- Primary language: Go\n- Languages: Go (91.5%), HTML (",
+        "host": "github.com"
+      },
+      {
+        "id": "wocrcumb",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+        "title": "yifanfeng97/Hyper-Extract",
+        "url": "https://github.com/yifanfeng97/Hyper-Extract",
+        "snippet": "# Repository: yifanfeng97/Hyper-Extract\n\nHypergraph is more powerful. Transform unstructured text into structured knowledge with LLMs. Graphs, hypergraphs, and spatio-temporal extractions — with one command.\n\n- Stars: 3028\n- Forks: 357\n- Watchers: 16\n- Open issues: 4\n- Primary language: Python\n- Lan",
+        "host": "github.com"
+      },
+      {
+        "id": "xamw1qio",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+        "title": "Ontos-AI/knowhere",
+        "url": "https://github.com/Ontos-AI/knowhere",
+        "snippet": "# Repository: Ontos-AI/knowhere\n\nKnowhere extracts, parses, and outputs structured chunks ready for AI Agents and RAG.\n\n- Stars: 1871\n- Forks: 233\n- Watchers: 40\n- Open issues: 13\n- Primary language: Python\n- Languages: Python (80.3%), HTML (19.3%), Shell (0.3%), Makefile, Mako\n- License: Apache Lic",
+        "host": "github.com"
+      },
+      {
+        "id": "qqvcvwsl",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+        "title": "Parvaz-Jamei/IngestForge",
+        "url": "https://github.com/Parvaz-Jamei/IngestForge",
+        "snippet": "# Repository: Parvaz-Jamei/IngestForge\n\nSafe, config-driven Python web ingestion pipeline with extraction, evidence-gated AI generation, provenance ledger, RAG chunks, data cards, and multi-provider exports.\n\n- Stars: 1\n- Forks: 0\n- Watchers: 0\n- Open issues: 4\n- Primary language: Python\n- Languages",
+        "host": "github.com"
+      },
+      {
+        "id": "h4m6dxew",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards",
+        "title": "jolovicdev/sourcery",
+        "url": "https://github.com/jolovicdev/sourcery",
+        "snippet": "# jolovicdev/sourcery\n\nSchema-first LLM extraction framework with entity grounding, multi-pass extraction, and deterministic post-processing\n\n- Stars: 4\n- Forks: 0\n- Watchers: 4\n- Open issues: 0\n- License: MIT License\n- Homepage: https://jolovicdev.github.io/sourcery/\n- Default branch: master\n- Crea",
+        "host": "github.com"
+      }
+    ],
+    "timestamp": 1783975396269,
+    "hitCount": 1
+  },
+  "openclaw hpc scalability bottlenecks mpi communication overhead and memory bandwidth analysis": {
+    "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+    "results": [
+      {
+        "id": "cpyiyepg",
+        "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+        "title": "Memory Bandwidth Contention: Communication vs",
+        "url": "https://web-backend.simula.no/sites/default/files/publications/files/badwidthcontention.pdf",
+        "snippet": "### Memory Bandwidth Contention: Communication vs\n\n### Computation Tradeoffs in Supercomputers with\n\n### Multicore Architectures\n\nJohannes Langguth( ), Xing Cai Department of High Performance Computing Simula Research Laboratory Oslo, Norway Email: { langguth,xingca} @simula.no\n\nMohammed Sourouri Ac",
+        "host": "web-backend.simula.no"
+      },
+      {
+        "id": "uwlv4r4b",
+        "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+        "title": "MPI Communication Performance on AMD MI300A: Microbenchmarks and Applications | Proceedings of the SC '25 Workshops of the International Conference for High Performance Computing, Networking, Storage and Analysis",
+        "url": "https://dl.acm.org/doi/10.1145/3731599.3767462",
+        "snippet": "MPI Communication Performance on AMD MI300A: Microbenchmarks and Applications | Proceedings of the SC '25 Workshops of the International Conference for High Performance Computing, Networking, Storage and Analysis\n\nskip to main content\n\nContents\n\n## Abstract\n\n### Abstract\n\nAMD’s MI300A integrates CPU",
+        "host": "dl.acm.org"
+      },
+      {
+        "id": "1na02t18",
+        "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+        "title": "Towards Efficient HPC: Exploring Overlap Strategies Using MPI Non-Blocking Communication",
+        "url": "https://www.mdpi.com/2227-7390/13/11/1848",
+        "snippet": "Towards Efficient HPC: Exploring Overlap Strategies Using MPI Non-Blocking Communication\n\nNext Article in Journal\n\nIdentification and Estimation in Linear Models with Endogeneity Through Time-Varying Volatility\n\nPrevious Article in Journal\n\nInverse Kinematics: Identifying a Functional Model for Clos",
+        "host": "www.mdpi.com"
+      },
+      {
+        "id": "59tnz2h6",
+        "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+        "title": "Leveraging Caliper and Benchpark to Analyze MPI Communication Patterns: Insights from AMG2023, Kripke, and Laghos",
+        "url": "https://arxiv.org/html/2507.22372",
+        "snippet": "# Leveraging Caliper and Benchpark to Analyze MPI Communication Patterns: Insights from AMG2023, Kripke, and Laghos\n\narXiv (Cornell University), 2025. Preprint. 0 citations.\n\n## Abstract\n\nWe introduce ``communication regions'' into the widely used Caliper HPC profiling tool. A communication region i",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "hqw20kwi",
+        "query": "OpenCLAW HPC scalability bottlenecks MPI communication overhead and memory bandwidth analysis",
+        "title": "Report on the HPC application bottlenecks",
+        "url": "https://exanode.eu/wp-content/uploads/2017/04/D2.5.pdf",
+        "snippet": "Project No. 671578 ExaNoDe Deliverable D2.5 Page i of iii\n\nD2.5\n\n## Report on the HPC application bottlenecks\n\nWorkpackage: 2 Co-Design for Exa-scale HPC System \nAuthor(s): Kazi Asifuzzaman BSC \nMilan Radulovic BSC \nPetar Radojkovic BSC \nAuthorized by Petar Radojkovic BSC \nReviewer Said Derradji Ato",
+        "host": "exanode.eu"
+      }
+    ],
+    "timestamp": 1783975396909,
+    "hitCount": 1
+  },
+  "technical best practices for building automated scraping systems that evade rate limiting, ip bans, and advanced browser fingerprint detection while ensuring robust session management": {
+    "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+    "results": [
+      {
+        "id": "k0powad3",
+        "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+        "title": "How to Build Proxy Rotation for High-Volume Web Scraping | AlterLab",
+        "url": "https://alterlab.io/blog/build-a-resilient-proxy-rotation-and-session-system",
+        "snippet": "How to Build Proxy Rotation for High-Volume Web Scraping | AlterLab\n\nShare\n\nShareShare on TwitterShare on LinkedInShare on Hacker NewsCopy link\n\nTable of Contents (9 sections)\n\nScaling a web scraping pipeline from a few thousand requests to millions per day exposes a fundamental infrastructure chall",
+        "host": "alterlab.io"
+      },
+      {
+        "id": "ru51vgkq",
+        "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+        "title": "Anti-bot Playbook for Social & Search Scraping (2026)",
+        "url": "https://webscraper.cloud/anti-bot-strategies-when-scraping-social-and-search-platform",
+        "snippet": "Anti-bot Playbook for Social & Search Scraping (2026)\n\nA 2026 playbook for avoiding blocks when scraping social and search: rate limiting, session & fingerprint management, headful browsers, and proxy rotation.\n\n## Stop getting blocked: practical anti-bot playbook for social & search scraping in 202",
+        "host": "webscraper.cloud"
+      },
+      {
+        "id": "69k9eh1h",
+        "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+        "title": "Web Scraping Best Practices: Complete 2026 Guide",
+        "url": "https://oxylabs.io/blog/web-scraping-best-practices",
+        "snippet": "Skip to main content\n\nBack to blog\n\nTutorials Data acquisition Scrapers\n\n# Web Scraping Best Practices: Complete 2026 Guide\n\nDovydas Vėsa\n\nLast updated on\n\n2026-06-01\n\n12 min read\n\nShare\n\nAI Summary:\n\nLearn practical techniques for crawling websites without getting blocked, from managing request beh",
+        "host": "oxylabs.io"
+      },
+      {
+        "id": "mamc77ox",
+        "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+        "title": "Cookie and session handling at scale across rotating proxies | proxyscraping",
+        "url": "https://proxyscraping.org/blog/cookie-and-session-handling-at-scale-across-rotating-proxies",
+        "snippet": "Cookie and session handling at scale across rotating proxies | proxyscraping\n\n← back to blog\n\n# Cookie and session handling at scale across rotating proxies\n\nMost proxy guides stop at “rotate your IPs and you’re done.” that’s fine for simple scraping where each request is stateless. but a huge class",
+        "host": "proxyscraping.org"
+      },
+      {
+        "id": "wawjxipo",
+        "query": "Technical best practices for building automated scraping systems that evade rate limiting, IP bans, and advanced browser fingerprint detection while ensuring robust session management",
+        "title": "Browser Fingerprint Strategy - Designing Identities, Not Just Rotating Them | ScrapingAnt",
+        "url": "https://scrapingant.com/blog/browser-fingerprint-strategy-designing-identities-not-just",
+        "snippet": "Browser Fingerprint Strategy - Designing Identities, Not Just Rotating Them | ScrapingAnt\n\nWeb scraping in 2025 is no longer a matter of “use proxies, randomize user‑agents, and hope for the best.” Modern anti‑bot systems:\n\n- Correlate activity across TLS fingerprints, cookies, JavaScript execution,",
+        "host": "scrapingant.com"
+      }
+    ],
+    "timestamp": 1783975401522,
+    "hitCount": 1
+  },
+  "\"openclaw\" user workflow installation usability pain points research community feedback": {
+    "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+    "results": [
+      {
+        "id": "ty1r1zpy",
+        "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+        "title": "[Bug]: WAY TOO MANY HURDDLES TO Get start. if you want a user group to use this you make it easy to get start.",
+        "url": "https://github.com/openclaw/openclaw/issues/79330",
+        "snippet": "# [Bug]: WAY TOO MANY HURDDLES TO Get start. if you want a user group to use this you make it easy to get start.\n\n- State: closed\n- Author: cdvankammen\n- Created: 2026-05-08T09:21:50Z\n- Updated: 2026-06-28T21:24:50Z\n- Repository: openclaw/openclaw\n- Number: #79330\n\n## Labels\n\n- bug\n- P3\n- clawsweepe",
+        "host": "github.com"
+      },
+      {
+        "id": "zz2wkk3b",
+        "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+        "title": "15 real problems running an AI agent in production with OpenClaw | Droptica",
+        "url": "https://www.droptica.ai/blog/15-real-problems-running-ai-agent-production-openclaw/",
+        "snippet": "15 real problems running an AI agent in production with OpenClaw | Droptica\n\n# 15 real problems running an AI agent in production with OpenClaw\n\nI ran an AI agent in production for three weeks straight — handling marketing, software development, HR support, sales assistance, and project management. ",
+        "host": "www.droptica.ai"
+      },
+      {
+        "id": "yka91cwh",
+        "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+        "title": "OpenClaw, six months later: what production actually demanded | Yash Gadodia",
+        "url": "https://yashgadodia.com/openclaw-six-months-in-production/",
+        "snippet": "OpenClaw, six months later: what production actually demanded | Yash Gadodia\n\n← Blog\n\n# OpenClaw, six months later: what production actually demanded\n\nI did a full stability audit of OpenClaw today. The results were a mix of stuff I knew was bad, stuff I'd convinced myself was fine, and a few false ",
+        "host": "yashgadodia.com"
+      },
+      {
+        "id": "imf28brv",
+        "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+        "title": "My Painful First Week With OpenClaw on a VPS — And Why I Almost Gave Up | by Siddharth Saraf | Medium",
+        "url": "https://siddharthsaraf.medium.com/my-painful-first-week-with-openclaw-on-a-vps-and-why-i-almost-gave-up-71b0553d9575",
+        "snippet": "My Painful First Week With OpenClaw on a VPS — And Why I Almost Gave Up | by Siddharth Saraf | Medium\n\nOpen in app\n\nSign up\n\nGet app\n\nSign up\n\nPress enter or click to view image in full size\n\n# My Painful First Week With OpenClaw on a VPS — And Why I Almost Gave Up\n\n8 min read\n\nMar 13, 2026\n\n--\n\nSha",
+        "host": "siddharthsaraf.medium.com"
+      },
+      {
+        "id": "er7u2i5k",
+        "query": "\"OpenCLAW\" user workflow installation usability pain points research community feedback",
+        "title": "[Feature Request] Improving Usability and \"Software-style\" Experience · Issue #23653 · openclaw/openclaw",
+        "url": "https://github.com/openclaw/openclaw/issues/23653",
+        "snippet": "# Issue: openclaw/openclaw #23653\n\n- Repository: openclaw/openclaw | Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞 | 358K stars | TypeScript\n\n## [Feature Request] Improving Usability and \"Software-style\" Experience\n\n- Author: [@liu-2011](https://github.com/liu-2011)\n- Sta",
+        "host": "github.com"
+      }
+    ],
+    "timestamp": 1783975401523,
+    "hitCount": 1
+  },
+  "high performance physics solver parallelization techniques gpu acceleration amr adaptive mesh refinement best practices openacc openmpi comparison": {
+    "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+    "results": [
+      {
+        "id": "ox74xkye",
+        "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+        "title": "foap4: adaptive mesh refinement with OpenACC, MPI, and p4est",
+        "url": "https://arxiv.org/html/2605.07612v1",
+        "snippet": "foap4: adaptive mesh refinement with OpenACC, MPI, and p4est\n\n[ orcid=0000-0003-0811-5091 ]\n\n\\cormark\n\n[1]\n\n\\credit\n\nConceptualization of this study, Funding acquisition, Methodology, Software, Visualization, Writing – original draft\n\n1] organization=Centrum Wiskunde & Informatica (CWI), addressline",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "pziomcfw",
+        "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+        "title": "Efficient GPU Offloading with OpenMP for a Hyperbolic Finite Volume Solver on Dynamically Adaptive Meshes",
+        "url": "https://mediatum.ub.tum.de/doc/1715404/0dyeh6z892lr012zhqhvvgzve.978-3-031-32041-5_4.pdf",
+        "snippet": "## Efficient GPU Offloading with OpenMP for a Hyperbolic Finite Volume Solver on Dynamically Adaptive Meshes\n\nMario Wille 1(B) , Tobias Weinzierl 2 , Gonzalo Brito Gadeschi 3 , and Michael Bader 1(B)\n\n1 TUM School of Computation, Information and Technology, Technical University of Munich, Garching, ",
+        "host": "mediatum.ub.tum.de"
+      },
+      {
+        "id": "3oafvu4g",
+        "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+        "title": "[1103.3373] Directionally Unsplit Hydrodynamic Schemes with Hybrid MPI/OpenMP/GPU Parallelization in AMR",
+        "url": "https://ar5iv.labs.arxiv.org/html/1103.3373",
+        "snippet": "[1103.3373] Directionally Unsplit Hydrodynamic Schemes with Hybrid MPI/OpenMP/GPU Parallelization in AMR\n\n# Directionally Unsplit Hydrodynamic Schemes with Hybrid MPI/OpenMP/GPU Parallelization in AMR\n\nHsi-Yu Schive11affiliation: Department of Physics, National Taiwan University, 10617, Taipei, Taiw",
+        "host": "ar5iv.labs.arxiv.org"
+      },
+      {
+        "id": "2uxpwqao",
+        "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+        "title": "GPU Acceleration of MPAS Physics Schemes Using OpenACC",
+        "url": "https://www.cisl.ucar.edu/sites/default/files/2021-10/KISTI%20-%20Joh%2C%20Kang%2C%20%26%20Kim.pdf",
+        "snippet": "### GPU Acceleration of MPAS Physics Schemes Using OpenACC\n\nJae Youp Kim1,2, Ji-Sun Kang1, and Minsu Joh1,2\n\n1Disaster Management HPC Technology Research Center, KISTI, Korea 2University of Science and Technology, Korea\n\nMulticore 7 Workshop kimjy@KISTI 1\n\n### Contents\n\n1. Introduction\n\n2. MPAS and ",
+        "host": "www.cisl.ucar.edu"
+      },
+      {
+        "id": "f4d843bl",
+        "query": "High performance physics solver parallelization techniques GPU acceleration AMR adaptive mesh refinement best practices openACC OpenMPI comparison",
+        "title": "Porting a Computational Fluid Dynamics Code with",
+        "url": "https://www.cs.umd.edu/~bhatele/pubs/pdf/2023/ipdps2023b.pdf",
+        "snippet": "## Porting a Computational Fluid Dynamics Code with\n\n## AMR to Large-scale GPU Platforms\n\nJoshua H. Davis†, Justin Shafner∗, Daniel Nichols†, Nathan Grube∗, Pino Martin∗, Abhinav Bhatele† †Department of Computer Science, University of Maryland ∗Department of Aerospace Engineering, University of Mary",
+        "host": "www.cs.umd.edu"
+      }
+    ],
+    "timestamp": 1783975401524,
+    "hitCount": 1
+  },
+  "security risk assessment automated web agent tools openclaw attack surface reduction credential management": {
+    "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+    "results": [
+      {
+        "id": "96n2qcjp",
+        "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+        "title": "Security - OpenClaw",
+        "url": "https://documentation.openclaw.ai/cli/security",
+        "snippet": "# `openclaw security`\n\nSecurity tools (audit + optional fixes).\n\nRelated:\n\n- Security guide: Security\n\n## Audit\n\n```bash\nopenclaw security audit\nopenclaw security audit --deep\nopenclaw security audit --deep --password <password>\nopenclaw security audit --deep --token <token>\nopenclaw security audit ",
+        "host": "documentation.openclaw.ai"
+      },
+      {
+        "id": "cvcsv7kn",
+        "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+        "title": "Running OpenClaw safely: identity, isolation, and runtime risk | Microsoft Security Blog",
+        "url": "https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/",
+        "snippet": "Running OpenClaw safely: identity, isolation, and runtime risk | Microsoft Security Blog\n\nSkip to main content\n\nResearch February 19 12 min read\n\n# Running OpenClaw safely: identity, isolation, and runtime risk\n\nBy\n\nListen to this post\n\n0:00\n\n0:00 / 0:00\n\n1x\n\nPowered by Microsoft Copilot\n\n---\n\n## Co",
+        "host": "www.microsoft.com"
+      },
+      {
+        "id": "8axsdvts",
+        "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+        "title": "Security - OpenClaw",
+        "url": "https://docs.openclaw.ai/gateway/security",
+        "snippet": "Personal assistant trust model. This guidance assumes one trusted\noperator boundary per gateway (single-user, personal-assistant model).\nOpenClaw is not a hostile multi-tenant security boundary for multiple\nadversarial users sharing one agent or gateway. For mixed-trust or\nadversarial-user operation",
+        "host": "docs.openclaw.ai"
+      },
+      {
+        "id": "gzo9grvu",
+        "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+        "title": "CloudSecurityAlliance/openclaw-audit",
+        "url": "https://github.com/CloudSecurityAlliance/openclaw-audit",
+        "snippet": "# Repository: CloudSecurityAlliance/openclaw-audit\n\nA static analysis tool that scans OpenClaw installations and deployment repositories against the CSAI \"Securing OpenClaw in the Enterprise: A Zero Trust Approach to Agentic AI Hardening\" whitepaper, producing structured security gap reports with op",
+        "host": "github.com"
+      },
+      {
+        "id": "38cxst2c",
+        "query": "security risk assessment automated web agent tools OpenCLAW attack surface reduction credential management",
+        "title": "OpenClaw Security Hardening Guide – Lab Space",
+        "url": "https://labs.cloudsecurityalliance.org/agentic/agentic-openclaw-hardening-guide-v1/",
+        "snippet": "Skip to content\n\n# OpenClaw Security Hardening Guide\n\nWhite Paper | 2026-03-27 | Status: draft\n\n# OpenClaw Security Hardening Guide\n\n## Executive Summary\n\nOpenClaw emerged in 2024 as an open-source AI agent framework that allows users to install third-party capabilities from a marketplace ecosystem ",
+        "host": "labs.cloudsecurityalliance.org"
+      }
+    ],
+    "timestamp": 1783975401525,
+    "hitCount": 1
+  },
+  "current state-of-the-art open-source architecture alternatives to openclaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv": {
+    "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv",
+    "results": [
+      {
+        "id": "kll7mhl1",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv",
+        "title": "yifanfeng97/Hyper-Extract",
+        "url": "http://github.com/yifanfeng97/Hyper-Extract",
+        "snippet": "# Repository: yifanfeng97/Hyper-Extract\n\nHypergraph is more powerful. Transform unstructured text into structured knowledge with LLMs. Graphs, hypergraphs, and spatio-temporal extractions — with one command.\n\n- Stars: 2844\n- Forks: 331\n- Watchers: 16\n- Open issues: 3\n- Primary language: Python\n- Lan",
+        "host": "github.com"
+      },
+      {
+        "id": "iw5d4rxa",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv",
+        "title": "jolovicdev/sourcery",
+        "url": "https://github.com/jolovicdev/sourcery",
+        "snippet": "# jolovicdev/sourcery\n\nSchema-first LLM extraction framework with entity grounding, multi-pass extraction, and deterministic post-processing\n\n- Stars: 4\n- Forks: 0\n- Watchers: 4\n- Open issues: 0\n- License: MIT License\n- Homepage: https://jolovicdev.github.io/sourcery/\n- Default branch: master\n- Crea",
+        "host": "github.com"
+      },
+      {
+        "id": "s3ky7oo1",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv",
+        "title": "Extract-0: A Specialized Language Model for Document Information Extraction",
+        "url": "https://arxiv.org/html/2509.22906v1",
+        "snippet": "Extract-0: A Specialized Language Model for Document Information Extraction \n\n# Extract-0: A Specialized Language Model for Document Information Extraction\n\nHenrique Godoy Inteli São Paulo, Brazil henrique.godoy@sou.inteli.edu.br\n\n###### Abstract\n\nThis paper presents Extract-0 111Data and code avail",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "oq5f5rmv",
+        "query": "Current state-of-the-art open-source architecture alternatives to OpenClaw focusing on extraction efficiency, data handling security, and privacy compliance standards research paper arxiv",
+        "title": "A Dynamic Self-Evolving Extraction System",
+        "url": "https://arxiv.org/pdf/2603.06915v1",
+        "snippet": "A Dynamic Self-Evolving Extraction System\n\n# A Dynamic Self-Evolving Extraction System\n\nMoin Amin-Naseri Megagon Labs moin@megagon.ai &Hannah Kim Megagon Labs hannah@megagon.ai &Estevam Hruschka Megagon Labs estevam@megagon.ai\n\n###### Abstract\n\nThe extraction of structured information from raw text ",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783975420655,
+    "hitCount": 1
+  },
+  "security threat modeling frameworks specific to open source security tool architecture including attack surface reduction": {
+    "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+    "results": [
+      {
+        "id": "83ulo098",
+        "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+        "title": "Open and Secure",
+        "url": "https://tag-security.cncf.io/community/assessments/Open_and_Secure.pdf",
+        "snippet": "#### A Manual for Practicing Threat Modeling to Assess and Fortify Open Source Security\n\n## Open and Secure\n\nOpen and Secure — A Manual for Practicing Threat Modeling to Assess and Fortify Open Source Security \nby Justin Cappos in collaboration with Andrés Vega \nand feedback and support of the CNCF ",
+        "host": "tag-security.cncf.io"
+      },
+      {
+        "id": "0m6xyepv",
+        "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+        "title": "An Analysis of Open-source Automated Threat Modeling Tools and Their Extensibility from Security into Privacy | USENIX",
+        "url": "https://www.usenix.org/publications/loginonline/analysis-open-source-automated-threat-modeling-tools-and-their",
+        "snippet": "An Analysis of Open-source Automated Threat Modeling Tools and Their Extensibility from Security into Privacy | USENIX\n\nJoin the conversation Back to ;login: Online\n\n# An Analysis of Open-source Automated Threat Modeling Tools and Their Extensibility from Security into Privacy\n\nFebruary 17, 2022\n\nRe",
+        "host": "www.usenix.org"
+      },
+      {
+        "id": "lvzcezd3",
+        "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+        "title": "THREAT_MODEL.md",
+        "url": "https://github.com/timescale/ressrf/blob/main/THREAT_MODEL.md",
+        "snippet": "# THREAT_MODEL.md\n\n- Branch: main\n- Repository: timescale/ressrf\n\n---\n\n# Threat Model\n\nThis document describes the threat model for ressrf, a multi-platform SSRF prevention library. It covers trust boundaries, a STRIDE analysis per component, prioritized threat scenarios, and accepted risks.\n\n## Tru",
+        "host": "github.com"
+      },
+      {
+        "id": "zriv6tpd",
+        "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+        "title": "SECURITY-THREAT-MODEL.md",
+        "url": "https://github.com/apache/opendal/blob/main/SECURITY-THREAT-MODEL.md",
+        "snippet": "# SECURITY-THREAT-MODEL.md\n\n- Branch: main\n- Repository: apache/opendal\n\n---\n\n \n\n# Apache OpenDAL Security Threat Model\n\n## 1. Status\n\nThis document defines the security boundary for Apache OpenDAL. It is intended\nfor maintainers, security reporters, downstream users, and automated security\nscanners",
+        "host": "github.com"
+      },
+      {
+        "id": "ddhglgw0",
+        "query": "Security threat modeling frameworks specific to open source security tool architecture including attack surface reduction",
+        "title": "docs/threat-model.md",
+        "url": "https://github.com/apache/camel-k/blob/main/docs/threat-model.md",
+        "snippet": "# docs/threat-model.md\n\n- Branch: main\n- Repository: apache/camel-k\n\n---\n\n# Apache Camel K — Threat Model\n\n> This document describes the *implicit contract* between Apache Camel K and\n> the people and clusters that run it: what Camel K assumes, what it\n> guarantees, what it leaves to the operator/de",
+        "host": "github.com"
+      }
+    ],
+    "timestamp": 1783976700623,
+    "hitCount": 1
+  },
+  "what operational hardening practices prevent ip bans and rate-limiting on web scraping operations for scalable systems?": {
+    "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+    "results": [
+      {
+        "id": "alu868je",
+        "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+        "title": "Building a Stealth Scraping Infrastructure That Actually Works | Empirium",
+        "url": "https://empirium.io/blog/stealth-scraping-infrastructure",
+        "snippet": "Building a Stealth Scraping Infrastructure That Actually Works | Empirium\n\nMost scraping tutorials show you how to extract data from a single page. Real operations need to extract data from millions of pages, consistently, without getting blocked, for months or years.\n\nThe difference between a scrap",
+        "host": "empirium.io"
+      },
+      {
+        "id": "02fhl2yj",
+        "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+        "title": "Web Scraping Rate Limiting: Production Best Practices for 2026 | KnowledgeSDK Blog",
+        "url": "https://knowledgesdk.com/blog/web-scraping-rate-limiting",
+        "snippet": "Web Scraping Rate Limiting: Production Best Practices for 2026 | KnowledgeSDK Blog\n\nknowledgesdk.com/ blog/web-scraping-rate-limiting\n\ntechnicalMarch 19, 2026·12 min read\n\n# Web Scraping Rate Limiting: Production Best Practices for 2026\n\nLearn why rate limiting is critical for production web scrapin",
+        "host": "knowledgesdk.com"
+      },
+      {
+        "id": "ksbdgduy",
+        "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+        "title": "Manage Per-IP Rate Limits with Rotating Proxies (2026) - SparkProxy",
+        "url": "https://www.sparkproxy.io/blog/guide-to-rotating-proxies-and-managing-per-ip-request-limits-for-web-scraping",
+        "snippet": "Manage Per-IP Rate Limits with Rotating Proxies (2026) - SparkProxy\n\nGuides\n\n# Manage Per-IP Rate Limits with Rotating Proxies (2026)\n\n## Scrapers hit per-IP limits within minutes on protected sites. Learn rotation strategies, backoff patterns, and a Python proxy manager that keeps success rates abo",
+        "host": "www.sparkproxy.io"
+      },
+      {
+        "id": "abb726hc",
+        "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+        "title": "Rate limiting yourself: token buckets, adaptive throttling, and 429 backoff",
+        "url": "https://blog.crawlex.net/blog/rate-limiting-yourself/",
+        "snippet": "Rate limiting yourself: token buckets, adaptive throttling, and 429 backoff Skip to content\n\nMost writing about rate limiting is written from the server’s chair. The server has a resource to protect, a per-user quota to enforce, a load shedder to keep the fleet alive when traffic spikes. The crawler",
+        "host": "blog.crawlex.net"
+      },
+      {
+        "id": "jw491nwi",
+        "query": "What operational hardening practices prevent IP bans and rate-limiting on web scraping operations for scalable systems?",
+        "title": "Rate limiting and retry strategies that avoid block escalation | proxyscraping",
+        "url": "https://proxyscraping.org/blog/rate-limiting-and-retry-strategies-that-avoid-block-escalation",
+        "snippet": "Rate limiting and retry strategies that avoid block escalation | proxyscraping\n\n← back to blog\n\n# Rate limiting and retry strategies that avoid block escalation\n\nMost scraping failures are not about the first block. they are about what happens in the thirty seconds after the first block, when your s",
+        "host": "proxyscraping.org"
+      }
+    ],
+    "timestamp": 1783976705293,
+    "hitCount": 1
+  },
+  "what are the known architecture patterns and feature gaps of openclaw compared to modern research automation frameworks?": {
+    "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+    "results": [
+      {
+        "id": "tj8wjdhd",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+        "title": "OpenClaw Architecture, Explained: How It Works",
+        "url": "https://ppaolo.substack.com/p/openclaw-system-architecture-overview",
+        "snippet": "OpenClaw Architecture, Explained: How It Works\n\n# Products for Humans\n\nSubscribeSign in\n\n# OpenClaw Architecture, Explained\n\n### How OpenClaw Works as an OS for AI Agents\n\nPaolo Perazzo\n\nFeb 11, 2026\n\n232\n\n16\n\n22\n\nShare\n\nIn early January 2026, a small group of developers gathered at the first Claude",
+        "host": "ppaolo.substack.com"
+      },
+      {
+        "id": "1wcbocjx",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+        "title": "A Systematic Taxonomy of Security Vulnerabilities in the OpenClaw AI Agent Framework",
+        "url": "https://arxiv.org/html/2603.27517v1",
+        "snippet": "A Systematic Taxonomy of Security Vulnerabilities in the OpenClaw AI Agent Framework\n\n# A Systematic Taxonomy of Security Vulnerabilities in the OpenClaw AI Agent Framework\n\nSurada Suwansathit SUCCESS Lab Texas A&M University surada@tamu.edu Yuxuan Zhang SUCCESS Lab Texas A&M University yuz516@tamu.",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "25tcdloe",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+        "title": "OpenClaw Architecture Critique: Token Overhead and Orchestration Issues | Help My Claw",
+        "url": "https://zooclaw.ai/help/en/2026-03-16/openclaw-architecture-critique/",
+        "snippet": "OpenClaw Architecture Critique: Token Overhead and Orchestration Issues | Help My Claw\n\n← Back to all tips\n\nA detailed technical critique from a greybeard developer who spent real time with OpenClaw’s internals identifies two structural problems that every production user eventually hits: prompt sta",
+        "host": "zooclaw.ai"
+      },
+      {
+        "id": "uqhc0k65",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+        "title": "OpenClaw vs Claude Code: An Architectural Comparison | zolty.systems",
+        "url": "https://blog.zolty.systems/posts/2026-04-02-openclaw-vs-claude-code-architecture/",
+        "snippet": "OpenClaw vs Claude Code: An Architectural Comparison | zolty.systems\n\n## TL;DR\n\nSomeone leaked the Claude Code source on GitHub. OpenClaw, the open-source AI coding agent with 346k stars, solves the same problem with a completely different architecture. I compared both codebases at the structural le",
+        "host": "blog.zolty.systems"
+      },
+      {
+        "id": "el2tror1",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks?",
+        "title": "docs/openclaw_integration.md",
+        "url": "https://github.com/veegee82/agent-workflow-protocol/blob/main/docs/openclaw_integration.md",
+        "snippet": "# docs/openclaw_integration.md\n\n- Branch: main\n- Repository: veegee82/agent-workflow-protocol\n\n---\n\n# How to Give OpenClaw a Real Brain\n\n> **OpenClaw is the best-connected AI gateway in open source. AWP gives it a brain — declarative orchestration, runtime tool creation, and budget-bounded multi-age",
+        "host": "github.com"
+      }
+    ],
+    "timestamp": 1783976705558,
+    "hitCount": 1
+  },
+  "owasp api security guidelines nist standards best practices for authentication hardening credential storage data protection": {
+    "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+    "results": [
+      {
+        "id": "gyo7btkl",
+        "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+        "title": "SP 800-228, Guidelines for API Protection for Cloud-Native Systems | CSRC",
+        "url": "https://csrc.nist.gov/pubs/sp/800/228/upd1/final",
+        "snippet": "SP 800-228, Guidelines for API Protection for Cloud-Native Systems | CSRC\n\nYou are viewing this page in an unauthorized frame window.\n\nThis is a potential security issue, you are being redirected to https://csrc.nist.gov.\n\nInformation Technology Laboratory\n\nComputer Security Resource Center\n\n### NIS",
+        "host": "csrc.nist.gov"
+      },
+      {
+        "id": "48owulfs",
+        "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+        "title": "Guidelines for API Protection for Cloud-Native Systems",
+        "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-228-upd1.pdf",
+        "snippet": "NIST Special Publication 800 \nNIST SP 800-228-upd1 \n\n## Guidelines for API Protection for Cloud-Native Systems\n\nRamaswamy Chandramouli Zack Butcher\n\nThis publication is available free of charge from: https://doi.org/10.6028/NIST.SP.800-228-upd1\n\nNIST Special Publication 800 \nNIST SP 800-228-upd1 \n\n#",
+        "host": "nvlpubs.nist.gov"
+      },
+      {
+        "id": "cm7f5dmt",
+        "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+        "title": "API2:2023 Broken Authentication - OWASP API Security Top 10",
+        "url": "https://owasp.org/API-Security/editions/2023/en/0xa2-broken-authentication/",
+        "snippet": "API2:2023 Broken Authentication - OWASP API Security Top 10\n\nSkip to content\n\n# API2:2023 Broken Authentication\n\n| Threat agents/Attack vectors | Security Weakness | Impacts |\n| --- | --- | --- |\n| API Specific : Exploitability Easy | Prevalence Common : Detectability Easy | Technical Severe : Busin",
+        "host": "owasp.org"
+      },
+      {
+        "id": "ieqt6y7e",
+        "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+        "title": "Authentication - OWASP Cheat Sheet Series",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+        "snippet": "Authentication - OWASP Cheat Sheet Series\n\nSkip to content\n\n# Authentication Cheat Sheet¶\n\n## Introduction¶\n\nAuthentication (AuthN) is the process of verifying that an individual, entity, or website is who or what it claims to be by determining the validity of one or more authenticators (like passwo",
+        "host": "cheatsheetseries.owasp.org"
+      },
+      {
+        "id": "1h2rqh31",
+        "query": "OWASP API Security Guidelines NIST Standards best practices for authentication hardening credential storage data protection",
+        "title": "OWASP API Security Project | OWASP Foundation",
+        "url": "https://owasp.org/www-project-api-security/",
+        "snippet": "OWASP API Security Project | OWASP Foundation\n\n# OWASP API Security Project\n\nCheck out the new OWASP API Security Top 10 2023!\n\n## What is API Security?\n\nA foundational element of innovation in today’s app-driven world is the API. From banks, retail and transportation to IoT, autonomous vehicles and",
+        "host": "owasp.org"
+      }
+    ],
+    "timestamp": 1783976706048,
+    "hitCount": 1
+  },
+  "how have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?": {
+    "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+    "results": [
+      {
+        "id": "nc9r6k1q",
+        "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+        "title": "docs/anti-bot.md",
+        "url": "https://github.com/fusengine/fuse-browser/blob/main/docs/anti-bot.md",
+        "snippet": "# docs/anti-bot.md\n\n- Branch: main\n- Repository: fusengine/fuse-browser\n\n---\n\n# Anti-bot & proxies\n\nHow fuse-browser stays under the radar: a stealth-by-default engine, proxy\nrotation/routing, WebRTC leak prevention, a TLS-impersonating HTTP fast-path,\nand an opt-in captcha solver. This is a referen",
+        "host": "github.com"
+      },
+      {
+        "id": "uryr2c7l",
+        "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+        "title": "The Proxy Arms Race: Bypassing Cloudflare's Advanced Bot Detection For Security Testing - Undercode Testing",
+        "url": "https://undercodetesting.com/the-proxy-arms-race-bypassing-cloudflares-advanced-bot-detection-for-security-testing/",
+        "snippet": "The Proxy Arms Race: Bypassing Cloudflare's Advanced Bot Detection For Security Testing - Undercode Testing \n\n \n\n \n\n🐢▶️ Listen🚀\n\n## Introduction:\n\nCloudflare has escalated its bot mitigation capabilities by deploying advanced TLS fingerprinting techniques to block security testing tools like Burp ",
+        "host": "undercodetesting.com"
+      },
+      {
+        "id": "tlaxv5dn",
+        "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+        "title": "How Proxy Rotation Helps Bypass Anti-Bot Systems | ScoreDetect Blog",
+        "url": "https://www.scoredetect.com/blog/posts/how-proxy-rotation-helps-bypass-anti-bot-systems",
+        "snippet": "How Proxy Rotation Helps Bypass Anti-Bot Systems | ScoreDetect Blog\n\nTech Trailblazers#1 Blockchain Trailblazer 2024\n\n# How Proxy Rotation Helps Bypass Anti-Bot Systems\n\nMichael Sumner\n\nMichael Sumner\n\nSummarize with: (opens in new tab)\n\nPublished May 14, 2025underDigital Content ProtectionUpdated J",
+        "host": "www.scoredetect.com"
+      },
+      {
+        "id": "qn2akw8x",
+        "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+        "title": "emircan-sahin/ghostfetch",
+        "url": "https://github.com/emircan-sahin/ghostfetch/",
+        "snippet": "# emircan-sahin/ghostfetch\n\nResilient HTTP client with CycleTLS, proxy rotation, smart error classification, and per-site interceptors\n\n- Stars: 3\n- Forks: 0\n- Watchers: 3\n- Open issues: 0\n- Default branch: main\n- Created: 2026-03-18T21:41:44Z\n\n## Languages\n\n- TypeScript\n\n## Top Contributors\n\n- emir",
+        "host": "github.com"
+      },
+      {
+        "id": "k7x579od",
+        "query": "How have other security/research tools implemented anti-rate-lit, proxy rotation, or bypass mechanisms without detection vulnerabilities in recent years?",
+        "title": "Cloudflare IUAM: Critical Bypass Vulnerability Report",
+        "url": "https://andrewcampi.com/cloudflare",
+        "snippet": "Cloudflare IUAM: Critical Bypass Vulnerability Report\n\nAndrew Campi Wiki\n\n# Cloudflare IUAM: Critical Bypass Vulnerability Report\n\nAndrew Campi August 23rd, 2024\n\nExecutive Summary\n\nIntroduction This report details a critical vulnerability discovered in Cloudflare's \"I'm Under Attack Mode\" (IUAM) pr",
+        "host": "andrewcampi.com"
+      }
+    ],
+    "timestamp": 1783976706049,
+    "hitCount": 1
+  },
+  "concurrent zero-copy network packet parser optimization c go low latency benchmarks": {
+    "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+    "results": [
+      {
+        "id": "v6izdai7",
+        "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+        "title": "rajveer100704/aegis",
+        "url": "https://github.com/rajveer100704/aegis",
+        "snippet": "# rajveer100704/aegis\n\nHigh-performance C++17 Deep Packet Inspection (DPI) framework featuring lock-free concurrency, zero-copy packet parsing, deterministic memory pools and multi-threaded packet processing.\n\n- Stars: 1\n- Forks: 0\n- Watchers: 1\n- Open issues: 0\n- License: MIT License\n- Homepage: ht",
+        "host": "github.com"
+      },
+      {
+        "id": "ois08lvs",
+        "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+        "title": "akos011221/upe",
+        "url": "https://github.com/akos011221/upe",
+        "snippet": "# Repository: akos011221/upe\n\nUserspace Packet Engine\n\n- Stars: 0\n- Forks: 0\n- Watchers: 0\n- Open issues: 1\n- Primary language: C\n- Languages: C (92.4%), Python (3.7%), Shell (2.8%), CMake (1.1%)\n- Topics: c-network-programming, dataplane, low-latency, packet-processing, userspace-networking\n- Defau",
+        "host": "github.com"
+      },
+      {
+        "id": "i53t6ltn",
+        "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+        "title": "Cornflakes: Zero-Copy Serialization for Microsecond-Scale Networking",
+        "url": "https://sing.stanford.edu/site/assets/publications/cornflakes-sosp23.pdf",
+        "snippet": "## Cornflakes: Zero-Copy Serialization for Microsecond-Scale Networking\n\n| | Deepti | Raghavan∗ | | | | | | |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| | | | | | Shreya | Ravi | | |\n| | Stanford | University | | | Stanford | University | | |\n| Gina | Yuan | | Pratiksha | | Thaker | |",
+        "host": "sing.stanford.edu"
+      },
+      {
+        "id": "j2hejhxb",
+        "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+        "title": "adilsondias-engineer/36-cpp-bbo-ingress-low-latency",
+        "url": "https://github.com/adilsondias-engineer/36-cpp-bbo-ingress-low-latency",
+        "snippet": "# adilsondias-engineer/36-cpp-bbo-ingress-low-latency\n\nUltra-low-latency DPDK network handler for BBO market data. Single-threaded, zero-allocation hot path with LMAX Disruptor IPC. Targets P99/P50 < 2.5x (vs 5.5x baseline). Features: branch hints, RDTSC timing, prefetch pipeline, 64-byte cache-alig",
+        "host": "github.com"
+      },
+      {
+        "id": "d9ivqdqs",
+        "query": "concurrent zero-copy network packet parser optimization C Go low latency benchmarks",
+        "title": "Zero-Copy Techniques - Go Optimization Guide",
+        "url": "https://goperf.dev/01-common-patterns/zero-copy/",
+        "snippet": "Zero-Copy Techniques - Go Optimization Guide\n\nSkip to content\n\n# Zero-Copy Techniques¶\n\nWhen writing performance-critical Go code, how memory is managed often has a bigger impact than it first appears. Zero-copy techniques are one of the more effective ways to tighten that control. Instead of moving",
+        "host": "goperf.dev"
+      }
+    ],
+    "timestamp": 1783976706050,
+    "hitCount": 1
+  },
+  "what are the known architecture patterns and feature gaps of openclaw compared to modern research automation frameworks? research paper arxiv": {
+    "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks? research paper arxiv",
+    "results": [
+      {
+        "id": "9maf84m6",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks? research paper arxiv",
+        "title": "[2602.19810v1] OpenClaw, Moltbook, and ClawdLab: From Agent-Only Social Networks to Autonomous Scientific Research",
+        "url": "https://arxiv.org/abs/2602.19810v1",
+        "snippet": "[2602.19810v1] OpenClaw, Moltbook, and ClawdLab: From Agent-Only Social Networks to Autonomous Scientific Research\n\nSkip to main content\n\narXiv is now an independent nonprofit! Learn more×\n\n# Computer Science > Artificial Intelligence\n\narXiv:2602.19810v1 (cs)\n\nA newer version of this paper has been ",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "u8gxfmi2",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks? research paper arxiv",
+        "title": "A Security Analysis of the OpenClaw AI Agent Framework",
+        "url": "https://arxiv.org/abs/2603.27517",
+        "snippet": "# A Security Analysis of the OpenClaw AI Agent Framework\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nAI agent frameworks connecting large language model (LLM) reasoning to host execution surfaces -- shell, filesystem, containers, and messaging -- introduce security challe",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "smz0uo4d",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks? research paper arxiv",
+        "title": "Uncovering Security Threats and Architecting Defenses in Autonomous Agents: A Case Study of OpenClaw",
+        "url": "https://arxiv.org/html/2603.12644v1",
+        "snippet": "Uncovering Security Threats and Architecting Defenses in Autonomous Agents: A Case Study of OpenClaw\n\n# Uncovering Security Threats and Architecting Defenses in Autonomous Agents: A Case Study of OpenClaw\n\nZonghao Ying Xiao Yang Siyang Wu Yumeng Song Yang Qu Hainan Li Tianlin Li Jiakai Wang Aishan L",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "zz30i22k",
+        "query": "What are the known architecture patterns and feature gaps of OpenCLaw compared to modern research automation frameworks? research paper arxiv",
+        "title": "AutoResearchClaw: Self-Reinforcing Autonomous Research with Human-AI Collaboration",
+        "url": "https://arxiv.org/pdf/2605.20025v1/__stdout.txt",
+        "snippet": "### : Self-Reinforcing Autonomous Research with Human-AI\n\nCollaboration Jiaqi Liu∗1, Shi Qiu∗1, Mairui Li1, Bingzhou Li1, Haonian Ji1, Siwei Han1, Xinyu Ye1, Peng Xia1, Zihan Dong6, Congyu Zhang1, Letian Zhang2, Guiming Chen2, Haoqin Tu2, Xinyu Yang3, Lu Feng1, Xujiang Zhao7, Haifeng Chen7, Jiawei Z",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783976715402,
+    "hitCount": 1
+  },
+  "evaluate whether nuclear fusion will reach net-positive commercial energy this decade": {
+    "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+    "results": [
+      {
+        "id": "2flc1gfk",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+        "title": "Fusion power experience rates are overestimated | Nature Energy | Springer Nature Link",
+        "url": "https://link.springer.com/article/10.1038/s41560-026-02023-8",
+        "snippet": "Fusion power experience rates are overestimated | Nature Energy | Springer Nature Link\n\n# Fusion power experience rates are overestimated\n\n- Analysis\n- Open access\n- Published: 23 March 2026\n\n- Volume 11, pages 926–934 (2026)\n- Cite this article\n\nYou have full access to this open access article\n\nDow",
+        "host": "link.springer.com"
+      },
+      {
+        "id": "4xn2h9su",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+        "title": "Helion Energy is building a fusion power plant. Can its technology deliver? | Scientific American",
+        "url": "https://www.scientificamerican.com/article/helion-energy-is-building-a-fusion-power-plant-can-its-technology-deliver/",
+        "snippet": "Helion Energy is building a fusion power plant. Can its technology deliver? | Scientific American\n\nMay 19, 2026\n\n8 min read\n\nAdd Us On GoogleAdd SciAm\n\n# Helion Energy wants to build fusion power on a start-up timeline\n\nThis company says its pulsed plasma machine will deliver electricity to the grid",
+        "host": "www.scientificamerican.com"
+      },
+      {
+        "id": "3kbp261e",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+        "title": "Bringing Fusion Energy to the Grid: Challenges and Pathways - Kleinman Center for Energy Policy",
+        "url": "https://kleinmanenergy.upenn.edu/research/publications/bringing-fusion-energy-to-the-grid-challenges-and-pathways/",
+        "snippet": "Bringing Fusion Energy to the Grid: Challenges and Pathways - Kleinman Center for Energy Policy\n\nDigest\n\n# Bringing Fusion Energy to the Grid: Challenges and Pathways\n\nColby A. Snyder, Benjamin Schmitt\n\nOctober 1, 2025\n\nEmerging Tech\n\nShare on\n\nFusion energy could provide carbon-neutral, abundant po",
+        "host": "kleinmanenergy.upenn.edu"
+      },
+      {
+        "id": "1u8x2hba",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+        "title": "Toward Commercial Fusion Energy: Considerations for Congress | Congress.gov | Library of Congress",
+        "url": "https://www.congress.gov/crs-product/R48866",
+        "snippet": "Toward Commercial Fusion Energy: Considerations for Congress | Congress.gov | Library of Congress\n\nskip to main content\n\nCitation Subscribe Share/Save Site Feedback\n\n# Toward Commercial Fusion Energy: Considerations for Congress\n\n## CRS PRODUCT (LIBRARY OF CONGRESS)\n\nHide Overview\n\n| CRS Product Typ",
+        "host": "www.congress.gov"
+      },
+      {
+        "id": "d99g6p21",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade",
+        "title": "Nuclear fusion powerplant could be running by 2035, General Fusion CEO says | BetaKit",
+        "url": "https://betakit.com/nuclear-fusion-powerplant-could-be-running-by-2035-general-fusion-ceo-says/",
+        "snippet": "Nuclear fusion powerplant could be running by 2035, General Fusion CEO says | BetaKit\n\nCanadian Tech & Startup News\n\nCanadian Tech & Startup News\n\nGreg Twinney, CEO of General Fusion, speaks at Web Summit Vancouver 2026.\n\nThe nuclear fusion company isn’t worried about going public as a pre-revenue c",
+        "host": "betakit.com"
+      }
+    ],
+    "timestamp": 1783990116302,
+    "hitCount": 1
+  },
+  "evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv": {
+    "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv",
+    "results": [
+      {
+        "id": "x2qazm98",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv",
+        "title": "Criteria for the economic viability of fusion power plants",
+        "url": "https://arxiv.org/abs/2604.07367",
+        "snippet": "# Criteria for the economic viability of fusion power plants\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nCommercial fusion energy requires frameworks to assess both the scientific and economic viability of a wide variety of fusion concepts. Inspired by the Lawson criterio",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "rpxj2dys",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv",
+        "title": "Continuing progress toward fusion energy breakeven and gain as measured against the Lawson criteria",
+        "url": "https://arxiv.org/html/2505.03834v5",
+        "snippet": "Continuing progress toward fusion energy breakeven and gain as measured against the Lawson criteria\n\n# Continuing progress toward fusion energy breakeven and gain as measured against the Lawson criteria\n\nSamuel E. Wurzel Fusion Energy Base sam@fusionenergybase.com Scott C. Hsu Lowercarbon Capital\n\n(",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "64n0s4hg",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv",
+        "title": "Fusion energy commercialization requires solving social and environmental challenges",
+        "url": "https://arxiv.org/pdf/2403.05993",
+        "snippet": "# Fusion energy commercialization requires solving social and environmental challenges\n\narXiv (Cornell University), 2024. Preprint. 0 citations.\n\n## Authors\n\n- S. J. Diem: h-index 19; 804 citations; corresponding author\n- L. El-Guebaly: h-index 32; 3,546 citations\n- Aditi Verma: h-index 11; 727 cita",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "plt5fryk",
+        "query": "Evaluate whether nuclear fusion will reach net-positive commercial energy this decade research paper arxiv",
+        "title": "Toward Commercial Fusion Energy: Considerations for Congress - EveryCRSReport.com",
+        "url": "https://www.everycrsreport.com/reports/R48866.html",
+        "snippet": "Toward Commercial Fusion Energy: Considerations for Congress - EveryCRSReport.com\n\n# Toward Commercial Fusion Energy: Considerations for Congress\n\nFebruary 27, 2026`R48866`\n\n# Toward Commercial Fusion Energy: Considerations for Congress\n\nFebruary 27, 2026 (R48866) Jump to Main Text of Report\n\n---\n\n#",
+        "host": "www.everycrsreport.com"
+      }
+    ],
+    "timestamp": 1783990133106,
+    "hitCount": 1
+  },
+  "build a better versiohn of openclaw a full blue print": {
+    "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+    "results": [
+      {
+        "id": "94h0opre",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+        "title": "czl9707/build-your-own-openclaw: A step-by- ...",
+        "url": "https://github.com/czl9707/build-your-own-openclaw",
+        "snippet": "# Repository: czl9707/build-your-own-openclaw\n\nA step-by-step guide to build your own AI agent.\n\n- Stars: 1716\n- Forks: 305\n- Watchers: 13\n- Open issues: 2\n- Primary language: Python\n- Languages: Python (94.8%), TypeScript (4.8%), CSS (0.3%), JavaScript (0.1%)\n- License: MIT License (MIT)\n- Topics: ",
+        "host": "github.com"
+      },
+      {
+        "id": "5rgl1fwj",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+        "title": "Build Your Own OpenClaw: The 18-Step Roadmap Explained | AI Success Lab Blog",
+        "url": "https://aisuccesslabjuliangoldie.com/blog/build-your-own-openclaw/",
+        "snippet": "Build Your Own OpenClaw: The 18-Step Roadmap Explained | AI Success Lab Blog\n\nBuild your own OpenClaw across 18 steps and you'll have a real, working AI agent by the end.\n\nMost tutorials throw you straight into code without showing you the map.\n\nResult — you finish a few steps, lose context, give up",
+        "host": "aisuccesslabjuliangoldie.com"
+      },
+      {
+        "id": "5ggrw3f7",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+        "title": "bidewio/better-openclaw",
+        "url": "https://github.com/bidewio/better-openclaw/",
+        "snippet": "# Repository: bidewio/better-openclaw\n\n- Stars: 57\n- Forks: 7\n- Watchers: 0\n- Open issues: 8\n- Primary language: TypeScript\n- Languages: TypeScript (97.4%), JavaScript (1.2%), CSS (0.7%), Shell (0.4%), Dockerfile (0.3%), HTML\n- License: Other (NOASSERTION)\n- Default branch: main\n- Created: 2026-02-1",
+        "host": "github.com"
+      },
+      {
+        "id": "27j3u1sq",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+        "title": "You Could've Invented OpenClaw",
+        "url": "https://gist.github.com/dabit3/bc60d3bea0b02927995cd9bf53c3db32",
+        "snippet": "# Gist: You Could've Invented OpenClaw\n\n- Author: [@dabit3](https://github.com/dabit3)\n- Public gist (1 file)\n- Created: 2026-02-11T00:53:16Z\n- Updated: 2026-06-20T15:21:50Z\n- Forks: 56\n\n## you_couldve_invented_openclaw.md\n\n```md\nSee more of my writing [here](https://x.com/dabit3/articles). Also che",
+        "host": "gist.github.com"
+      },
+      {
+        "id": "8s6ppk6j",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT",
+        "title": "Building Openclaw from Scratch — Part 1 (The Agent Core)",
+        "url": "https://systemdesigner.medium.com/building-openclaw-from-scratch-part-1-38ae9e5afcab",
+        "snippet": "Building Openclaw from Scratch — Part 1 (The Agent Core) | by Apoorv Agarwal | Medium\n\nSign up\n\nGet app\n\nSign up\n\n# Building Openclaw from Scratch — Part 1 (The Agent Core)\n\n10 min read\n\nFeb 24, 2026\n\n--\n\nShare\n\nHere we will build a stripped down openclaw. A full-featured AI coding platform down to ",
+        "host": "systemdesigner.medium.com"
+      }
+    ],
+    "timestamp": 1783990211605,
+    "hitCount": 1
+  },
+  "build a better versiohn of openclaw a full blue print research paper arxiv": {
+    "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT research paper arxiv",
+    "results": [
+      {
+        "id": "9qafcu40",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT research paper arxiv",
+        "title": "Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents",
+        "url": "https://arxiv.org/abs/2603.13151v1",
+        "snippet": "Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents\n\n# Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents\n\nZongwei Li Hainan UniversityHaikouChina lizw1017@hainanu.edu.cn, Wenkai Li Hainan UniversityHaikouChina cswkli@hainanu.edu.cn and Xiaoqi Li Hainan Uni",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "t3mk4myk",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT research paper arxiv",
+        "title": "OpenClaw-RL: Train Any Agent Simply by Talking",
+        "url": "https://arxiv.org/abs/2603.10165",
+        "snippet": "# OpenClaw-RL: Train Any Agent Simply by Talking\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Authors\n\n- Yinjie Wang: h-index 0; 0 citations; corresponding author\n- Xuyang Chen: h-index 0; 0 citations\n- Xiaolong Jin: h-index 0; 0 citations\n- Mengdi Wang: h-index 0; 0 citations\n- Lin",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "eb8ajrt1",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT research paper arxiv",
+        "title": "A Case Study of OpenClaw",
+        "url": "https://arxiv.org/pdf/2603.12644",
+        "snippet": "# Uncovering Security Threats and Architecting Defenses in Autonomous Agents: A Case Study of OpenClaw\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nThe rapid evolution of Large Language Models (LLMs) into autonomous, tool-calling agents has fundamentally altered the cybers",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "hpu9crc1",
+        "query": "BUILD A BETTER VERSIOHN OF OPENCLAW A FULL BLUE PRINT research paper arxiv",
+        "title": "[2602.19810v1] OpenClaw, Moltbook, and ClawdLab: From Agent-Only Social Networks to Autonomous Scientific Research",
+        "url": "https://arxiv.org/abs/2602.19810v1",
+        "snippet": "[2602.19810v1] OpenClaw, Moltbook, and ClawdLab: From Agent-Only Social Networks to Autonomous Scientific Research\n\nSkip to main content\n\narXiv is now an independent nonprofit! Learn more×\n\n# Computer Science > Artificial Intelligence\n\narXiv:2602.19810v1 (cs)\n\nA newer version of this paper has been ",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783990225957,
+    "hitCount": 1
+  },
+  "research latgestg arxiv papers tgo improve yourself and creatge new tgools": {
+    "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+    "results": [
+      {
+        "id": "2p1y5yqw",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+        "title": "Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data",
+        "url": "https://arxiv.org/pdf/2602.21320",
+        "snippet": "# Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nLarge language models (LLMs) are becoming the foundation for autonomous agents that can use tools to solve complex tasks. Reinforcement learning (RL) has emerg",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "cedo1via",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+        "title": "ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Intrinsic Adaptation",
+        "url": "https://arxiv.org/pdf/2602.07883",
+        "snippet": "# ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Intrinsic Adaptation\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nAgentic systems powered by Large Language Models (LLMs) have demonstrated remarkable potential in tackling complex, long-horizon t",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "rn3m3nwr",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+        "title": "Evolving from Tool User to Creator via Training-Free Experience Reuse in Multimodal Reasoning",
+        "url": "https://arxiv.org/pdf/2602.01983",
+        "snippet": "# Evolving from Tool User to Creator via Training-Free Experience Reuse in Multimodal Reasoning\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Authors\n\n- Xintian Shen: h-index 0; 0 citations; corresponding author\n- Jiawei Chen: h-index 0; 0 citations\n- Lihao Zheng: h-index 0; 0 citati",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "mmixos1n",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+        "title": "[2210.11610] Large Language Models Can Self-Improve",
+        "url": "https://arxiv.org/abs/2210.11610",
+        "snippet": "# Large Language Models Can Self-Improve\n\narXiv (Cornell University), 2022. Preprint. 24 citations.\n\n## Abstract\n\nLarge Language Models (LLMs) have achieved excellent performances in various tasks. However, fine-tuning an LLM requires extensive supervision. Human, on the other hand, may improve thei",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "6t73bvyn",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS",
+        "title": "Learning to Evolve: A Self-Improving Framework for Multi-Agent Systems via Textual Parameter Graph Optimization",
+        "url": "https://aclanthology.org/2026.findings-acl.1534.pdf",
+        "snippet": "Findings of the Association for Computational Linguistics: ACL 2026, pages 30719–30732 July 2-7, 2026 ©2026 Association for Computational Linguistics\n\n## Learning to Evolve: A Self-Improving Framework for Multi-Agent Systems via Textual Parameter Graph Optimization\n\n### Shan He∗ Runze Wang∗ Zhuoyun ",
+        "host": "aclanthology.org"
+      }
+    ],
+    "timestamp": 1783992681817,
+    "hitCount": 1
+  },
+  "research latgestg arxiv papers tgo improve yourself and creatge new tgools research paper arxiv": {
+    "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS research paper arxiv",
+    "results": [
+      {
+        "id": "g1x3y65j",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS research paper arxiv",
+        "title": "ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Intrinsic Adaptation",
+        "url": "https://arxiv.org/pdf/2602.07883",
+        "snippet": "# ToolSelf: Unifying Task Execution and Self-Reconfiguration via Tool-Driven Intrinsic Adaptation\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nAgentic systems powered by Large Language Models (LLMs) have demonstrated remarkable potential in tackling complex, long-horizon t",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "ujbs4wzj",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS research paper arxiv",
+        "title": "Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data",
+        "url": "https://arxiv.org/pdf/2602.21320",
+        "snippet": "# Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nLarge language models (LLMs) are becoming the foundation for autonomous agents that can use tools to solve complex tasks. Reinforcement learning (RL) has emerg",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "gv5jw0c8",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS research paper arxiv",
+        "title": "Transformer Geometry Observatory TGO-I: Spectral Geometry Observatory",
+        "url": "https://arxiv.org/html/2606.19249",
+        "snippet": "# Transformer Geometry Observatory TGO-I: Spectral Geometry Observatory\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nDespite the widespread adoption of Vision Transformers (ViTs) and their success across numerous computer vision applications, the fundamental understanding ",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "krzr49m9",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TGOOLS research paper arxiv",
+        "title": "TGO-II: Representational Similarity Observatory",
+        "url": "https://arxiv.org/html/2607.02386",
+        "snippet": "TGO-II: Representational Similarity Observatory\n\narXiv is now an independent nonprofit! Learn more×\n\n# TGO-II: Representational Similarity Observatory\n\nKaustubh Kapil ORCID 0009-0000-4918-8452 and Kishor P. Upla ORCID 0000-0001-6306-0682\n\n###### Abstract\n\nWhile Vision Transformers have achieved rema",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783992696983,
+    "hitCount": 1
+  },
+  "research latgestg arxiv papers tgo improve yourself and creatge new tools asnd fix it so local language models can evolve too": {
+    "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+    "results": [
+      {
+        "id": "qeauu3f6",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+        "title": "Learning to Self-Evolve",
+        "url": "https://arxiv.org/abs/2603.18620v1",
+        "snippet": "Learning to Self-Evolve\n\n# Learning to Self-Evolve\n\nXiaoyin Chen1, 2 Canwen Xu3 Yite Wang3 Boyi Liu3 Zhewei Yao3 Yuxiong He3 1Mila – Quebec AI Institute 2University of Montreal 3Snowflake This work was done during Xiaoyin’s internship at Snowflake. Correspondence should be addressed to Canwen Xu: ca",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "rs30i7ea",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+        "title": "Large Language Models Can Self-Improve",
+        "url": "https://arxiv.org/abs/2210.11610",
+        "snippet": "# Large Language Models Can Self-Improve\n\narXiv (Cornell University), 2022. Preprint. 24 citations.\n\n## Abstract\n\nLarge Language Models (LLMs) have achieved excellent performances in various tasks. However, fine-tuning an LLM requires extensive supervision. Human, on the other hand, may improve thei",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "sqpq2c2l",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+        "title": "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models",
+        "url": "https://arxiv.org/abs/2510.04618v3",
+        "snippet": "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models\n\n# Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models\n\nQizheng Zhang1∗, Changran Hu2∗, Shubhangi Upasani2, Boyuan Ma2, Fenglu Hong2, Vamsidhar Kamanuru2, Jay Rainton2, Chen Wu2, Mengmeng ",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "arr8lafh",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+        "title": "R-Zero: Self-Evolving Reasoning LLM from Zero Data",
+        "url": "https://arxiv.org/abs/2508.05004v1",
+        "snippet": "R-Zero: Self-Evolving Reasoning LLM from Zero Data\n\n# R-Zero: Self-Evolving Reasoning LLM from Zero Data\n\nChengsong Huang1,2 ${}^{\\text{\\Letter}}$ Wenhao Yu1 ${}^{\\text{\\Letter}}$ Xiaoyang Wang1 Hongming Zhang1 Zongxia Li1,3 Ruosen Li1,4, Jiaxin Huang2, Haitao Mi1, Dong Yu1 1Tencent AI Seattle Lab 2",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "pfa6wl5a",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too",
+        "title": "Large Language Model Agents Are Not Always Faithful Self-Evolvers",
+        "url": "https://arxiv.org/abs/2601.22436v2",
+        "snippet": "Large Language Model Agents Are Not Always Faithful Self-Evolvers\n\n# Large Language Model Agents Are Not Always Faithful Self-Evolvers\n\nWeixiang Zhao Yingshuo Wang Yichen Zhang Yang Deng Yanyan Zhao Wanxiang Che Bing Qin Ting Liu\n\n###### Abstract\n\nSelf-evolving large language model (LLM) agents cont",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783992904220,
+    "hitCount": 5
+  },
+  "research latgestg arxiv papers tgo improve yourself and creatge new tools asnd fix it so local language models can evolve too research paper arxiv": {
+    "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too research paper arxiv",
+    "results": [
+      {
+        "id": "bahty4o0",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too research paper arxiv",
+        "title": "Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data",
+        "url": "https://arxiv.org/pdf/2602.21320",
+        "snippet": "# Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Abstract\n\nLarge language models (LLMs) are becoming the foundation for autonomous agents that can use tools to solve complex tasks. Reinforcement learning (RL) has emerg",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "ojftdytq",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too research paper arxiv",
+        "title": "Learning to Self-Evolve",
+        "url": "https://arxiv.org/abs/2603.18620v1",
+        "snippet": "Learning to Self-Evolve\n\n# Learning to Self-Evolve\n\nXiaoyin Chen1, 2 Canwen Xu3 Yite Wang3 Boyi Liu3 Zhewei Yao3 Yuxiong He3 1Mila – Quebec AI Institute 2University of Montreal 3Snowflake This work was done during Xiaoyin’s internship at Snowflake. Correspondence should be addressed to Canwen Xu: ca",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "6jyosaz8",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too research paper arxiv",
+        "title": "Large Language Models Can Self-Improve",
+        "url": "https://arxiv.org/abs/2210.11610",
+        "snippet": "# Large Language Models Can Self-Improve\n\narXiv (Cornell University), 2022. Preprint. 24 citations.\n\n## Abstract\n\nLarge Language Models (LLMs) have achieved excellent performances in various tasks. However, fine-tuning an LLM requires extensive supervision. Human, on the other hand, may improve thei",
+        "host": "arxiv.org"
+      },
+      {
+        "id": "oc8ryecj",
+        "query": "RESEARCH LATGESTG ARXIV PAPERS TGO IMPROVE YOURSELF AND CREATGE NEW TOOLS asnd fix it so local language models can evolve too research paper arxiv",
+        "title": "Untitled",
+        "url": "https://arxiv.org/pdf/2602.01983",
+        "snippet": "# Evolving from Tool User to Creator via Training-Free Experience Reuse in Multimodal Reasoning\n\narXiv (Cornell University), 2026. Preprint. 0 citations.\n\n## Authors\n\n- Xintian Shen: h-index 0; 0 citations; corresponding author\n- Jiawei Chen: h-index 0; 0 citations\n- Lihao Zheng: h-index 0; 0 citati",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783992908601,
+    "hitCount": 3
+  },
+  "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb": {
+    "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+    "results": [
+      {
+        "id": "6o8pmvsj",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+        "title": "feat(ui): Premium polish with enhanced components and animations",
+        "url": "https://github.com/openclaw/openclaw/pull/9017",
+        "snippet": "# feat(ui): Premium polish with enhanced components and animations\n\n- State: closed\n- Author: thejustinfagan\n- Created: 2026-02-04T19:13:45Z\n- Updated: 2026-03-11T04:07:50Z\n- Repository: openclaw/openclaw\n- Number: #9017\n- +2918 -0 in 7 files\n- Merge commit: bd55abe83cc5ab03496da0819de478a587a39336\n",
+        "host": "github.com"
+      },
+      {
+        "id": "sschruuz",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+        "title": "CreshD/clawUI",
+        "url": "https://github.com/CreshD/clawUI",
+        "snippet": "# Repository: CreshD/clawUI (fork of [Kt-L/clawUI](https://github.com/Kt-L/clawUI))\n\nA sleek, open-source desktop client for OpenClaw. Built with React, Vite, and Electron for a fast, responsive, and experimental \"Vibe Coding\" experience.\n\n- Stars: 0\n- Forks: 0\n- Watchers: 0\n- Open issues: 0\n- Prima",
+        "host": "github.com"
+      },
+      {
+        "id": "rmh3oonc",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+        "title": "freymeyer/es-interface",
+        "url": "https://github.com/freymeyer/es-interface",
+        "snippet": "# Repository: freymeyer/es-interface\n\nVisual novel–style chat interface for OpenClaw AI agents\n\n- Stars: 3\n- Forks: 0\n- Watchers: 0\n- Open issues: 0\n- Primary language: HTML\n- Languages: HTML (51.2%), JavaScript (48.8%)\n- License: MIT License (MIT)\n- Default branch: main\n- Created: 2026-03-21T15:00:",
+        "host": "github.com"
+      },
+      {
+        "id": "e22jjjdg",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+        "title": "haihao0307/Brotherhood-UI",
+        "url": "https://github.com/haihao0307/Brotherhood-UI",
+        "snippet": "# haihao0307/Brotherhood-UI\n\nTurn OpenClaw into a live Liangshan stage. Brotherhood-UI turns OpenClaw's natural-language workflow into a live pixel-art stage inspired by *Water Margin*. This is not just a status board. It is a visual performance layer for AI workflow.\n\n- Stars: 12\n- Forks: 2\n- Watch",
+        "host": "github.com"
+      },
+      {
+        "id": "rubjyzhb",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb",
+        "title": "ui-skills skill by openclaw/skills",
+        "url": "https://playbooks.com/skills/openclaw/skills/ui-skills",
+        "snippet": "ui-skills skill by openclaw/skills\n\nhome/ skills/ openclaw/ skills/ ui-skills\n\n# ui-skills skill\n\nsafe\n\n/skills/correctroadh/ui-skills\n\nThis skill enforces opinionated UI constraints to help you build accessible, performant interfaces with agents.\n\n`npx playbooks add skill openclaw/skills --skill ui",
+        "host": "playbooks.com"
+      }
+    ],
+    "timestamp": 1783993281530,
+    "hitCount": 1
+  },
+  "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv": {
+    "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv",
+    "results": [
+      {
+        "id": "dv8jwjml",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv",
+        "title": "haihao0307/Brotherhood-UI",
+        "url": "https://github.com/haihao0307/Brotherhood-UI",
+        "snippet": "# haihao0307/Brotherhood-UI\n\nTurn OpenClaw into a live Liangshan stage. Brotherhood-UI turns OpenClaw's natural-language workflow into a live pixel-art stage inspired by *Water Margin*. This is not just a status board. It is a visual performance layer for AI workflow.\n\n- Stars: 12\n- Forks: 2\n- Watch",
+        "host": "github.com"
+      },
+      {
+        "id": "vaosu302",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv",
+        "title": "freymeyer/es-interface",
+        "url": "https://github.com/freymeyer/es-interface",
+        "snippet": "# Repository: freymeyer/es-interface\n\nVisual novel–style chat interface for OpenClaw AI agents\n\n- Stars: 3\n- Forks: 0\n- Watchers: 0\n- Open issues: 0\n- Primary language: HTML\n- Languages: HTML (51.2%), JavaScript (48.8%)\n- License: MIT License (MIT)\n- Default branch: main\n- Created: 2026-03-21T15:00:",
+        "host": "github.com"
+      },
+      {
+        "id": "7mebt2xl",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv",
+        "title": "CreshD/clawUI",
+        "url": "https://github.com/CreshD/clawUI",
+        "snippet": "# Repository: CreshD/clawUI (fork of [Kt-L/clawUI](https://github.com/Kt-L/clawUI))\n\nA sleek, open-source desktop client for OpenClaw. Built with React, Vite, and Electron for a fast, responsive, and experimental \"Vibe Coding\" experience.\n\n- Stars: 0\n- Forks: 0\n- Watchers: 0\n- Open issues: 0\n- Prima",
+        "host": "github.com"
+      },
+      {
+        "id": "a7i8raxx",
+        "query": "build a blueprint for amore advanced better version of openclaw with a styleish ui with lots of effectsw abd animationb research paper arxiv",
+        "title": "Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents",
+        "url": "https://arxiv.org/abs/2603.13151v1",
+        "snippet": "Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents\n\n# Defensible Design for OpenClaw: Securing Autonomous Tool-Invoking Agents\n\nZongwei Li Hainan UniversityHaikouChina lizw1017@hainanu.edu.cn, Wenkai Li Hainan UniversityHaikouChina cswkli@hainanu.edu.cn and Xiaoqi Li Hainan Uni",
+        "host": "arxiv.org"
+      }
+    ],
+    "timestamp": 1783993298660,
+    "hitCount": 1
   }
 }

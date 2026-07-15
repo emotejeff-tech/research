@@ -102,18 +102,18 @@
     "name": "ua_rotator",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 13,
+    "usageCount": 22,
     "created": 1783822606744,
-    "lastUsed": 1783856890675,
+    "lastUsed": 1783993186437,
     "successRate": 1
   },
   "opsec_log_scrubber": {
     "name": "opsec_log_scrubber",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 13,
+    "usageCount": 22,
     "created": 1783822606744,
-    "lastUsed": 1783856890633,
+    "lastUsed": 1783993186091,
     "successRate": 1
   },
   "inmate_record_extractor": {
@@ -132,10 +132,10 @@
     "name": "extract_agent_self_improvement_methodologies",
     "description": "Extract self-improvement methodologies from AI agent papers on arXiv",
     "language": "python",
-    "usageCount": 1,
+    "usageCount": 3,
     "created": 1783824298248,
-    "lastUsed": 1783824306252,
-    "successRate": 0,
+    "lastUsed": 1783993185353,
+    "successRate": 0.67,
     "gapAnalysis": "extract_agent_self_improvement_methodologies_from_arxiv_papers",
     "testStatus": "passed",
     "executionStatus": "error"
@@ -156,9 +156,9 @@
     "name": "google_dorker",
     "description": "Evolved tool (adopted from disk)",
     "language": "python",
-    "usageCount": 6,
+    "usageCount": 15,
     "created": 1783830431526,
-    "lastUsed": 1783856890715,
+    "lastUsed": 1783993186946,
     "successRate": 1
   }
 }

@@ -52,3 +52,38 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Settings and local config files
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.*.json
+!eslint.config.*
+!.eslintrc*
+!components.json
+!tailwind.config.*
+!postcss.config.*
+!.prettierrc*
+!turbo.json
+!.github/**/*.json
+!scripts/**/*.json
+!.vscode/*.json
+!.vs/
+*.local.json
+settings.json
+settings.local.json
+*.local.yaml
+*.local.yml
+
+# Uploads and generated files
+upload/
+download/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.avif
+*.svg
+*.ico
