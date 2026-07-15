@@ -36,11 +36,11 @@ import {
 } from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
 import { loadSearchCache, getCachedResults, cacheResults, getCacheStats } from './tools/search_cache'
-import { initLocalMemory, storeConclusion, retrieveRelevant, getMemoryStats } from './tools/local_memory'
+import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats, getMemoryInfo } from './tools/vector_memory'
 import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
-import { loadSettings, saveSettings, getSettings, fetchModels as fetchLLMMModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
+import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
 import { announce, isVoiceEnabled, fetchVoices } from './tools/voicebox'
 import { discoverEnvKeys, runHealthChecks } from './tools/health_check'
 import { warmupLocalModel } from './tools/llm'
@@ -55,7 +55,7 @@ async function autoDetectLocalServices() {
     const s = getSettings()
     // Try to fetch available voices from Audiobox
     try {
-      const voices = await fetchVoices(s.voiceBoxUrl || '', s.voiceBoxApiKey || '')
+      const voices = await fetchVoices()
       const voiceNames = voices.map((v) => typeof v === 'string' ? v : v.id || v.name).filter(Boolean)
       if (voiceNames.length > 0 && !s.ttsVoice) {
         s.ttsVoice = voiceNames[0]
@@ -68,7 +68,7 @@ async function autoDetectLocalServices() {
     }
     // Try to fetch available models from local LLM providers
     try {
-      const models = await fetchLLMMModels(s.provider, s.baseURL || '', s.apiKey || '')
+      const models = await fetchModels(s.provider, s.baseURL || '', s.apiKey || '')
       if (models.models.length > 0 && !s.model) {
         s.model = models.models[0]
         s.baseURL = s.baseURL || PROVIDER_PRESETS[s.provider].defaultURL
@@ -1123,7 +1123,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('settings:fetchModels', async (data: { provider: ProviderType; baseURL: string; apiKey: string }) => {
-    const result = await fetchLLMMModels(data.provider, data.baseURL, data.apiKey)
+    const result = await fetchModels(data.provider, data.baseURL, data.apiKey)
     socket.emit('settings:models', { models: result.models, error: result.error })
   })
 
@@ -1152,7 +1152,7 @@ io.on('connection', (socket) => {
 httpServer.listen(PORT, () => {
   initTelemetry()
   loadSearchCache()
-  initLocalMemory()
+  loadVectorMemory()
   loadMetaPrompts()
   loadSettings()
 

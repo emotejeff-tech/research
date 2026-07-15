@@ -2,9 +2,9 @@
  * tools/llm.ts — Multi-tier language model pipeline with robust local fallback.
  *
  * Topology:
- *   Tier 1 — primary:   user's configured provider (local or cloud)
- *   Tier 2 — local:     Ollama / LM Studio / llama.cpp / custom OpenAI-compatible
- *   Tier 3 — degraded:  no-LLM structured snippet compilation
+ *   Tier 1 — local-first: Ollama / LM Studio / llama.cpp / custom OpenAI-compatible
+ *   Tier 2 — cloud fallback: user's configured provider (OpenRouter/Anthropic/etc.)
+ *   Tier 3 — degraded: no-LLM structured snippet compilation
  *
  * Key improvements for local LLM support:
  *   - Ollama direct mode (no /v1 prefix needed)
@@ -22,40 +22,11 @@ import type { LLMResult, Source } from '../types'
 export { extractJSON }
 
 // ---------- Configuration ----------
-const LOCAL_LLM_TIMEOUT_MS = 180000 // 180s — local models can be VERY slow
+const LOCAL_LLM_TIMEOUT_MS = 300000 // 300s — local models can be VERY slow
 const LOCAL_LLM_RETRY_BACKOFF = 3000 // ms between retries
 const LOCAL_LLM_HEARTBEAT_MS = 15000 // ms — log heartbeat every 15s
 
-/** Normalize a base URL — strip trailing slash and handle Ollama direct mode. */
-function normalizeBaseURL(baseURL: string): string {
-  let normalized = baseURL.replace(/\/$/, '')
-  // Ollama direct mode: if it ends with /v1, strip it for /api/chat
-  if (normalized.endsWith('/v1')) {
-    normalized = normalized.slice(0, -3)
-  }
-  return normalized
-}
-
-/** Check if the base URL is for Ollama (direct or v1-compatible). */
-function isOllamaURL(baseURL: string): boolean {
-  return baseURL.includes('localhost:11434') || baseURL.includes('0.0.0.0:11434') || baseURL.includes('127.0.0.1:11434')
-}
-
-/** Get the correct chat endpoint based on provider type. */
-function getChatEndpoint(baseURL: string): string {
-  return isOllamaURL(baseURL)
-    ? `${normalizeBaseURL(baseURL)}/api/chat`
-    : `${normalizeBaseURL(baseURL)}/chat/completions`
-}
-
-/** Get the correct models endpoint based on provider type. */
-function getModelsEndpoint(baseURL: string): string {
-  return isOllamaURL(baseURL)
-    ? `${normalizeBaseURL(baseURL)}/api/tags`
-    : `${normalizeBaseURL(baseURL)}/models`
-}
-
-// ---------- Tier 1: primary (configured provider) ----------
+// ---------- Tier 1: primary (configured provider or local) ----------
 /** Primary LLM call with exponential-backoff retries.
  * If local is set as PRIMARY, use it directly. Otherwise use the configured
  * cloud provider (Z.ai by default).
@@ -139,7 +110,7 @@ async function localLLMWithModel(
   }
 
   try {
-    const res = await fetch(getChatEndpoint(baseURL), {
+    const res = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -241,7 +212,7 @@ async function callLocalModel(
   }
 
   try {
-    const res = await fetch(getChatEndpoint(config.baseURL), {
+    const res = await fetch(`${config.baseURL.replace(/\/$/, '')}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

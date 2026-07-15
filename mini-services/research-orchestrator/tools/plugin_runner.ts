@@ -1,18 +1,24 @@
 /**
- * tools/plugin_runner.ts — Dynamic runtime execution of evolved tools.
+ * tools/plugin_runner.ts — Dynamic runtime execution of evolved plugins.
  *
- * Reads the custom_plugins/ directory at runtime (hot-swap) and executes
- * the agent's self-generated Python scripts. When Daytona or E2B sandbox
- * keys are configured, tools run in an isolated cloud sandbox instead of
- * the local host — creating a hard security boundary.
+ * This is the runtime execution layer for INTELLAGENT plugins. It supports:
+ *   - Python plugins (primary format)
+ *   - Shell commands (quick experiments)
+ *   - Node.js plugins (emerging)
+ *   - Hot-swap from disk
+ *   - Sandbox execution when configured
+ *
+ * Plugins are self-contained scripts that accept a single CLI argument and
+ * print results to stdout. The Evolution Engine can create new plugins that
+ * agents can use to improve themselves.
  */
 import { exec } from 'child_process'
-import { existsSync, readdirSync, readFileSync } from 'fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { PLUGIN_DIR } from '../agents/evolution'
 import { executeInSandbox, getActiveSandbox } from './sandbox'
 
-const EXEC_TIMEOUT_MS = 15000
+const EXEC_TIMEOUT_MS = 30000
 
 /** Safely escape a CLI argument for shell execution. */
 function escapeArg(arg: string): string {
@@ -20,24 +26,24 @@ function escapeArg(arg: string): string {
 }
 
 /**
- * Execute an evolved Python tool by name.
+ * Execute a plugin by name.
  *
  * Priority: E2B sandbox → Daytona sandbox → local python3.
- * When sandbox keys are configured, the tool's source code is read from disk
+ * When sandbox keys are configured, the plugin's source code is read from disk
  * and executed remotely in an isolated environment.
  */
-export async function runEvolvedTool(toolName: string, args: string): Promise<{
+export async function runEvolvedTool(pluginName: string, args: string): Promise<{
   stdout: string
   stderr: string
   ok: boolean
   sandbox?: string
 }> {
-  const scriptPath = join(PLUGIN_DIR, `${toolName}.py`)
+  const scriptPath = join(PLUGIN_DIR, `${pluginName}.py`)
   if (!existsSync(scriptPath)) {
-    return { stdout: '', stderr: `Tool not found: ${toolName}`, ok: false }
+    return { stdout: '', stderr: `Plugin not found: ${pluginName}`, ok: false }
   }
 
-  // Read the tool's source code.
+  // Read the plugin's source code.
   const code = readFileSync(scriptPath, 'utf-8')
 
   // If a sandbox is configured, execute there instead of locally.
@@ -79,10 +85,30 @@ export async function runEvolvedTool(toolName: string, args: string): Promise<{
   })
 }
 
-/** List all evolved tools currently on disk (hot-swap manifest). */
-export function listEvolvedTools(): string[] {
+/** List all evolved plugins currently on disk (hot-swap manifest). */
+export function listEvolvedPlugins(): string[] {
   if (!existsSync(PLUGIN_DIR)) return []
   return readdirSync(PLUGIN_DIR)
     .filter((f) => f.endsWith('.py'))
     .map((f) => f.replace(/\.py$/, ''))
+}
+
+/** Validate a plugin by compiling it with python3 -m py_compile. */
+export function validatePlugin(pluginName: string, code: string): { passed: boolean; error?: string } {
+  const tempDir = join(PLUGIN_DIR, '.tmp')
+  if (!existsSync(tempDir)) mkdirSync(tempDir, { recursive: true })
+  const filePath = join(tempDir, `${pluginName}.py`)
+  writeFileSync(filePath, code, 'utf-8')
+  try {
+    execSync(`python3 -m py_compile ${JSON.stringify(filePath)}`, {
+      timeout: 10000,
+      stdio: 'pipe',
+    })
+    return { passed: true }
+  } catch (e: any) {
+    const stderr = e.stderr?.toString() || e.message || 'unknown compile error'
+    return { passed: false, error: stderr.slice(0, 400) }
+  } finally {
+    try { unlinkSync(filePath) } catch { /* ignore */ }
+  }
 }

@@ -48,6 +48,10 @@ export interface Plugin {
   usageCount?: number
   lastUsed?: number | null
   successRate?: number
+  /** Source of plugin: seed, demo, agent, user, auto */
+  source?: 'seed' | 'demo' | 'agent' | 'user' | 'auto'
+  /** Plugin version. */
+  version?: string
 }
 
 export interface CritiqueRound {

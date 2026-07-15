@@ -52,6 +52,9 @@ export interface LLMSettings {
   supabaseKey?: string
   pineconeApiKey?: string
   pineconeIndex?: string
+  /** Memory backend settings (local-first: JSON/SQLite-compatible, no cloud). */
+  memoryBackend: 'local'
+  memoryPath: ''
   /** VoiceBox (local TTS + Whisper) settings. */
   voiceBoxUrl?: string
   voiceBoxApiKey?: string
@@ -146,6 +149,8 @@ const DEFAULT_SETTINGS: LLMSettings = {
   ttsVoices: ['af_heart', 'bf_heart', 'af_alloy', 'bf_alloy'],
   ttsModels: ['kokoro', 'f5-tts', 'vits'],
   whisperModel: 'whisper-1',
+  memoryBackend: 'local',
+  memoryPath: '',
 }
 
 let settings: LLMSettings = { ...DEFAULT_SETTINGS }

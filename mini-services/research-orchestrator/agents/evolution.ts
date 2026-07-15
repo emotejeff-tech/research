@@ -24,6 +24,7 @@ import { fileURLToPath } from 'url'
 import { llmWithFallback, extractJSON } from '../tools/llm'
 import type { Plugin, Source } from '../types'
 import { uid } from '../util'
+import { validatePlugin } from '../tools/plugin_runner'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const PLUGIN_DIR = join(__dirname, '..', 'custom_plugins')
@@ -52,8 +53,6 @@ export async function analyzeGap(
   const raw = await llmWithFallback(
     GAP_SYSTEM,
     `Research goal: ${query}\nSub-queries explored: ${subQueries.join('; ')}\nSources gathered:\n${sourcesDigest}\nExisting tools in registry: ${existingTools.length ? existingTools.join(', ') : 'none'}\n\nIdentify the single most valuable missing capability.`,
-    2,
-    true,
     {
       retries: 2,
       degraded: JSON.stringify({
@@ -98,8 +97,6 @@ export async function authorTool(
   const raw = await llmWithFallback(
     AUTHOR_SYSTEM,
     `Missing capability to fulfill: ${capability}\nResearch context: ${query}\n\nGenerate the Python tool now.`,
-    2,
-    true,
     {
       retries: 2,
       degraded: JSON.stringify({
@@ -129,8 +126,6 @@ export async function authorFromBlueprint(
   const raw = await llmWithFallback(
     AUTHOR_SYSTEM,
     `Implement this specific algorithm/technique as a Python tool:\n\nTool name: ${suggestedName}\nMechanics to implement: ${mechanics}\nJustification: ${justification}\n\nGenerate the Python tool now. The tool name MUST be "${suggestedName}".`,
-    2,
-    true,
     {
       retries: 2,
       degraded: JSON.stringify({
@@ -166,6 +161,10 @@ export function testTool(
   const filePath = join(PLUGIN_DIR, `${name}.py`)
   writeFileSync(filePath, code, 'utf-8')
   try {
+    const validation = validatePlugin(name, code)
+    if (!validation.passed) {
+      return { passed: false, error: validation.error }
+    }
     execSync(`python3 -m py_compile ${JSON.stringify(filePath)}`, {
       timeout: 8000,
       stdio: 'pipe',
@@ -187,6 +186,12 @@ export async function runUnitTest(
   code: string,
   capability: string,
 ): Promise<{ passed: boolean; error?: string; testCode?: string }> {
+  // Validate the plugin first.
+  const validation = validatePlugin(name, code)
+  if (!validation.passed) {
+    return { passed: false, error: validation.error, testCode: 'validation_failed' }
+  }
+
   // Generate a test script that imports the tool and runs it.
   const testCode = `import sys, importlib.util, traceback
 spec = importlib.util.spec_from_file_location("${name}", "${join(PLUGIN_DIR, name + '.py').replace(/\\/g, '/')}")
@@ -248,8 +253,6 @@ export async function patchTool(
   const raw = await llmWithFallback(
     PATCH_SYSTEM,
     `Missing capability: ${capability}\n\nFailed code:\n${code}\n\nCompilation/test error:\n${error}\n\nRewrite the ENTIRE corrected script.`,
-    2,
-    true,
     {
       retries: 2,
       degraded: JSON.stringify({

@@ -1,11 +1,12 @@
 /**
- * tools/plugin_registry.ts — Persistent execution memory.
+ * tools/plugin_registry.ts — Persistent plugin registry for INTELLAGENT.
  *
- * Stores tool manifests durably in custom_plugins/registry.json so evolved
- * skills survive orchestrator restarts. At boot, loadSavedRegistry() reads
- * the JSON metadata + reconstructs full Plugin objects by reading the .py
- * files from disk. Every creation/execution updates usageCount, lastUsed,
- * and successRate, then persists immediately.
+ * This is the durable plugin store. Plugins can be:
+ *   - user-created (saved as .py files in custom_plugins/)
+ *   - agent-generated (via Evolution Engine)
+ *   - auto-discovered from disk
+ *
+ * The registry persists metadata so plugins survive restarts.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from 'fs'
 import { dirname, join } from 'path'
@@ -29,6 +30,8 @@ export interface PluginMeta {
   gapAnalysis?: string
   testStatus?: 'passed' | 'failed' | 'patched'
   executionStatus?: 'ok' | 'error' | 'not_run'
+  source?: 'seed' | 'agent' | 'user' | 'auto'
+  version?: string
 }
 
 /** Seed tools written to registry.json on first boot. */
@@ -41,6 +44,8 @@ const SEED_TOOLS: PluginMeta[] = [
     created: Date.now() - 1000 * 60 * 60 * 24 * 2,
     lastUsed: null,
     successRate: 1.0,
+    source: 'seed',
+    version: '1.0.0',
   },
   {
     name: 'source_crossref',
@@ -50,6 +55,8 @@ const SEED_TOOLS: PluginMeta[] = [
     created: Date.now() - 1000 * 60 * 60 * 24,
     lastUsed: null,
     successRate: 1.0,
+    source: 'seed',
+    version: '1.0.0',
   },
   {
     name: 'pdf_outline',
@@ -59,6 +66,8 @@ const SEED_TOOLS: PluginMeta[] = [
     created: Date.now() - 1000 * 60 * 30,
     lastUsed: null,
     successRate: 1.0,
+    source: 'seed',
+    version: '1.0.0',
   },
   {
     name: 'opsec_log_scrubber',
@@ -69,6 +78,8 @@ const SEED_TOOLS: PluginMeta[] = [
     lastUsed: null,
     successRate: 1.0,
     gapAnalysis: 'OPSEC: prevent credential/path leakage in research outputs',
+    source: 'seed',
+    version: '1.0.0',
   },
   {
     name: 'ua_rotator',
@@ -79,6 +90,8 @@ const SEED_TOOLS: PluginMeta[] = [
     lastUsed: null,
     successRate: 1.0,
     gapAnalysis: 'OPSEC: footprint obfuscation against IP bans / cadence detection',
+    source: 'seed',
+    version: '1.0.0',
   },
   {
     name: 'google_dorker',
@@ -89,188 +102,108 @@ const SEED_TOOLS: PluginMeta[] = [
     lastUsed: null,
     successRate: 1.0,
     gapAnalysis: 'OPSEC/OSINT: surface freely-public information that seems private using dork techniques',
+    source: 'seed',
+    version: '1.0.0',
   },
 ]
+
+/** 3 DEMO plugins specifically for testing latest arXiv papers for ideas. */
+const DEMO_ARXIV_PLUGINS: Record<string, string> = {
+  arxiv_fetcher: `#!/usr/bin/env python3
+"""Fetch latest arXiv papers for a research topic."""
+import sys, urllib.request, json, re
+
+def fetch_arxiv(topic, max_results=10):
+    query = f'all:{topic}'
+    url = f"http://export.arxiv.org/api/query?search_query={query}&start=0&max_results={max_results}"
+    with urllib.request.urlopen(url, timeout=30) as response:
+        raw = response.read().decode('utf-8')
+    titles = re.findall(r'<title>(.*?)</title>', raw, re.S)
+    # Skip the feed title, keep paper titles
+    return [t.strip() for t in titles[1:]]
+
+def main():
+    topic = sys.argv[1] if len(sys.argv) > 1 else "large language models"
+    for t in fetch_arxiv(topic):
+        print(f"- {t}")
+
+if __name__ == "__main__":
+    main()`,
+
+  arxiv_summarizer: `#!/usr/bin/env python3
+"""Summarize arXiv paper abstracts and extract key ideas."""
+import sys, urllib.request, json, re
+
+def fetch_arxiv(topic, max_results=10):
+    query = f'all:{topic}'
+    url = f"http://export.arxiv.org/api/query?search_query={query}&start=0&max_results={max_results}"
+    with urllib.request.urlopen(url, timeout=30) as response:
+        raw = response.read().decode('utf-8')
+    # Extract abstracts from the XML feed
+    abstracts = re.findall(r'<summary>(.*?)</summary>', raw, re.S)
+    titles = re.findall(r'<title>(.*?)</title>', raw, re.S)
+    links = re.findall(r'<id>(.*?)</id>', raw, re.S)
+    return titles, abstracts, links
+
+def summarize(title, abstract):
+    # Strip XML tags and normalize whitespace
+    abstract = re.sub(r'<[^>]+>', ' ', abstract)
+    abstract = re.sub(r'\s+', ' ', abstract).strip()
+    return f"{title}\n{abstract[:500]}"
+
+def main():
+    topic = sys.argv[1] if len(sys.argv) > 1 else "large language models"
+    titles, abstracts, links = fetch_arxiv(topic)
+    for i, (title, abstract, link) in enumerate(zip(titles, abstracts, links), 1):
+        print(f"\n[{i}] {title}")
+        print(f"URL: {link.strip()}")
+        print(f"Summary: {summarize(title, abstract)[:500]}")
+
+if __name__ == "__main__":
+    main()`,
+
+  arxiv_idea_explorer: `#!/usr/bin/env python3
+"""Explore arXiv papers and extract research ideas from titles/abstracts."""
+import sys, urllib.request, re
+
+def fetch_arxiv(topic, max_results=20):
+    query = f'all:{topic}'
+    url = f"http://export.arxiv.org/api/query?search_query={query}&start=0&max_results={max_results}"
+    with urllib.request.urlopen(url, timeout=30) as response:
+        raw = response.read().decode('utf-8')
+    titles = re.findall(r'<title>(.*?)</title>', raw, re.S)
+    abstracts = re.findall(r'<summary>(.*?)</summary>', raw, re.S)
+    links = re.findall(r'<id>(.*?)</id>', raw, re.S)
+    return titles, abstracts, links
+
+def extract_ideas(title, abstract):
+    # Simple keyword-based idea extraction
+    abstract = re.sub(r'<[^>]+>', ' ', abstract)
+    abstract = re.sub(r'\s+', ' ', abstract).strip()
+    keywords = re.findall(r'\b[a-zA-Z]{4,}\b', abstract)
+    # Count frequency of meaningful words
+    counts = {}
+    for w in keywords:
+        counts[w] = counts.get(w, 0) + 1
+    top = sorted(counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    return [f"- {w} ({count}x)" for w, count in top]
+
+def main():
+    topic = sys.argv[1] if len(sys.argv) > 1 else "large language models"
+    titles, abstracts, links = fetch_arxiv(topic)
+    for i, (title, abstract, link) in enumerate(zip(titles, abstracts, links), 1):
+        print(f"\n[{i}] {title}")
+        print(f"URL: {link.strip()}")
+        print("Keywords: " + "; ".join(extract_ideas(title, abstract)))
+
+if __name__ == "__main__":
+    main()`,
+}
 
 /** Write the seed .py files for the core tools if they don't exist. */
 function ensureSeedScripts() {
   if (!existsSync(PLUGIN_DIR)) mkdirSync(PLUGIN_DIR, { recursive: true })
-  const seeds: Record<string, string> = {
-    arxiv_fetcher: `import urllib.request, json, re
-
-def fetch_arxiv(topic, max_results=5):
-    url = f"http://export.arxiv.org/api/query?search_query=all:{topic}&max_results={max_results}"
-    raw = urllib.request.urlopen(url, timeout=20).read().decode()
-    titles = re.findall(r"<title>(.*?)</title>", raw, re.S)
-    return titles[1:]
-
-if __name__ == "__main__":
-    import sys
-    topic = sys.argv[1] if len(sys.argv) > 1 else "large language models"
-    for t in fetch_arxiv(topic):
-        print("-", t.strip())`,
-    source_crossref: `import re, sys
-
-def cross_reference(claim, sources):
-    tokens = set(re.findall(r"\\w{4,}", claim.lower()))
-    scored = []
-    for s in sources:
-        st = set(re.findall(r"\\w{4,}", s.lower()))
-        overlap = len(tokens & st) / max(len(tokens), 1)
-        scored.append((overlap, s))
-    scored.sort(reverse=True)
-    return scored[:3]
-
-if __name__ == "__main__":
-    claim = sys.argv[1] if len(sys.argv) > 1 else "renewable energy reduces emissions"
-    srcs = ["Solar and wind lower CO2 output.", "Fossil fuels remain dominant."]
-    for score, s in cross_reference(claim, srcs):
-        print(f"{score:.2f}  {s}")`,
-    pdf_outline: `import urllib.request, re, sys
-
-def outline(url):
-    raw = urllib.request.urlopen(url, timeout=30).read()
-    text = raw.decode("latin-1")
-    headings = re.findall(r"\\n([A-Z][A-Za-z0-9 ]{4,80})\\n", text)
-    seen, out = set(), []
-    for h in headings:
-        if h not in seen:
-            seen.add(h); out.append(h.strip())
-    return out[:20]
-
-if __name__ == "__main__":
-    url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/paper.pdf"
-    for h in outline(url):
-        print("-", h)`,
-    opsec_log_scrubber: `import re, sys
-
-def sanitize_stream(raw_text):
-    """OPSEC: detect and mask high-exposure data patterns."""
-    count = 0
-    # API keys: OpenAI, GitHub, Google, Anthropic, HuggingFace
-    key_pattern = r'(sk-[a-zA-Z0-9]{32,}|ghp_[a-zA-Z0-9]{36}|AIzaSy[a-zA-Z0-9-_]{33}|sk-ant-[a-zA-Z0-9-_]+|hf_[a-zA-Z0-9]{30,})'
-    raw_text, n = re.subn(key_pattern, "[REDACTED_CREDENTIAL]", raw_text)
-    count += n
-    # Bearer tokens
-    raw_text, n = re.subn(r'(Bearer\\s+[a-zA-Z0-9._-]{20,})', "Bearer [REDACTED]", raw_text)
-    count += n
-    # Linux absolute paths
-    raw_text, n = re.subn(r'/home/[a-zA-Z0-9_-]+', '/home/[REDACTED_USER]', raw_text)
-    count += n
-    raw_text, n = re.subn(r'/Users/[a-zA-Z0-9_-]+', '/Users/[REDACTED_USER]', raw_text)
-    count += n
-    # Windows paths
-    raw_text, n = re.subn(r'C:\\\\\\\\Users\\\\[a-zA-Z0-9_-]+', r'C:\\\\Users\\\\[REDACTED_USER]', raw_text)
-    count += n
-    # Email addresses
-    raw_text, n = re.subn(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}', "[REDACTED_EMAIL]", raw_text)
-    count += n
-    # IP addresses (private ranges)
-    raw_text, n = re.subn(r'\\b(?:10|172|192)\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b', "[REDACTED_IP]", raw_text)
-    count += n
-    return raw_text, count
-
-if __name__ == "__main__":
-    text = sys.argv[1] if len(sys.argv) > 1 else "test sk-1234567890abcdefghijklmnop123456 /home/user/secret"
-    cleaned, n = sanitize_stream(text)
-    print(f"[OPSEC] scrubbed {n} item(s)")
-    print(cleaned)`,
-    ua_rotator: `import random, sys
-
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1",
-]
-
-def rotate_ua():
-    return random.choice(USER_AGENTS)
-
-def jitter_delay():
-    return random.randint(100, 1500)
-
-if __name__ == "__main__":
-    mode = sys.argv[1] if len(sys.argv) > 1 else "ua"
-    if mode == "jitter":
-        print(jitter_delay())
-    else:
-        print(rotate_ua())`,
-    google_dorker: `import sys, json
-
-# OSINT dork templates — find publicly exposed data that appears private
-DORK_TEMPLATES = {
-    "exposed_files": [
-        'site:{domain} filetype:pdf',
-        'site:{domain} filetype:xls OR filetype:xlsx',
-        'site:{domain} filetype:doc OR filetype:docx',
-        'site:{domain} filetype:sql OR filetype:db OR filetype:csv',
-        'site:{domain} filetype:env OR filetype:config OR filetype:ini',
-    ],
-    "credentials": [
-        'site:{domain} "password" OR "passwd" OR "credentials"',
-        'site:{domain} "api key" OR "apikey" OR "secret_key"',
-        'site:{domain} "BEGIN RSA PRIVATE KEY"',
-        'site:{domain} "authorization: bearer"',
-        'intext:"index of" "parent directory" filetype:env',
-    ],
-    "user_data": [
-        'site:{domain} intext:"email" OR intext:"phone" OR intext:"address"',
-        'site:{domain} intitle:"index of" "backup"',
-        'site:{domain} inurl:admin OR inurl:login OR inurl:dashboard',
-        'site:{domain} inurl:wp-content/uploads/',
-        'site:{domain} intext:"ssn" OR intext:"social security"',
-    ],
-    "exposed_dirs": [
-        'site:{domain} intitle:"index of" /',
-        'site:{domain} intitle:"index of /backup"',
-        'site:{domain} intitle:"index of /admin"',
-        'site:{domain} inurl:/uploads/ OR inurl:/files/',
-        'site:{domain} intext:"directory listing"',
-    ],
-    "cached_versions": [
-        'cache:{domain}',
-        'site:{domain} inurl:wp-config.php',
-        'site:{domain} inurl:.git OR inurl:.svn',
-        'site:{domain} inurl:phpinfo.php',
-        'site:{domain} inurl:server-status',
-    ],
-}
-
-def build_dorks(query):
-    \"\"\"Build OSINT dork queries from a search term.\"\"\"
-    # Extract domain-like terms from the query
-    words = query.replace('http://', '').replace('https://', '').split()
-    domain = ''
-    for w in words:
-        if '.' in w and ' ' not in w:
-            domain = w.rstrip('/')
-            break
-    if not domain:
-        domain = words[0] if words else 'example.com'
-
-    dorks = []
-    for category, templates in DORK_TEMPLATES.items():
-        for t in templates[:2]:  # 2 per category
-            dorks.append({
-                'category': category,
-                'dork': t.format(domain=domain),
-                'description': f'OSINT: {category} — finds publicly exposed {category.replace("_", " ")} for {domain}'
-            })
-    return dorks
-
-if __name__ == "__main__":
-    query = sys.argv[1] if len(sys.argv) > 1 else "example.com security"
-    dorks = build_dorks(query)
-    print(f"[OSINT] Generated {len(dorks)} dork queries for intelligence gathering")
-    for d in dorks:
-        print(f"\\n[{d['category'].upper()}] {d['dork']}")
-    print("\\n---\\nThese dorks find freely-public information that may appear private.")
-    print("Use responsibly. Only search domains/data you own or have permission to investigate.")`,
-  }
-  for (const [name, code] of Object.entries(seeds)) {
+  for (const [name, code] of Object.entries(DEMO_ARXIV_PLUGINS)) {
     const p = join(PLUGIN_DIR, `${name}.py`)
     if (!existsSync(p)) writeFileSync(p, code, 'utf-8')
   }
@@ -282,8 +215,22 @@ export function loadSavedRegistry(): Record<string, PluginMeta> {
     ensureSeedScripts()
     const initial: Record<string, PluginMeta> = {}
     for (const s of SEED_TOOLS) initial[s.name] = s
+    // Add demo arxiv plugins
+    for (const name of Object.keys(DEMO_ARXIV_PLUGINS)) {
+      initial[name] = {
+        name,
+        description: `Demo plugin for arXiv research ideas: ${name}`,
+        language: 'python',
+        usageCount: 0,
+        created: Date.now(),
+        lastUsed: null,
+        successRate: 1.0,
+        source: 'demo',
+        version: '1.0.0',
+      }
+    }
     writeFileSync(REGISTRY_PATH, JSON.stringify(initial, null, 2), 'utf-8')
-    console.log(`[registry] seeded ${Object.keys(initial).length} core tools → ${REGISTRY_PATH}`)
+    console.log(`[registry] seeded ${Object.keys(initial).length} tools → ${REGISTRY_PATH}`)
     return initial
   }
   try {
@@ -305,6 +252,8 @@ export function loadSavedRegistry(): Record<string, PluginMeta> {
             created: Date.now(),
             lastUsed: null,
             successRate: 1.0,
+            source: 'auto',
+            version: '1.0.0',
           }
           adopted++
         }
@@ -384,6 +333,8 @@ export function registerTool(
     gapAnalysis: plugin.gapAnalysis,
     testStatus: plugin.testStatus,
     executionStatus: plugin.executionStatus,
+    source: 'agent',
+    version: '1.0.0',
   }
   registry[plugin.name] = meta
   saveRegistry(registry)

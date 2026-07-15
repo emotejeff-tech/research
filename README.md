@@ -1,5 +1,5 @@
 <!--
-  Research Orchestrator — Autonomous Multi-Agent Research Engine
+  INTELLAGENT — Autonomous Multi-Agent Research Engine
   ==============================================================
   A self-critiquing, self-teaching research platform built on a split-agent architecture.
   Coordinator → Discovery → Synthesis ↔ Critic (actor–critic loop) → Evolution → Dreamer

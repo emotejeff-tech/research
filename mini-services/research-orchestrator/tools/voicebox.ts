@@ -87,7 +87,7 @@ export async function autoDetectAudioboxModels(): Promise<string[]> {
       })
       if (res.ok) {
         const data: any = await res.json()
-        const arr = Array.isArray(data) ? data : data?.models || data?.data || []
+        const arr = Array.isArray(data) ? data : data?.models || data?.data || data?.voices || []
         for (const m of arr) {
           if (typeof m === 'string') models.push(m)
           else if (m?.id) models.push(m.id)
