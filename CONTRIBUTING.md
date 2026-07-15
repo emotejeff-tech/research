@@ -56,6 +56,9 @@ cd mini-services/research-orchestrator && bun run dev
 # Terminal 2: Frontend
 cd ../.. && bun run dev
 
+# Windows all-in-one alternative:
+# powershell -ExecutionPolicy Bypass -File start.ps1
+
 # 6. Open http://localhost:3000
 ```
 

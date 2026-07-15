@@ -203,6 +203,16 @@ VOICEBOX_API_KEY=...
 
 ### 3. Run Everything
 
+**Windows easiest way:** run the all-in-one script:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File start.ps1
+```
+
+This starts both the frontend and backend in separate PowerShell windows.
+
+**Manual method:**
+
 ```bash
 # Terminal 1: Orchestrator backend (port 3003)
 cd mini-services/research-orchestrator

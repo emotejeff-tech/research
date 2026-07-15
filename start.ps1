@@ -1,6 +1,6 @@
 #!/usr/bin/env powershell
-# NEXUS All-in-One Startup Script for Windows
-# Run this from your project root (D:\jeffres)
+# INTELLAGENT All-in-One Startup Script for Windows
+# Run this from your project root (D:\research)
 # Usage: powershell -ExecutionPolicy Bypass -File start.ps1
 
 $ErrorActionPreference = "Stop"
@@ -9,7 +9,7 @@ $ORCH = Join-Path $ROOT "mini-services\research-orchestrator"
 
 Write-Host ""
 Write-Host "  ====================================================" -ForegroundColor Cyan
-Write-Host "            NEXUS All-in-One Startup                  " -ForegroundColor Cyan
+Write-Host "            INTELLAGENT All-in-One Startup                  " -ForegroundColor Cyan
 Write-Host "  ====================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -126,14 +126,14 @@ Write-Host ""
 
 # Start orchestrator in a new window
 Write-Host "  Starting orchestrator (port 3003)..." -ForegroundColor Cyan
-$orchCmd = "cd '$ORCH'; Write-Host 'NEXUS Orchestrator - port 3003'; bun run dev; Write-Host 'Press Enter to close'; Read-Host"
+$orchCmd = "cd '$ORCH'; Write-Host 'INTELLAGENT Orchestrator - port 3003'; bun run dev; Write-Host 'Press Enter to close'; Read-Host"
 Start-Process powershell -ArgumentList "-NoExit", "-Command", $orchCmd
 
 Start-Sleep -Seconds 3
 
 # Start frontend in a new window
 Write-Host "  Starting frontend (port 3000)..." -ForegroundColor Cyan
-$frontCmd = "cd '$ROOT'; Write-Host 'NEXUS Frontend - port 3000'; bun run dev; Write-Host 'Press Enter to close'; Read-Host"
+$frontCmd = "cd '$ROOT'; Write-Host 'INTELLAGENT Frontend - port 3000'; bun run dev; Write-Host 'Press Enter to close'; Read-Host"
 Start-Process powershell -ArgumentList "-NoExit", "-Command", $frontCmd
 
 # --- Done ---
