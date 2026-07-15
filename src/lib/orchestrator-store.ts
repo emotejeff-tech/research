@@ -224,6 +224,32 @@ const PHASE_LABELS: Record<Phase, string> = {
 
 const uid = () => Math.random().toString(36).slice(2, 10)
 
+// ---------- Settings handling ----------
+let pendingSettingsRequest = false
+let settingsRequestTimer: NodeJS.Timeout | null = null
+
+const requestSettings = () => {
+  if (pendingSettingsRequest || !socket?.connected) return
+  pendingSettingsRequest = true
+  socket?.emit('settings:get', {})
+}
+
+const clearPendingSettingsRequest = () => {
+  pendingSettingsRequest = false
+  if (settingsRequestTimer) {
+    clearTimeout(settingsRequestTimer)
+    settingsRequestTimer = null
+  }
+}
+
+const scheduleSettingsRetry = () => {
+  if (settingsRequestTimer) return
+  settingsRequestTimer = setTimeout(() => {
+    settingsRequestTimer = null
+    if (socket?.connected) requestSettings()
+  }, 1000)
+}
+
 export const useOrchestrator = create<OrchestratorState>((set, get) => ({
   connected: false,
   phase: 'idle',
@@ -306,6 +332,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
       socket?.emit('stats:request', {})
       socket?.emit('metaPrompt:request', {})
       socket?.emit('health:request', {})
+      requestSettings()
     })
     socket.on('disconnect', () => set({ connected: false }))
 
@@ -441,6 +468,7 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
     })
 
     socket.on('settings:update', (d: any) => {
+      clearPendingSettingsRequest()
       set({
         llmSettings: d.settings || null,
         providerPresets: d.presets || null,
@@ -636,7 +664,10 @@ export const useOrchestrator = create<OrchestratorState>((set, get) => ({
 
   setSettingsOpen: (open: boolean) => {
     set({ settingsOpen: open })
-    if (open) socket?.emit('settings:get', {})
+    if (open) {
+      if (socket?.connected) requestSettings()
+      else scheduleSettingsRetry()
+    }
   },
 
   saveLLMSettings: (settings: any) => {
