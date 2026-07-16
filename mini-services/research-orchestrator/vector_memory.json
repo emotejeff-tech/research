@@ -58,7 +58,52 @@
         1,
         1,
         1
-      ]
+      ],
+      "tfidf": {
+        "1000": 0.5945348918918356,
+        "evaluate": 0.5945348918918356,
+        "whether": 0.5945348918918356,
+        "sodium": 1.551401887167465,
+        "ion": 1.551401887167465,
+        "batteries": 1.4187352600105112,
+        "viable": 0.5945348918918356,
+        "alternative": 0.5945348918918356,
+        "lithium": 1.4187352600105112,
+        "grid": 1.2476982301661725,
+        "storage": 1.2476982301661725,
+        "evaluation": 0.5945348918918356,
+        "data": 0.5945348918918356,
+        "analysis": 0.5945348918918356,
+        "sibs": 1.0066350759511735,
+        "present": 0.5945348918918356,
+        "several": 0.5945348918918356,
+        "key": 0.5945348918918356,
+        "characteristics": 0.5945348918918356,
+        "compared": 1.0066350759511735,
+        "libs": 0.5945348918918356,
+        "applications": 0.5945348918918356,
+        "cost": 0.5945348918918356,
+        "availability": 0.5945348918918356,
+        "approximately": 0.5945348918918356,
+        "times": 0.5945348918918356,
+        "abundant": 0.5945348918918356,
+        "extraction": 0.5945348918918356,
+        "seawater": 0.5945348918918356,
+        "having": 0.5945348918918356,
+        "minimal": 0.5945348918918356,
+        "environmental": 0.5945348918918356,
+        "impact": 0.5945348918918356,
+        "mining": 0.5945348918918356,
+        "techno": 0.5945348918918356,
+        "economic": 0.5945348918918356,
+        "analyses": 0.5945348918918356,
+        "indicate": 0.5945348918918356,
+        "lower": 0.5945348918918356,
+        "manufacturing": 0.5945348918918356,
+        "costs": 0.5945348918918356,
+        "due": 0.5945348918918356,
+        "mat": 0.5945348918918356
+      }
     },
     {
       "id": "d8dd24wr",
@@ -128,7 +173,62 @@
         1,
         1,
         1
-      ]
+      ],
+      "tfidf": {
+        "design": 0.5945348918918356,
+        "blueprint": 0.5945348918918356,
+        "decentralized": 1.0066350759511735,
+        "inference": 1.2476982301661725,
+        "network": 0.5945348918918356,
+        "using": 1.0066350759511735,
+        "latest": 0.5945348918918356,
+        "research": 0.5945348918918356,
+        "overview": 0.5945348918918356,
+        "three": 0.5945348918918356,
+        "zone": 0.5945348918918356,
+        "architecture": 0.5945348918918356,
+        "replaces": 0.5945348918918356,
+        "opaque": 0.5945348918918356,
+        "cross": 0.5945348918918356,
+        "chain": 0.5945348918918356,
+        "gateways": 0.5945348918918356,
+        "verifiable": 0.5945348918918356,
+        "artifacts": 0.5945348918918356,
+        "tee": 0.5945348918918356,
+        "kernels": 0.5945348918918356,
+        "run": 0.5945348918918356,
+        "commitment": 0.5945348918918356,
+        "proofs": 0.5945348918918356,
+        "generated": 0.5945348918918356,
+        "weights": 0.5945348918918356,
+        "anchored": 0.5945348918918356,
+        "public": 0.5945348918918356,
+        "shards": 0.5945348918918356,
+        "pin": 0.5945348918918356,
+        "layer": 0.5945348918918356,
+        "online": 0.5945348918918356,
+        "router": 0.5945348918918356,
+        "optimizes": 0.5945348918918356,
+        "dispatch": 0.5945348918918356,
+        "across": 0.5945348918918356,
+        "heterogeneous": 0.5945348918918356,
+        "internet": 0.5945348918918356,
+        "nodes": 0.5945348918918356,
+        "objectives": 0.5945348918918356,
+        "implement": 0.5945348918918356,
+        "verification": 0.5945348918918356,
+        "gate": 0.5945348918918356,
+        "authenticates": 0.5945348918918356,
+        "execution": 0.5945348918918356,
+        "per": 0.5945348918918356,
+        "node": 0.5945348918918356,
+        "model": 0.5945348918918356,
+        "hashes": 0.5945348918918356,
+        "pinned": 0.5945348918918356,
+        "shard": 0.5945348918918356,
+        "tier": 0.5945348918918356,
+        "instead": 0.5945348918918356
+      }
     },
     {
       "id": "wqdoedsf",
@@ -201,7 +301,62 @@
         1,
         1,
         1
-      ]
+      ],
+      "tfidf": {
+        "compare": 0.5945348918918356,
+        "crispr": 1.0066350759511735,
+        "delivery": 0.5945348918918356,
+        "vectors": 0.5945348918918356,
+        "aav": 1.0066350759511735,
+        "lipid": 1.0066350759511735,
+        "nanoparticles": 1.0066350759511735,
+        "which": 0.5945348918918356,
+        "clinically": 1.0066350759511735,
+        "viable": 1.0066350759511735,
+        "conclusion": 0.5945348918918356,
+        "lnps": 0.5945348918918356,
+        "systemic": 0.5945348918918356,
+        "therapies": 0.5945348918918356,
+        "because": 0.5945348918918356,
+        "deliver": 0.5945348918918356,
+        "transient": 0.5945348918918356,
+        "mrnas": 0.5945348918918356,
+        "rather": 0.5945348918918356,
+        "persistent": 0.5945348918918356,
+        "viral": 0.5945348918918356,
+        "genomes": 0.5945348918918356,
+        "while": 0.5945348918918356,
+        "eranacogene": 0.5945348918918356,
+        "dezaparvovec": 0.5945348918918356,
+        "proves": 0.5945348918918356,
+        "work": 0.5945348918918356,
+        "contexts": 0.5945348918918356,
+        "inherent": 0.5945348918918356,
+        "averson": 0.5945348918918356,
+        "pre": 0.5945348918918356,
+        "existing": 0.5945348918918356,
+        "immunity": 0.5945348918918356,
+        "capsid": 0.5945348918918356,
+        "cas": 0.5945348918918356,
+        "related": 0.5945348918918356,
+        "dna": 0.5945348918918356,
+        "components": 0.5945348918918356,
+        "creates": 0.5945348918918356,
+        "unacceptable": 0.5945348918918356,
+        "failure": 0.5945348918918356,
+        "pathway": 0.5945348918918356,
+        "liver": 0.5945348918918356,
+        "large": 0.5945348918918356,
+        "targets": 0.5945348918918356,
+        "ceiling": 0.5945348918918356,
+        "lnp": 0.5945348918918356,
+        "sidesteps": 0.5945348918918356,
+        "using": 0.5945348918918356,
+        "cleaner": 0.5945348918918356,
+        "mrna": 0.5945348918918356,
+        "formulations": 0.5945348918918356,
+        "dreamer": 0.5945348918918356
+      }
     },
     {
       "id": "dwavhoyn",
@@ -267,7 +422,4619 @@
         1,
         1,
         1
-      ]
+      ],
+      "tfidf": {
+        "79330": 0.5945348918918356,
+        "blueprint": 0.5945348918918356,
+        "bettert": 0.5945348918918356,
+        "version": 0.5945348918918356,
+        "openclaw": 1.0066350759511735,
+        "core": 1.0066350759511735,
+        "objectives": 0.5945348918918356,
+        "simplify": 0.5945348918918356,
+        "deployment": 0.5945348918918356,
+        "removing": 0.5945348918918356,
+        "setup": 0.5945348918918356,
+        "hurdles": 0.5945348918918356,
+        "per": 1.0066350759511735,
+        "issue": 0.5945348918918356,
+        "automate": 0.5945348918918356,
+        "transformation": 0.5945348918918356,
+        "raw": 1.0066350759511735,
+        "audits": 0.5945348918918356,
+        "structured": 0.5945348918918356,
+        "reports": 0.5945348918918356,
+        "using": 0.5945348918918356,
+        "specialized": 0.5945348918918356,
+        "extraction": 1.0066350759511735,
+        "optimize": 0.5945348918918356,
+        "execution": 0.5945348918918356,
+        "via": 0.5945348918918356,
+        "localized": 0.5945348918918356,
+        "ring": 0.5945348918918356,
+        "topology": 0.5945348918918356,
+        "dispatch": 0.5945348918918356,
+        "rather": 0.5945348918918356,
+        "central": 0.5945348918918356,
+        "sharding": 0.5945348918918356,
+        "architecture": 0.5945348918918356,
+        "plan": 0.5945348918918356,
+        "wrap": 0.5945348918918356,
+        "unified": 0.5945348918918356,
+        "cli": 0.5945348918918356,
+        "facade": 0.5945348918918356,
+        "two": 0.5945348918918356,
+        "layers": 0.5945348918918356,
+        "engine": 0.5945348918918356,
+        "schema": 0.5945348918918356,
+        "first": 0.5945348918918356,
+        "multi": 0.5945348918918356,
+        "pass": 0.5945348918918356,
+        "sourcery": 0.5945348918918356,
+        "entity": 0.5945348918918356,
+        "grounding": 0.5945348918918356,
+        "processes": 0.5945348918918356,
+        "audit": 0.5945348918918356,
+        "outputs": 0.5945348918918356,
+        "curat": 0.5945348918918356
+      }
+    },
+    {
+      "id": "n29wvufo",
+      "text": "researcg jspace ## Independent Analysis: solarkyle/jspace\n\n### What jspace Is (Based on Verifiable Data)\n\nSource [11] is the primary data point. The repository explicitly describes its purpose as a **\"Same-day replication + extensions of Anthropic's global-workspace paper on Gemma 4 — emotion probes, hallucination prediction, 16GB-GPU recipe\"** ([n]).\n\nThis means jspace is not an independently conceived tool or framework — it is a **replication and extension** of work published by Anthropic (the company behind Claude). The \"global-workspace\" concept appears to be Anthropic's own research contribution regarding how AI models process information using internal workspace representations.\n\n### Technical Composition\n\n- Primary language: Python (91.1%) with HTML (7.2%), plus a third unspecified component ([n])\n- 37 GitHub stars, 3 forks, 6 open issues — indicating low community engagement relative to the scale of the underlying research\n\n### Three Functional Components Identified\n\n1. **Emotion Probes** — Aligned with Source [2] (Mohammad's work on emotion lexicons), this suggests jspace implements probes that measure emotional valence or affective processing within the model, which is a known technique in AI alignment and evaluation research\n2. **Hallucination Prediction** — A capability to anticipate when the model will generate factually incorrect output\n3. **16GB-GPU Recipe** — An optimization strategy for running this work on consumer-grade hardware (NVIDIA RTX 4090 class), which is significant because Anthropic's original Gemma models are designed for larger deployments\n\n### Contextual Assessment Against Best Practice Literature\n\nSources [1], [3], and [10] provide broader context on research software sustainability, collaborative development challenges, and best practices in scientific software registries. These do not directly evaluate jspace but offer a benchmark: high-quality replication repositories typically include rigorous documentation, test suites, reproducibility guarantees, and clear licensing — none of which are evident from the source data provided for jspace specifically.\n\n### Independent Conclusion\n\n**jspace is a lightweight, derivative research project with narrow scope.** It replicates Anthropic's own global-workspace findings on Gemma 4 and extends them with emotion probes, hallucination prediction, and hardware accessibility improvements. The low engagement metrics (37 stars) suggest the community has not broadly adopted or endorsed this particular implementation.\n\nThe value proposition is clear but limited: it makes Anthropic's proprietary-adjacent research reproducible on consumer GPUs with added evaluation dimensions (emotion + hallucination). However, because it replicates work owned by a major AI company rather than developing independent methodology, its scientific contribution is primarily in **reproducibility and accessibility** — not original discovery.\n\nThe open issues (6) relative to engagement (37 stars) indicate unresolved implementation problems that may limit practical utility for replication attempts ([n]).\n\n---\n\n## 🔍 OSINT Intelligence Appendix\n\n> The following Google dork queries were auto-generated to find publicly exposed data related to this research topic. These use freely-available public search techniques to surface information that may appear private.\n\n```\n[OSINT] Generated 10 dork queries for intelligence gathering\r\n\r\n[EXPOSED_FILES] site:researcg filetype:pdf\r\n\r\n[EXPOSED_FILES] site:researcg filetype:xls OR filetype:xlsx\r\n\r\n[CREDENTIALS] site:researcg \"password\" OR \"passwd\" OR \"credentials\"\r\n\r\n[CREDENTIALS] site:researcg \"api key\" OR \"apikey\" OR \"secret_key\"\r\n\r\n[USER_DATA] site:researcg intext:\"email\" OR intext:\"phone\" OR intext:\"address\"\r\n\r\n[USER_DATA] site:researcg intitle:\"index of\" \"backup\"\r\n\r\n[EXPOSED_DIRS] site:researcg intitle:\"index of\" /\r\n\r\n[EXPOSED_DIRS] site:researcg intitle:\"index of /backup\"\r\n\r\n[CACHED_VERSIONS] cache:researcg\r\n\r\n[CACHED_VERSIONS] site:researcg inurl:wp-config.php\r\n\r\n---\r\nThese dorks find freely-public information that may appear private.\r\nUse responsibly. Only search domains/data you own or have permission to investigate.\n```\n",
+      "query": "researcg jspace",
+      "conclusion": "## Independent Analysis: solarkyle/jspace\n\n### What jspace Is (Based on Verifiable Data)\n\nSource [11] is the primary data point. The repository explicitly describes its purpose as a **\"Same-day replication + extensions of Anthropic's global-workspace paper on Gemma 4 — emotion probes, hallucination prediction, 16GB-GPU recipe\"** ([n]).\n\nThis means jspace is not an independently conceived tool or framework — it is a **replication and extension** of work published by Anthropic (the company behind Claude). The \"global-workspace\" concept appears to be Anthropic's own research contribution regarding how AI models process information using internal workspace representations.\n\n### Technical Composition\n\n- Primary language: Python (91.1%) with HTML (7.2%), plus a third unspecified component ([n])\n- 37 GitHub stars, 3 forks, 6 open issues — indicating low community engagement relative to the scale of the underlying research\n\n### Three Functional Components Identified\n\n1. **Emotion Probes** — Aligned with Source [2] (Mohammad's work on emotion lexicons), this suggests jspace implements probes that measure emotional valence or affective processing within the model, which is a known technique in AI alignment and evaluation research\n2. **Hallucination Prediction** — A capability to anticipate when the model will generate factually incorrect output\n3. **16GB-GPU Recipe** — An optimization strategy for running this work on consumer-grade hardware (NVIDIA RTX 4090 class), which is significant because Anthropic's original Gemma models are designed for larger deployments\n\n### Contextual Assessment Against Best Practice Literature\n\nSources [1], [3], and [10] provide broader context on research software sustainability, collaborative development challenges, and best practices in scientific software registries. These do not directly evaluate jspace but offer a benchmark: high-quality replication repositories typically include rigorous documentation, test suites, reproducibility guarantees, and clear licensing — none of which are evident from the source data provided for jspace specifically.\n\n### Independent Conclusion\n\n**jspace is a lightweight, derivative research project with narrow scope.** It replicates Anthropic's own global-workspace findings on Gemma 4 and extends them with emotion probes, hallucination prediction, and hardware accessibility improvements. The low engagement metrics (37 stars) suggest the community has not broadly adopted or endorsed this particular implementation.\n\nThe value proposition is clear but limited: it makes Anthropic's proprietary-adjacent research reproducible on consumer GPUs with added evaluation dimensions (emotion + hallucination). However, because it replicates work owned by a major AI company rather than developing independent methodology, its scientific contribution is primarily in **reproducibility and accessibility** — not original discovery.\n\nThe open issues (6) relative to engagement (37 stars) indicate unresolved implemen",
+      "timestamp": 1784118098780,
+      "vector": [
+        2.386294361119891,
+        8.108378329154686,
+        7.348453986308935,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        7.029808777056552,
+        5.007906670625619,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        5.694400777912588,
+        2.386294361119891,
+        6.661959879021967,
+        5.007906670625619,
+        5.694400777912588,
+        2.386294361119891,
+        5.007906670625619,
+        6.226886976133954,
+        5.694400777912588,
+        5.694400777912588,
+        5.007906670625619,
+        4.040347569516239,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        5.694400777912588,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        7.029808777056552,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        5.007906670625619,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        5.007906670625619,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        6.226886976133954,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        4.040347569516239,
+        7.629518980131347,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        4.040347569516239,
+        5.007906670625619,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        5.007906670625619,
+        5.007906670625619,
+        4.040347569516239,
+        4.040347569516239,
+        4.040347569516239,
+        4.040347569516239,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891,
+        2.386294361119891
+      ],
+      "tfidf": {
+        "4090": 0.5945348918918356,
+        "researcg": 2.0201672986729586,
+        "jspace": 1.8308354440698487,
+        "independent": 1.2476982301661725,
+        "analysis": 0.5945348918918356,
+        "solarkyle": 0.5945348918918356,
+        "based": 0.5945348918918356,
+        "verifiable": 0.5945348918918356,
+        "data": 1.7514463719916622,
+        "source": 1.2476982301661725,
+        "primary": 1.0066350759511735,
+        "point": 0.5945348918918356,
+        "repository": 0.5945348918918356,
+        "explicitly": 0.5945348918918356,
+        "describes": 0.5945348918918356,
+        "its": 1.0066350759511735,
+        "purpose": 0.5945348918918356,
+        "day": 0.5945348918918356,
+        "replication": 1.4187352600105112,
+        "extensions": 0.5945348918918356,
+        "anthropic": 1.65979841422551,
+        "global": 1.2476982301661725,
+        "workspace": 1.4187352600105112,
+        "paper": 0.5945348918918356,
+        "gemma": 1.2476982301661725,
+        "emotion": 1.551401887167465,
+        "probes": 1.4187352600105112,
+        "hallucination": 1.4187352600105112,
+        "prediction": 1.2476982301661725,
+        "16gb": 1.0066350759511735,
+        "gpu": 1.0066350759511735,
+        "recipe": 1.0066350759511735,
+        "means": 0.5945348918918356,
+        "independently": 0.5945348918918356,
+        "conceived": 0.5945348918918356,
+        "tool": 0.5945348918918356,
+        "framework": 0.5945348918918356,
+        "extension": 0.5945348918918356,
+        "work": 1.4187352600105112,
+        "published": 0.5945348918918356,
+        "company": 1.0066350759511735,
+        "behind": 0.5945348918918356,
+        "claude": 0.5945348918918356,
+        "concept": 0.5945348918918356,
+        "appears": 0.5945348918918356,
+        "research": 1.7514463719916622,
+        "contribution": 1.0066350759511735,
+        "regarding": 0.5945348918918356,
+        "models": 1.0066350759511735,
+        "process": 0.5945348918918356,
+        "information": 1.2476982301661725,
+        "using": 0.5945348918918356,
+        "internal": 0.5945348918918356,
+        "representations": 0.5945348918918356,
+        "technical": 0.5945348918918356,
+        "composition": 0.5945348918918356,
+        "language": 0.5945348918918356,
+        "python": 0.5945348918918356,
+        "html": 0.5945348918918356,
+        "plus": 0.5945348918918356,
+        "third": 0.5945348918918356,
+        "unspecified": 0.5945348918918356,
+        "component": 0.5945348918918356,
+        "github": 0.5945348918918356,
+        "stars": 1.2476982301661725,
+        "forks": 0.5945348918918356,
+        "open": 1.0066350759511735,
+        "issues": 1.0066350759511735,
+        "indicating": 0.5945348918918356,
+        "low": 1.0066350759511735,
+        "community": 1.0066350759511735,
+        "engagement": 1.2476982301661725,
+        "relative": 1.0066350759511735,
+        "scale": 0.5945348918918356,
+        "underlying": 0.5945348918918356,
+        "three": 0.5945348918918356,
+        "functional": 0.5945348918918356,
+        "components": 0.5945348918918356,
+        "identified": 0.5945348918918356,
+        "aligned": 0.5945348918918356,
+        "mohammad": 0.5945348918918356,
+        "lexicons": 0.5945348918918356,
+        "suggests": 0.5945348918918356,
+        "implements": 0.5945348918918356,
+        "measure": 0.5945348918918356,
+        "emotional": 0.5945348918918356,
+        "valence": 0.5945348918918356,
+        "affective": 0.5945348918918356,
+        "processing": 0.5945348918918356,
+        "within": 0.5945348918918356,
+        "model": 1.0066350759511735,
+        "which": 1.2476982301661725,
+        "known": 0.5945348918918356,
+        "technique": 0.5945348918918356,
+        "alignment": 0.5945348918918356,
+        "evaluation": 1.0066350759511735,
+        "capability": 0.5945348918918356,
+        "anticipate": 0.5945348918918356,
+        "generate": 0.5945348918918356,
+        "factually": 0.5945348918918356,
+        "incorrect": 0.5945348918918356,
+        "output": 0.5945348918918356,
+        "optimization": 0.5945348918918356,
+        "strategy": 0.5945348918918356,
+        "running": 0.5945348918918356,
+        "consumer": 1.0066350759511735,
+        "grade": 0.5945348918918356,
+        "hardware": 1.0066350759511735,
+        "nvidia": 0.5945348918918356,
+        "rtx": 0.5945348918918356,
+        "class": 0.5945348918918356,
+        "significant": 0.5945348918918356,
+        "because": 1.0066350759511735,
+        "original": 1.0066350759511735,
+        "designed": 0.5945348918918356,
+        "larger": 0.5945348918918356,
+        "deployments": 0.5945348918918356,
+        "contextual": 0.5945348918918356,
+        "assessment": 0.5945348918918356,
+        "best": 1.0066350759511735,
+        "practice": 0.5945348918918356,
+        "literature": 0.5945348918918356,
+        "sources": 0.5945348918918356,
+        "provide": 0.5945348918918356,
+        "broader": 0.5945348918918356,
+        "context": 0.5945348918918356,
+        "software": 1.0066350759511735,
+        "sustainability": 0.5945348918918356,
+        "collaborative": 0.5945348918918356,
+        "development": 0.5945348918918356,
+        "challenges": 0.5945348918918356,
+        "practices": 0.5945348918918356,
+        "scientific": 1.0066350759511735,
+        "registries": 0.5945348918918356,
+        "these": 1.2476982301661725,
+        "directly": 0.5945348918918356,
+        "evaluate": 0.5945348918918356,
+        "offer": 0.5945348918918356,
+        "benchmark": 0.5945348918918356,
+        "high": 0.5945348918918356,
+        "quality": 0.5945348918918356,
+        "repositories": 0.5945348918918356,
+        "typically": 0.5945348918918356,
+        "include": 0.5945348918918356,
+        "rigorous": 0.5945348918918356,
+        "documentation": 0.5945348918918356,
+        "test": 0.5945348918918356,
+        "suites": 0.5945348918918356,
+        "reproducibility": 1.0066350759511735,
+        "guarantees": 0.5945348918918356,
+        "clear": 1.0066350759511735,
+        "licensing": 0.5945348918918356,
+        "none": 0.5945348918918356,
+        "evident": 0.5945348918918356,
+        "provided": 0.5945348918918356,
+        "specifically": 0.5945348918918356,
+        "conclusion": 0.5945348918918356,
+        "lightweight": 0.5945348918918356,
+        "derivative": 0.5945348918918356,
+        "project": 0.5945348918918356,
+        "narrow": 0.5945348918918356,
+        "scope": 0.5945348918918356,
+        "replicates": 1.0066350759511735,
+        "findings": 0.5945348918918356,
+        "extends": 0.5945348918918356,
+        "accessibility": 1.0066350759511735,
+        "improvements": 0.5945348918918356,
+        "metrics": 0.5945348918918356,
+        "suggest": 0.5945348918918356,
+        "broadly": 0.5945348918918356,
+        "adopted": 0.5945348918918356,
+        "endorsed": 0.5945348918918356,
+        "particular": 0.5945348918918356,
+        "implementation": 1.0066350759511735,
+        "value": 0.5945348918918356,
+        "proposition": 0.5945348918918356,
+        "limited": 0.5945348918918356,
+        "makes": 0.5945348918918356,
+        "proprietary": 0.5945348918918356,
+        "adjacent": 0.5945348918918356,
+        "reproducible": 0.5945348918918356,
+        "gpus": 0.5945348918918356,
+        "added": 0.5945348918918356,
+        "dimensions": 0.5945348918918356,
+        "however": 0.5945348918918356,
+        "owned": 0.5945348918918356,
+        "major": 0.5945348918918356,
+        "rather": 0.5945348918918356,
+        "developing": 0.5945348918918356,
+        "methodology": 0.5945348918918356,
+        "primarily": 0.5945348918918356,
+        "discovery": 0.5945348918918356,
+        "indicate": 0.5945348918918356,
+        "unresolved": 0.5945348918918356,
+        "problems": 0.5945348918918356,
+        "limit": 0.5945348918918356,
+        "practical": 0.5945348918918356,
+        "utility": 0.5945348918918356,
+        "attempts": 0.5945348918918356,
+        "osint": 1.0066350759511735,
+        "intelligence": 1.0066350759511735,
+        "appendix": 0.5945348918918356,
+        "following": 0.5945348918918356,
+        "google": 0.5945348918918356,
+        "dork": 1.0066350759511735,
+        "queries": 1.0066350759511735,
+        "auto": 0.5945348918918356,
+        "generated": 1.0066350759511735,
+        "find": 1.0066350759511735,
+        "publicly": 0.5945348918918356,
+        "exposed": 1.551401887167465,
+        "related": 0.5945348918918356,
+        "topic": 0.5945348918918356,
+        "use": 1.0066350759511735,
+        "freely": 1.0066350759511735,
+        "available": 0.5945348918918356,
+        "public": 1.0066350759511735,
+        "search": 1.0066350759511735,
+        "techniques": 0.5945348918918356,
+        "surface": 0.5945348918918356,
+        "appear": 1.0066350759511735,
+        "private": 1.0066350759511735,
+        "gathering": 0.5945348918918356,
+        "files": 1.0066350759511735,
+        "site": 1.900861568440509,
+        "filetype": 1.2476982301661725,
+        "pdf": 0.5945348918918356,
+        "xls": 0.5945348918918356,
+        "xlsx": 0.5945348918918356,
+        "credentials": 1.2476982301661725,
+        "password": 0.5945348918918356,
+        "passwd": 0.5945348918918356,
+        "api": 0.5945348918918356,
+        "key": 1.0066350759511735,
+        "apikey": 0.5945348918918356,
+        "secret": 0.5945348918918356,
+        "user": 1.0066350759511735,
+        "intext": 1.2476982301661725,
+        "email": 0.5945348918918356,
+        "phone": 0.5945348918918356,
+        "address": 0.5945348918918356,
+        "intitle": 1.2476982301661725,
+        "index": 1.2476982301661725,
+        "backup": 1.0066350759511735,
+        "dirs": 1.0066350759511735,
+        "cached": 1.0066350759511735,
+        "versions": 1.0066350759511735,
+        "cache": 0.5945348918918356,
+        "inurl": 0.5945348918918356,
+        "config": 0.5945348918918356,
+        "php": 0.5945348918918356,
+        "dorks": 0.5945348918918356,
+        "responsibly": 0.5945348918918356,
+        "domains": 0.5945348918918356,
+        "permission": 0.5945348918918356,
+        "investigate": 0.5945348918918356
+      }
     }
-  ]
+  ],
+  "index": {
+    "1000": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "4090": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "79330": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "evaluate": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "whether": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "sodium": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "ion": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 5,
+        "idf": 1.0870113769896297
+      }
+    ],
+    "batteries": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "viable": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "alternative": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "lithium": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "grid": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "storage": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "evaluation": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "data": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "analysis": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "sibs": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "present": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "several": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "key": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "characteristics": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "compared": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "libs": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "applications": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "cost": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "availability": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "approximately": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "times": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "abundant": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "extraction": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "seawater": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "having": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "minimal": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "environmental": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "impact": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "mining": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "techno": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "economic": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "analyses": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "indicate": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "lower": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "manufacturing": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "costs": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "due": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "mat": [
+      {
+        "documentId": "k27msfuf",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "design": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "blueprint": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "decentralized": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "inference": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "network": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "using": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      },
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      }
+    ],
+    "latest": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "research": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "overview": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "three": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "zone": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "architecture": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "replaces": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "opaque": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "cross": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "chain": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "gateways": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "verifiable": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "artifacts": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "tee": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "kernels": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "run": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "commitment": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "proofs": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "generated": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "weights": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "anchored": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "public": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "shards": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pin": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "layer": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "online": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "router": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "optimizes": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dispatch": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "across": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "heterogeneous": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "internet": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "nodes": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "objectives": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "implement": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "verification": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "gate": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "authenticates": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "execution": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "per": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 4,
+        "idf": 1.2876820724517808
+      }
+    ],
+    "node": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "model": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "hashes": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pinned": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "shard": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "tier": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "instead": [
+      {
+        "documentId": "d8dd24wr",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "compare": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "crispr": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "delivery": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "vectors": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "aav": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "lipid": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "nanoparticles": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "which": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "clinically": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "conclusion": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "lnps": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "systemic": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "therapies": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "because": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "deliver": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "transient": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "mrnas": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "rather": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      },
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "persistent": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "viral": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "genomes": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "while": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "eranacogene": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dezaparvovec": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "proves": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "work": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "contexts": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "inherent": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "averson": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pre": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "existing": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "immunity": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "capsid": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "cas": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "related": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "dna": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "components": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      },
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "creates": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "unacceptable": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "failure": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pathway": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "liver": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "large": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "targets": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "ceiling": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "lnp": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "sidesteps": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "cleaner": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "mrna": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "formulations": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dreamer": [
+      {
+        "documentId": "wqdoedsf",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "bettert": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "version": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "openclaw": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "core": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "simplify": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "deployment": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "removing": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "setup": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "hurdles": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "issue": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "automate": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "transformation": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "raw": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "audits": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "structured": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "reports": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "specialized": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "optimize": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "via": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "localized": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "ring": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 3,
+        "idf": 1.538996500732687
+      }
+    ],
+    "topology": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "central": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "sharding": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "plan": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "wrap": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "unified": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "cli": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "facade": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "two": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "layers": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "engine": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "schema": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "first": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "multi": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pass": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "sourcery": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "entity": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "grounding": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "processes": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "audit": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "outputs": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "curat": [
+      {
+        "documentId": "dwavhoyn",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "researcg": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "jspace": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "independent": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "solarkyle": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "based": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "source": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "primary": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "point": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "repository": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "explicitly": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "describes": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "its": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "purpose": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "day": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "replication": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "extensions": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "anthropic": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "global": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "workspace": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "paper": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "gemma": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "emotion": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "probes": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "hallucination": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "prediction": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "16gb": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "gpu": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "recipe": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "means": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "independently": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "conceived": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "tool": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "framework": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "extension": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "published": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "company": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "behind": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "claude": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "concept": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "appears": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "contribution": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "regarding": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "models": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "process": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "information": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "internal": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "representations": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "technical": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "composition": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "language": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "python": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "html": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "plus": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "third": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "unspecified": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "component": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "github": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "stars": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "forks": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "open": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "issues": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "indicating": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "low": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "community": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "engagement": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "relative": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "scale": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "underlying": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "functional": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "identified": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "aligned": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "mohammad": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "lexicons": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "suggests": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "implements": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "measure": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "emotional": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "valence": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "affective": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "processing": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "within": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "known": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "technique": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "alignment": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "capability": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "anticipate": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "generate": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "factually": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "incorrect": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "output": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "optimization": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "strategy": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "running": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "consumer": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "grade": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "hardware": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "nvidia": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "rtx": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "class": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "significant": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "original": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "designed": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "larger": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "deployments": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "contextual": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "assessment": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "best": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "practice": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "literature": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "sources": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "provide": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "broader": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "context": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "software": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "sustainability": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "collaborative": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "development": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "challenges": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "practices": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "scientific": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "registries": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "these": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "directly": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "offer": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "benchmark": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "high": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "quality": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "repositories": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "typically": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "include": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "rigorous": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "documentation": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "test": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "suites": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "reproducibility": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "guarantees": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "clear": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "licensing": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "none": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "evident": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "provided": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "specifically": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "lightweight": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "derivative": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "project": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "narrow": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "scope": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "replicates": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "findings": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "extends": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "accessibility": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "improvements": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "metrics": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "suggest": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "broadly": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "adopted": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "endorsed": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "particular": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "implementation": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "value": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "proposition": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "limited": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "makes": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "proprietary": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "adjacent": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "reproducible": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "gpus": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "added": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dimensions": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "however": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "owned": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "major": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "developing": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "methodology": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "primarily": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "discovery": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "unresolved": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "problems": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "limit": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "practical": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "utility": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "attempts": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "osint": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "intelligence": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "appendix": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "following": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "google": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "dork": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "queries": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "auto": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "find": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "publicly": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "exposed": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "topic": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "use": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "freely": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "available": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "search": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "techniques": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "surface": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "appear": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "private": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "gathering": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "files": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "site": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "filetype": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "pdf": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "xls": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "xlsx": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "credentials": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "password": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "passwd": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "api": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 2,
+        "idf": 1.8754687373538999
+      }
+    ],
+    "apikey": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "secret": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "user": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "intext": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "email": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "phone": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "address": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "intitle": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "index": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "backup": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dirs": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "cached": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "versions": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 0,
+        "idf": 3.4849066497880004
+      }
+    ],
+    "cache": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "inurl": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "config": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "php": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "dorks": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "responsibly": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "domains": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "permission": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ],
+    "investigate": [
+      {
+        "documentId": "n29wvufo",
+        "tf": 1,
+        "df": 1,
+        "idf": 2.386294361119891
+      }
+    ]
+  },
+  "docFreq": {
+    "1000": 1,
+    "4090": 1,
+    "79330": 1,
+    "evaluate": 1,
+    "whether": 1,
+    "sodium": 1,
+    "ion": 1,
+    "batteries": 1,
+    "viable": 1,
+    "alternative": 1,
+    "lithium": 1,
+    "grid": 1,
+    "storage": 1,
+    "evaluation": 1,
+    "data": 1,
+    "analysis": 1,
+    "sibs": 1,
+    "present": 1,
+    "several": 1,
+    "key": 1,
+    "characteristics": 1,
+    "compared": 1,
+    "libs": 1,
+    "applications": 1,
+    "cost": 1,
+    "availability": 1,
+    "approximately": 1,
+    "times": 1,
+    "abundant": 1,
+    "extraction": 1,
+    "seawater": 1,
+    "having": 1,
+    "minimal": 1,
+    "environmental": 1,
+    "impact": 1,
+    "mining": 1,
+    "techno": 1,
+    "economic": 1,
+    "analyses": 1,
+    "indicate": 1,
+    "lower": 1,
+    "manufacturing": 1,
+    "costs": 1,
+    "due": 1,
+    "mat": 1,
+    "design": 1,
+    "blueprint": 1,
+    "decentralized": 1,
+    "inference": 1,
+    "network": 1,
+    "using": 1,
+    "latest": 1,
+    "research": 1,
+    "overview": 1,
+    "three": 1,
+    "zone": 1,
+    "architecture": 1,
+    "replaces": 1,
+    "opaque": 1,
+    "cross": 1,
+    "chain": 1,
+    "gateways": 1,
+    "verifiable": 1,
+    "artifacts": 1,
+    "tee": 1,
+    "kernels": 1,
+    "run": 1,
+    "commitment": 1,
+    "proofs": 1,
+    "generated": 1,
+    "weights": 1,
+    "anchored": 1,
+    "public": 1,
+    "shards": 1,
+    "pin": 1,
+    "layer": 1,
+    "online": 1,
+    "router": 1,
+    "optimizes": 1,
+    "dispatch": 1,
+    "across": 1,
+    "heterogeneous": 1,
+    "internet": 1,
+    "nodes": 1,
+    "objectives": 1,
+    "implement": 1,
+    "verification": 1,
+    "gate": 1,
+    "authenticates": 1,
+    "execution": 1,
+    "per": 1,
+    "node": 1,
+    "model": 1,
+    "hashes": 1,
+    "pinned": 1,
+    "shard": 1,
+    "tier": 1,
+    "instead": 1,
+    "compare": 1,
+    "crispr": 1,
+    "delivery": 1,
+    "vectors": 1,
+    "aav": 1,
+    "lipid": 1,
+    "nanoparticles": 1,
+    "which": 1,
+    "clinically": 1,
+    "conclusion": 1,
+    "lnps": 1,
+    "systemic": 1,
+    "therapies": 1,
+    "because": 1,
+    "deliver": 1,
+    "transient": 1,
+    "mrnas": 1,
+    "rather": 1,
+    "persistent": 1,
+    "viral": 1,
+    "genomes": 1,
+    "while": 1,
+    "eranacogene": 1,
+    "dezaparvovec": 1,
+    "proves": 1,
+    "work": 1,
+    "contexts": 1,
+    "inherent": 1,
+    "averson": 1,
+    "pre": 1,
+    "existing": 1,
+    "immunity": 1,
+    "capsid": 1,
+    "cas": 1,
+    "related": 1,
+    "dna": 1,
+    "components": 1,
+    "creates": 1,
+    "unacceptable": 1,
+    "failure": 1,
+    "pathway": 1,
+    "liver": 1,
+    "large": 1,
+    "targets": 1,
+    "ceiling": 1,
+    "lnp": 1,
+    "sidesteps": 1,
+    "cleaner": 1,
+    "mrna": 1,
+    "formulations": 1,
+    "dreamer": 1,
+    "bettert": 1,
+    "version": 1,
+    "openclaw": 1,
+    "core": 1,
+    "simplify": 1,
+    "deployment": 1,
+    "removing": 1,
+    "setup": 1,
+    "hurdles": 1,
+    "issue": 1,
+    "automate": 1,
+    "transformation": 1,
+    "raw": 1,
+    "audits": 1,
+    "structured": 1,
+    "reports": 1,
+    "specialized": 1,
+    "optimize": 1,
+    "via": 1,
+    "localized": 1,
+    "ring": 1,
+    "topology": 1,
+    "central": 1,
+    "sharding": 1,
+    "plan": 1,
+    "wrap": 1,
+    "unified": 1,
+    "cli": 1,
+    "facade": 1,
+    "two": 1,
+    "layers": 1,
+    "engine": 1,
+    "schema": 1,
+    "first": 1,
+    "multi": 1,
+    "pass": 1,
+    "sourcery": 1,
+    "entity": 1,
+    "grounding": 1,
+    "processes": 1,
+    "audit": 1,
+    "outputs": 1,
+    "curat": 1,
+    "researcg": 1,
+    "jspace": 1,
+    "independent": 1,
+    "solarkyle": 1,
+    "based": 1,
+    "source": 1,
+    "primary": 1,
+    "point": 1,
+    "repository": 1,
+    "explicitly": 1,
+    "describes": 1,
+    "its": 1,
+    "purpose": 1,
+    "day": 1,
+    "replication": 1,
+    "extensions": 1,
+    "anthropic": 1,
+    "global": 1,
+    "workspace": 1,
+    "paper": 1,
+    "gemma": 1,
+    "emotion": 1,
+    "probes": 1,
+    "hallucination": 1,
+    "prediction": 1,
+    "16gb": 1,
+    "gpu": 1,
+    "recipe": 1,
+    "means": 1,
+    "independently": 1,
+    "conceived": 1,
+    "tool": 1,
+    "framework": 1,
+    "extension": 1,
+    "published": 1,
+    "company": 1,
+    "behind": 1,
+    "claude": 1,
+    "concept": 1,
+    "appears": 1,
+    "contribution": 1,
+    "regarding": 1,
+    "models": 1,
+    "process": 1,
+    "information": 1,
+    "internal": 1,
+    "representations": 1,
+    "technical": 1,
+    "composition": 1,
+    "language": 1,
+    "python": 1,
+    "html": 1,
+    "plus": 1,
+    "third": 1,
+    "unspecified": 1,
+    "component": 1,
+    "github": 1,
+    "stars": 1,
+    "forks": 1,
+    "open": 1,
+    "issues": 1,
+    "indicating": 1,
+    "low": 1,
+    "community": 1,
+    "engagement": 1,
+    "relative": 1,
+    "scale": 1,
+    "underlying": 1,
+    "functional": 1,
+    "identified": 1,
+    "aligned": 1,
+    "mohammad": 1,
+    "lexicons": 1,
+    "suggests": 1,
+    "implements": 1,
+    "measure": 1,
+    "emotional": 1,
+    "valence": 1,
+    "affective": 1,
+    "processing": 1,
+    "within": 1,
+    "known": 1,
+    "technique": 1,
+    "alignment": 1,
+    "capability": 1,
+    "anticipate": 1,
+    "generate": 1,
+    "factually": 1,
+    "incorrect": 1,
+    "output": 1,
+    "optimization": 1,
+    "strategy": 1,
+    "running": 1,
+    "consumer": 1,
+    "grade": 1,
+    "hardware": 1,
+    "nvidia": 1,
+    "rtx": 1,
+    "class": 1,
+    "significant": 1,
+    "original": 1,
+    "designed": 1,
+    "larger": 1,
+    "deployments": 1,
+    "contextual": 1,
+    "assessment": 1,
+    "best": 1,
+    "practice": 1,
+    "literature": 1,
+    "sources": 1,
+    "provide": 1,
+    "broader": 1,
+    "context": 1,
+    "software": 1,
+    "sustainability": 1,
+    "collaborative": 1,
+    "development": 1,
+    "challenges": 1,
+    "practices": 1,
+    "scientific": 1,
+    "registries": 1,
+    "these": 1,
+    "directly": 1,
+    "offer": 1,
+    "benchmark": 1,
+    "high": 1,
+    "quality": 1,
+    "repositories": 1,
+    "typically": 1,
+    "include": 1,
+    "rigorous": 1,
+    "documentation": 1,
+    "test": 1,
+    "suites": 1,
+    "reproducibility": 1,
+    "guarantees": 1,
+    "clear": 1,
+    "licensing": 1,
+    "none": 1,
+    "evident": 1,
+    "provided": 1,
+    "specifically": 1,
+    "lightweight": 1,
+    "derivative": 1,
+    "project": 1,
+    "narrow": 1,
+    "scope": 1,
+    "replicates": 1,
+    "findings": 1,
+    "extends": 1,
+    "accessibility": 1,
+    "improvements": 1,
+    "metrics": 1,
+    "suggest": 1,
+    "broadly": 1,
+    "adopted": 1,
+    "endorsed": 1,
+    "particular": 1,
+    "implementation": 1,
+    "value": 1,
+    "proposition": 1,
+    "limited": 1,
+    "makes": 1,
+    "proprietary": 1,
+    "adjacent": 1,
+    "reproducible": 1,
+    "gpus": 1,
+    "added": 1,
+    "dimensions": 1,
+    "however": 1,
+    "owned": 1,
+    "major": 1,
+    "developing": 1,
+    "methodology": 1,
+    "primarily": 1,
+    "discovery": 1,
+    "unresolved": 1,
+    "problems": 1,
+    "limit": 1,
+    "practical": 1,
+    "utility": 1,
+    "attempts": 1,
+    "osint": 1,
+    "intelligence": 1,
+    "appendix": 1,
+    "following": 1,
+    "google": 1,
+    "dork": 1,
+    "queries": 1,
+    "auto": 1,
+    "find": 1,
+    "publicly": 1,
+    "exposed": 1,
+    "topic": 1,
+    "use": 1,
+    "freely": 1,
+    "available": 1,
+    "search": 1,
+    "techniques": 1,
+    "surface": 1,
+    "appear": 1,
+    "private": 1,
+    "gathering": 1,
+    "files": 1,
+    "site": 1,
+    "filetype": 1,
+    "pdf": 1,
+    "xls": 1,
+    "xlsx": 1,
+    "credentials": 1,
+    "password": 1,
+    "passwd": 1,
+    "api": 1,
+    "apikey": 1,
+    "secret": 1,
+    "user": 1,
+    "intext": 1,
+    "email": 1,
+    "phone": 1,
+    "address": 1,
+    "intitle": 1,
+    "index": 1,
+    "backup": 1,
+    "dirs": 1,
+    "cached": 1,
+    "versions": 1,
+    "cache": 1,
+    "inurl": 1,
+    "config": 1,
+    "php": 1,
+    "dorks": 1,
+    "responsibly": 1,
+    "domains": 1,
+    "permission": 1,
+    "investigate": 1
+  },
+  "docCount": 5
 }

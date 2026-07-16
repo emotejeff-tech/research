@@ -76,6 +76,37 @@ const STOP_WORDS = new Set([
 const MIN_TOKEN_LEN = 3
 const MAX_ENTRIES = 500
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function normalizeEntry(entry: unknown): MemoryEntry | null {
+  if (!isRecord(entry) || typeof entry.id !== 'string' || typeof entry.text !== 'string' || typeof entry.conclusion !== 'string' || typeof entry.timestamp !== 'number') {
+    return null
+  }
+
+  const tokens = tokenize(entry.text)
+  const { vector, tfidf } = computeTfidf(tokens, store.entries.length)
+  return {
+    id: entry.id,
+    text: entry.text,
+    query: typeof entry.query === 'string' ? entry.query : '',
+    conclusion: entry.conclusion,
+    timestamp: entry.timestamp,
+    vector: Array.isArray(entry.vector) ? entry.vector : vector,
+    tfidf,
+  }
+}
+
+function normalizeLoadedStore(parsed: VectorStore): VectorStore {
+  return {
+    entries: Array.isArray(parsed.entries) ? parsed.entries.map(normalizeEntry).filter((entry): entry is MemoryEntry => Boolean(entry)) : [],
+    index: isRecord(parsed.index) ? parsed.index : {},
+    docFreq: isRecord(parsed.docFreq) ? parsed.docFreq : {},
+    docCount: typeof parsed.docCount === 'number' ? parsed.docCount : 0,
+  }
+}
+
 /** Normalize text for tokenization. */
 function normalizeText(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
@@ -154,11 +185,10 @@ export function loadVectorMemory() {
 
     if (existsSync(JSON_STORAGE_PATH)) {
       const raw = readFileSync(JSON_STORAGE_PATH, 'utf-8')
-      store = JSON.parse(raw) as VectorStore
-      // Rebuild index for any legacy entries missing it
-      if (!store.index || !store.docFreq) {
-        buildInvertedIndex()
-      }
+      const parsed = JSON.parse(raw) as VectorStore
+      store = normalizeLoadedStore(parsed)
+      buildInvertedIndex()
+      persist()
       console.log(`[vector-memory] loaded ${store.entries.length} past conclusions (TF-IDF local)`)
     } else {
       store = { entries: [], index: {}, docFreq: {}, docCount: 0 }
@@ -194,13 +224,14 @@ export function queryLocalMemory(query: string, k = 3, threshold = 0.1): QueryRe
   for (const entry of store.entries) {
     const qTfidf = computeTfidf(queryTokens, store.entries.length).tfidf
     const entryTokens = new Set(tokenize(entry.text))
+    const entryTfidf = entry.tfidf || {}
 
     // TF-IDF similarity
     let tfidfScore = 0
     let overlap = 0
     for (const token of entryTokens) {
       if (qTfidf[token]) {
-        tfidfScore += qTfidf[token] * entry.tfidf[token]
+        tfidfScore += qTfidf[token] * (entryTfidf[token] || 0)
         overlap++
       }
     }
@@ -217,7 +248,7 @@ export function queryLocalMemory(query: string, k = 3, threshold = 0.1): QueryRe
       const df = idx.length
       if (df === 0) continue
       const idf = Math.log((store.entries.length - df + 0.5) / (df + 0.5))
-      const tf = entry.tfidf[token] || 0
+      const tf = entryTfidf[token] || 0
       const termFreq = tf > 0 ? (1 + k1) * tf : 0
       const denom = tf + k1 * (1 - b + b * docLen / (avgDocLen || 1))
       bm25Score += idf * termFreq / denom
