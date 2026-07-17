@@ -53,6 +53,9 @@ const DEFAULT_TTS_VOICES = [
   'chatterbox',
 ]
 
+const TTS_TIMEOUT_MS = 8000
+const DETECT_TIMEOUT_MS = 1500
+
 /** Get the active VoiceBox URL from settings. */
 export function getAudioboxUrl(): string {
   const s = getSettings()
@@ -180,11 +183,11 @@ function getAudioboxSpeechUrls(): string[] {
   ]
 }
 
-async function fetchJson<T>(url: string, init: RequestInit = {}): Promise<T | null> {
+async function fetchJson<T>(url: string, init: RequestInit = {}, timeoutMs: number = DETECT_TIMEOUT_MS): Promise<T | null> {
   try {
     const res = await fetch(url, {
       ...init,
-      signal: init.signal || AbortSignal.timeout(5000),
+      signal: init.signal || AbortSignal.timeout(timeoutMs),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return (await res.json()) as T
@@ -201,13 +204,13 @@ async function responseText(res: Response): Promise<string> {
   }
 }
 
-async function fetchListFromProvider(provider: TtsProvider, kind: 'models' | 'voices'): Promise<string[]> {
+async function fetchListFromProvider(provider: TtsProvider, kind: 'models' | 'voices', timeoutMs = DETECT_TIMEOUT_MS): Promise<string[]> {
   const urls = provider === 'openai-compatible'
     ? kind === 'models' ? [getOpenAiCompatibleModelsUrl()] : [getOpenAiCompatibleVoicesUrl()]
     : kind === 'models' ? getAudioboxModelsUrls() : getAudioboxVoicesUrls()
 
   for (const url of urls) {
-    const data = await fetchJson<any>(url, { method: 'GET' })
+    const data = await fetchJson<any>(url, { method: 'GET' }, timeoutMs)
     if (data) {
       const values = listFromData(data, kind)
       if (values.length > 0) return values
@@ -265,7 +268,7 @@ async function announceAudiobox(message: string, model: string, voice: string): 
           text: message,
           stream: false,
         }),
-        signal: AbortSignal.timeout(30000),
+        signal: AbortSignal.timeout(TTS_TIMEOUT_MS),
       })
 
       if (!res.ok) throw new Error(`Audiobox HTTP ${res.status}: ${await responseText(res)}`)
@@ -310,7 +313,7 @@ async function announceOpenAiCompatible(message: string, model: string, voice: s
         response_format: 'wav',
         stream: false,
       }),
-      signal: AbortSignal.timeout(30000),
+      signal: AbortSignal.timeout(TTS_TIMEOUT_MS),
     })
 
     if (!res.ok) throw new Error(`OpenAI-compatible TTS HTTP ${res.status}: ${await responseText(res)}`)
@@ -341,28 +344,28 @@ async function announceOpenAiCompatible(message: string, model: string, voice: s
 }
 
 /** Auto-detect VoiceBox models on startup. */
-export async function autoDetectAudioboxModels(): Promise<string[]> {
-  return fetchModels()
+export async function autoDetectAudioboxModels(timeoutMs = DETECT_TIMEOUT_MS): Promise<string[]> {
+  return fetchModels(timeoutMs)
 }
 
 /** Auto-detect VoiceBox voices on startup. */
-export async function autoDetectAudioboxVoices(): Promise<string[]> {
-  return fetchVoices()
+export async function autoDetectAudioboxVoices(timeoutMs = DETECT_TIMEOUT_MS): Promise<string[]> {
+  return fetchVoices(timeoutMs)
 }
 
 /** Fetch available VoiceBox voices. */
-export async function fetchVoices(): Promise<string[]> {
+export async function fetchVoices(timeoutMs = DETECT_TIMEOUT_MS): Promise<string[]> {
   for (const provider of providerOrder()) {
-    const voices = await fetchListFromProvider(provider, 'voices')
+    const voices = await fetchListFromProvider(provider, 'voices', timeoutMs)
     if (voices.length > 0) return voices
   }
   return DEFAULT_TTS_VOICES
 }
 
 /** Fetch available VoiceBox models. */
-export async function fetchModels(): Promise<string[]> {
+export async function fetchModels(timeoutMs = DETECT_TIMEOUT_MS): Promise<string[]> {
   for (const provider of providerOrder()) {
-    const models = await fetchListFromProvider(provider, 'models')
+    const models = await fetchListFromProvider(provider, 'models', timeoutMs)
     if (models.length > 0) return models
   }
   return DEFAULT_TTS_MODELS

@@ -216,6 +216,7 @@ export async function fetchModels(
   provider: ProviderType,
   baseURL: string,
   apiKey: string,
+  timeoutMs = 5000,
 ): Promise<{ models: string[]; voices?: string[]; error?: string }> {
   if (!baseURL && provider !== 'zai') {
     return { models: [], error: 'No base URL configured' }
@@ -230,7 +231,7 @@ export async function fetchModels(
     if (provider === 'ollama') {
       const res = await fetch(`${url.replace('/v1', '')}/api/tags`, {
         headers,
-        signal: AbortSignal.timeout(5000),
+        signal: AbortSignal.timeout(timeoutMs),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data: any = await res.json()
@@ -242,7 +243,7 @@ export async function fetchModels(
     if (provider === 'audiobox') {
       const res = await fetch(`${url}/api/voices`, {
         headers,
-        signal: AbortSignal.timeout(5000),
+        signal: AbortSignal.timeout(timeoutMs),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data: any = await res.json()
@@ -253,7 +254,7 @@ export async function fetchModels(
     // All other providers use the OpenAI-compatible /v1/models endpoint.
     const res = await fetch(`${url}/models`, {
       headers,
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(timeoutMs),
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data: any = await res.json()

@@ -25,6 +25,7 @@ export { extractJSON }
 const LOCAL_LLM_TIMEOUT_MS = 300000 // 300s — local models can be VERY slow
 const LOCAL_LLM_RETRY_BACKOFF = 3000 // ms between retries
 const LOCAL_LLM_HEARTBEAT_MS = 15000 // ms — log heartbeat every 15s
+const LOCAL_LLM_WARMUP_TIMEOUT_MS = 10000 // ms — startup warmup should not block forever
 
 // ---------- Tier 1: primary (configured provider or local) ----------
 /** Primary LLM call with exponential-backoff retries.
@@ -187,9 +188,10 @@ async function callLocalModel(
   systemPrompt: string,
   userPrompt: string,
   useJsonMode: boolean,
+  timeoutMs = LOCAL_LLM_TIMEOUT_MS,
 ): Promise<string> {
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), LOCAL_LLM_TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   // Heartbeat: log every 15s so the orchestrator console shows the model is still working
   const heartbeat = setInterval(() => {
@@ -252,6 +254,7 @@ export async function warmupLocalModel(): Promise<boolean> {
       'You are a test. Respond with "OK".',
       'Say OK.',
       false,
+      LOCAL_LLM_WARMUP_TIMEOUT_MS,
     )
     console.log('[llm] model warmup complete — first query will be fast.')
     return true

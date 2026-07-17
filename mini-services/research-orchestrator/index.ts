@@ -52,6 +52,7 @@ function uniqueStrings(values: unknown[]): string[] {
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
+const STARTUP_DETECT_TIMEOUT_MS = 1500
 
 // ---------- Auto-detect local services ----------
 async function autoDetectLocalServices() {
@@ -59,7 +60,7 @@ async function autoDetectLocalServices() {
     const s = getSettings()
     // Try to fetch available voices from VoiceBox/Audiobox or OpenAI-compatible TTS
     try {
-      const voices = await fetchVoices()
+      const voices = await fetchVoices(STARTUP_DETECT_TIMEOUT_MS)
       const voiceNames = uniqueStrings(voices)
       if (voiceNames.length > 0) {
         s.ttsVoices = voiceNames
@@ -75,7 +76,7 @@ async function autoDetectLocalServices() {
 
     // Try to fetch available TTS models from VoiceBox/Audiobox or OpenAI-compatible TTS
     try {
-      const ttsModels = await fetchTtsModels()
+      const ttsModels = await fetchTtsModels(STARTUP_DETECT_TIMEOUT_MS)
       const modelNames = uniqueStrings(ttsModels)
       if (modelNames.length > 0) {
         s.ttsModels = modelNames
@@ -91,7 +92,7 @@ async function autoDetectLocalServices() {
 
     // Try to fetch available models from local LLM providers
     try {
-      const models = await fetchModels(s.provider, s.baseURL || '', s.apiKey || '')
+      const models = await fetchModels(s.provider, s.baseURL || '', s.apiKey || '', STARTUP_DETECT_TIMEOUT_MS)
       if (models.models.length > 0 && !s.model) {
         s.model = models.models[0]
         s.baseURL = s.baseURL || PROVIDER_PRESETS[s.provider].defaultURL
@@ -109,8 +110,10 @@ async function autoDetectLocalServices() {
   }
 }
 
-// Start local service detection on boot
-autoDetectLocalServices().catch((e) => console.error('[auto-detect] unhandled:', (e as Error)?.message))
+// Start local service detection in the background after the server is listening and settings are loaded.
+function startBackgroundStartupWork() {
+  void autoDetectLocalServices().catch((e) => console.error('[auto-detect] unhandled:', (e as Error)?.message))
+}
 
 // ---------- Persistent execution memory ----------
 const tasks = new Map<string, TaskState>()
@@ -134,16 +137,15 @@ function makeEmitter(socket: any, taskId: string): Emit {
 }
 
 /** Announce a message via TTS and emit the audio to the frontend. */
-async function announcePhase(socket: any, message: string) {
+function announcePhase(socket: any, message: string) {
   if (!isVoiceEnabled()) return
-  try {
-    const result = await announce(message)
+  void announce(message).then((result) => {
     if (result.ok && result.audioBase64) {
       socket.emit('voice:announce', { audio: result.audioBase64, text: message })
     }
-  } catch {
+  }).catch(() => {
     /* best-effort — TTS failures shouldn't break the run */
-  }
+  })
 }
 
 // ============================================================
@@ -1179,6 +1181,8 @@ httpServer.listen(PORT, () => {
   loadMetaPrompts()
   loadSettings()
 
+  startBackgroundStartupWork()
+
   // Environment auto-discovery: scan env vars for API keys.
   const envDiscovery = discoverEnvKeys()
   if (envDiscovery.found.length > 0) {
@@ -1195,7 +1199,7 @@ httpServer.listen(PORT, () => {
     latestHealthStatuses = statuses
   }).catch(() => { /* best-effort */ })
   // Warmup: pre-load the local model into VRAM so the first query is fast.
-  warmupLocalModel()
+  warmupLocalModel().catch(() => { /* best-effort */ })
 
   // Run skill deprecation on boot + every 6 hours.
   const deprecated = deprecateStaleTools(pluginRegistryMeta)
