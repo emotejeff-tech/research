@@ -28,6 +28,8 @@ export interface Source {
   url: string
   snippet: string
   host: string
+  /** Whether this source came from a local cache and should skip link validation. */
+  cached?: boolean
 }
 
 export interface Plugin {

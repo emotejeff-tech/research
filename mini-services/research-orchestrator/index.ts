@@ -35,7 +35,7 @@ import {
   type PluginMeta,
 } from './tools/plugin_registry'
 import { initTelemetry, recordRun, getLogs, clearLogs, type RunLog } from './telemetry'
-import { loadSearchCache, getCachedResults, cacheResults, getCacheStats } from './tools/search_cache'
+import { loadSearchCache, getCachedResults, cacheResults, getCacheStats, flushSearchCache } from './tools/search_cache'
 import { loadVectorMemory, storeConclusion, retrieveRelevant, getMemoryStats, getMemoryInfo } from './tools/vector_memory'
 import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
@@ -1213,5 +1213,11 @@ httpServer.listen(PORT, () => {
   console.log(`[research-orchestrator] socket.io listening on :${PORT}`)
 })
 
-process.on('SIGTERM', () => httpServer.close(() => process.exit(0)))
-process.on('SIGINT', () => httpServer.close(() => process.exit(0)))
+process.on('SIGTERM', () => {
+  flushSearchCache()
+  httpServer.close(() => process.exit(0))
+})
+process.on('SIGINT', () => {
+  flushSearchCache()
+  httpServer.close(() => process.exit(0))
+})

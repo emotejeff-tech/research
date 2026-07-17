@@ -7,24 +7,69 @@
  */
 import type { Source } from '../types'
 
-/** Check if a URL is alive (returns 2xx/3xx). 500ms timeout per URL. */
+const LINK_VALIDATION_TTL_MS = 7 * 24 * 60 * 60 * 1000
+
+interface LinkCheckCacheEntry {
+  expiresAt: number
+  alive: boolean
+  status?: number
+}
+
+const linkValidationCache = new Map<string, LinkCheckCacheEntry>()
+
+function normalizeUrl(url: string): string {
+  try {
+    const parsed = new URL(url)
+    parsed.hash = ''
+    parsed.search = parsed.search
+      .replace(/[?&](?:ref|utm_[a-z_]+|fbclid|gclid|mc_cid|mc_eid)=([^&]+)/gi, '')
+      .replace(/[?&]$/, '')
+    return parsed.toString().replace(/\/$/, '')
+  } catch {
+    return url.replace(/\/$/, '')
+  }
+}
+
+/** Check if a URL is alive (returns 2xx/3xx). Cached for 7 days to avoid repeated HEAD/GET churn. */
 async function checkUrl(url: string): Promise<{ url: string; alive: boolean; status?: number }> {
+  const normalizedUrl = normalizeUrl(url)
+  const cached = linkValidationCache.get(normalizedUrl)
+  if (cached && cached.expiresAt > Date.now()) {
+    return { url, alive: cached.alive, status: cached.status }
+  }
+
   try {
     const res = await fetch(url, {
       method: 'HEAD',
       redirect: 'follow',
-      signal: AbortSignal.timeout(3000),
+      signal: AbortSignal.timeout(1000),
     })
-    return { url, alive: res.ok || res.status < 400, status: res.status }
+    const alive = res.ok || res.status < 400
+    linkValidationCache.set(normalizedUrl, {
+      expiresAt: Date.now() + LINK_VALIDATION_TTL_MS,
+      alive,
+      status: res.status,
+    })
+    return { url, alive, status: res.status }
   } catch {
     // Some servers block HEAD — try GET as fallback.
     try {
       const res = await fetch(url, {
         method: 'GET',
-        signal: AbortSignal.timeout(3000),
+        signal: AbortSignal.timeout(1500),
       })
-      return { url, alive: res.ok || res.status < 400, status: res.status }
+      const alive = res.ok || res.status < 400
+      linkValidationCache.set(normalizedUrl, {
+        expiresAt: Date.now() + LINK_VALIDATION_TTL_MS,
+        alive,
+        status: res.status,
+      })
+      return { url, alive, status: res.status }
     } catch {
+      linkValidationCache.set(normalizedUrl, {
+        expiresAt: Date.now() + LINK_VALIDATION_TTL_MS,
+        alive: false,
+      })
       return { url, alive: false }
     }
   }
@@ -67,7 +112,6 @@ const CREDIBILITY_DOMAINS: Record<string, number> = {
   'biorxiv.org': 8, 'medrxiv.org': 8,
   // Government / institutional
   'gov': 8, 'nist.gov': 8, 'europa.eu': 8, 'who.int': 8,
-  'nist.gov': 8, 'epa.gov': 7,
   // Major tech / reference
   'github.com': 7, 'stackoverflow.com': 6, 'wikipedia.org': 6,
   'mdn.mozilla.org': 7, 'developer.mozilla.org': 7,

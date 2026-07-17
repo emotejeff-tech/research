@@ -12,6 +12,9 @@ import type { Source } from '../types'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const CACHE_PATH = join(__dirname, '..', 'search_cache.json')
+const CACHE_WRITE_DEBOUNCE_MS = 250
+const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
+const CACHE_MAX_ENTRIES = 100
 
 interface CacheEntry {
   query: string
@@ -21,10 +24,38 @@ interface CacheEntry {
 }
 
 let cache: Record<string, CacheEntry> = {}
+let persistTimer: NodeJS.Timeout | undefined
+
+/** Prune expired cache entries. */
+function pruneExpiredEntries() {
+  const now = Date.now()
+  for (const [key, entry] of Object.entries(cache)) {
+    if (now - entry.timestamp > CACHE_TTL_MS) delete cache[key]
+  }
+}
+
+/** Debounced persist the cache. */
+function schedulePersist() {
+  if (persistTimer) clearTimeout(persistTimer)
+  persistTimer = setTimeout(() => {
+    persistTimer = undefined
+    persist()
+  }, CACHE_WRITE_DEBOUNCE_MS) as any
+}
+
+/** Persist the cache. */
+function persist() {
+  try {
+    writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2), 'utf-8')
+  } catch {
+    /* best-effort */
+  }
+}
 
 /** Load the cache from disk. */
 export function loadSearchCache() {
   try {
+    pruneExpiredEntries()
     if (existsSync(CACHE_PATH)) {
       cache = JSON.parse(readFileSync(CACHE_PATH, 'utf-8'))
       console.log(`[search-cache] loaded ${Object.keys(cache).length} cached queries`)
@@ -34,12 +65,12 @@ export function loadSearchCache() {
   }
 }
 
-/** Persist the cache. */
-function persist() {
-  try {
-    writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2), 'utf-8')
-  } catch {
-    /* best-effort */
+/** Flush pending debounced cache writes. */
+export function flushSearchCache() {
+  if (persistTimer) {
+    clearTimeout(persistTimer)
+    persistTimer = undefined
+    persist()
   }
 }
 
@@ -57,7 +88,7 @@ export function getCachedResults(query: string): Source[] | null {
   const entry = cache[key]
   if (entry) {
     entry.hitCount += 1
-    persist()
+    schedulePersist()
     return entry.results
   }
   return null
@@ -72,9 +103,10 @@ export function cacheResults(query: string, results: Source[]) {
     timestamp: Date.now(),
     hitCount: 1,
   }
+  pruneExpiredEntries()
   // Cap at 100 cached queries.
   const keys = Object.keys(cache)
-  if (keys.length > 100) {
+  if (keys.length > CACHE_MAX_ENTRIES) {
     // Evict the oldest.
     let oldest = keys[0]
     for (const k of keys) {
@@ -82,11 +114,12 @@ export function cacheResults(query: string, results: Source[]) {
     }
     delete cache[oldest]
   }
-  persist()
+  schedulePersist()
 }
 
 /** Get cache stats for the frontend. */
 export function getCacheStats(): { entries: number; totalHits: number } {
+  pruneExpiredEntries()
   const entries = Object.keys(cache).length
   const totalHits = Object.values(cache).reduce((sum, e) => sum + e.hitCount, 0)
   return { entries, totalHits }

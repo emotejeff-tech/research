@@ -14,7 +14,8 @@ import { getCachedResults, cacheResults } from '../tools/search_cache'
 import { validateLinks, sortByCredibility, getCredibilityScore } from '../tools/link_checker'
 import { getSettings } from '../tools/settings'
 import type { Source, Emit } from '../types'
-import { sleep } from '../util'
+
+type BranchResult = { sources: Source[]; cached: boolean }
 
 /** Smart source trimming: reduce source count based on context window size. */
 function getOptimalSourceCount(): number {
@@ -33,13 +34,13 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
     text: `Parallel search: firing ${subQueries.length} sub-queries simultaneously…`,
   })
 
-  const branchResults = await Promise.allSettled(
+  const branchResults = (await Promise.allSettled(
     subQueries.map(async (sq) => {
       // Check cache first.
       const cached = getCachedResults(sq)
       if (cached) {
         emit('research:thought', { agent: 'Discovery', text: `Cache hit: "${sq}"` })
-        return cached
+        return { sources: cached.map((src) => ({ ...src, cached: true })), cached: true }
       }
 
       // Multi-provider search.
@@ -51,23 +52,23 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
 
       if (results.length > 0) {
         cacheResults(sq, results)
-        return results
+        return { sources: results, cached: false }
       }
 
       // OFFLINE CACHE REPLAY: if all providers fail, try broader cache search.
       emit('research:thought', { agent: 'Discovery', text: `All providers failed for "${sq}" — searching offline cache…` })
       return [] // Will be handled by the offline fallback below
     }),
-  )
+  )) as PromiseSettledResult<BranchResult>[]
 
   // Collect results from all branches.
   let sources: Source[] = []
   let allBranchesFailed = true
   for (let i = 0; i < branchResults.length; i++) {
     const r = branchResults[i]
-    if (r.status === 'fulfilled' && r.value.length > 0) {
+    if (r.status === 'fulfilled' && r.value.sources.length > 0) {
       allBranchesFailed = false
-      for (const src of r.value) {
+      for (const src of r.value.sources) {
         sources.push(src)
         emit('research:source', { source: src })
       }
@@ -86,19 +87,21 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
     // synthesis path will handle it.
   }
 
-  // AUTO-VALIDATING LINK CHECKER: filter out dead URLs.
-  if (sources.length > 3) {
+  // Cached sources already passed link validation when they were stored, so only validate live results.
+  const uncachedSources = sources.filter((s) => !s.cached)
+  if (uncachedSources.length > 3) {
     emit('research:thought', {
       agent: 'Discovery',
-      text: `Validating ${sources.length} URLs (HEAD requests, filtering 404s)…`,
+      text: `Validating ${uncachedSources.length} live URL(s) (HEAD requests, filtering 404s)…`,
     })
-    const before = sources.length
-    sources = await validateLinks(sources, 10)
-    const removed = before - sources.length
+    const before = uncachedSources.length
+    const uncachedAlive = await validateLinks(uncachedSources, 10)
+    const removed = before - uncachedAlive.length
+    sources = sources.filter((s) => s.cached || uncachedAlive.some((src) => src.url === s.url))
     if (removed > 0) {
       emit('research:thought', {
         agent: 'Discovery',
-        text: `Link validation: removed ${removed} dead URL(s), ${sources.length} remaining.`,
+        text: `Link validation: removed ${removed} dead live URL(s), ${uncachedAlive.length} live URL(s) remaining.`,
       })
     }
   }
@@ -121,8 +124,9 @@ export async function discover(subQueries: string[], emit: Emit): Promise<Source
   const cachedAcademic = getCachedResults(academicQuery)
   if (cachedAcademic) {
     for (const src of cachedAcademic) {
-      sources.push({ ...src, id: src.id + '_ac' })
-      emit('research:source', { source: { ...src, id: src.id + '_ac' } })
+      const source = { ...src, id: src.id + '_ac', cached: true }
+      sources.push(source)
+      emit('research:source', { source })
     }
   } else {
     try {
