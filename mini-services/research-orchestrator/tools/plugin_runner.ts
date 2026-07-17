@@ -12,7 +12,7 @@
  * print results to stdout. The Evolution Engine can create new plugins that
  * agents can use to improve themselves.
  */
-import { exec } from 'child_process'
+import { exec, execSync } from 'child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { PLUGIN_DIR } from '../agents/evolution'

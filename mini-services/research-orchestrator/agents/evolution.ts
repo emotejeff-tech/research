@@ -63,7 +63,7 @@ export async function analyzeGap(
       useJsonMode: true,
     },
   )
-  const parsed = extractJSON<{ capability?: string; rationale?: string }>(raw)
+  const parsed = extractJSON<{ capability?: string; rationale?: string }>(raw.content)
   return {
     capability: parsed?.capability || 'a reusable data-extraction utility for this domain',
     rationale: parsed?.rationale || 'would automate part of the research workflow',
@@ -71,13 +71,14 @@ export async function analyzeGap(
 }
 
 // ---------- Stage 2: Tool Authoring ----------
-function parsePlugin(raw: string): Omit<Plugin, 'id' | 'createdAt'> | null {
+function parsePlugin(raw: { content: string } | string): Omit<Plugin, 'id' | 'createdAt'> | null {
+  const text = typeof raw === 'string' ? raw : raw.content
   const parsed = extractJSON<{
     name?: string
     description?: string
     language?: string
     code?: string
-  }>(raw)
+  }>(text)
   if (!parsed || !parsed.name || !parsed.code) return null
   // un-escape newlines if the LLM returned them as literal \n
   const code = parsed.code.replace(/\\n/g, '\n').replace(/\\t/g, '\t')
@@ -109,7 +110,7 @@ export async function authorTool(
       useJsonMode: true,
     },
   )
-  return parsePlugin(raw)
+  return parsePlugin(raw.content)
 }
 
 /**
@@ -138,7 +139,7 @@ export async function authorFromBlueprint(
       useJsonMode: true,
     },
   )
-  const parsed = parsePlugin(raw)
+  const parsed = parsePlugin(raw.content)
   if (parsed) {
     // Force the suggested name from the blueprint.
     parsed.name = suggestedName.replace(/[^a-z0-9_]/gi, '_').toLowerCase()
@@ -147,7 +148,45 @@ export async function authorFromBlueprint(
   return parsed
 }
 
-// ---------- Stage 3: Automated Test Sandbox (TDD) ----------
+// ---------- Deterministic fallback authoring ----------
+const DETERMINISTIC_REVIEWER_NAME = 'data_reviewer'
+const DETERMINISTIC_REVIEWER_DESCRIPTION = 'Summarizes and keyword-scans research input text with standard-library Python only.'
+const DETERMINISTIC_REVIEWER_CODE = `import re
+import sys
+from collections import Counter
+
+
+def summarize_text(text: str) -> str:
+    text = (text or "").strip()
+    if not text:
+        return "No input text provided. Nothing to review."
+
+    sentences = [s.strip() for s in re.split(r"[.!?]+", text) if s.strip()]
+    words = re.findall(r"[A-Za-z0-9_]{4,}", text.lower())
+    top_terms = ", ".join(f"{term}({count})" for term, count in Counter(words).most_common(10))
+    sample = text[:500]
+    return (
+        f"Input length: {len(text)} characters\\n"
+        f"Sentence count: {len(sentences)}\\n"
+        f"Top terms: {top_terms or 'none'}\\n"
+        f"Sample: {sample}..."
+    )
+
+
+def main() -> None:
+    if len(sys.argv) > 1:
+        input_text = sys.argv[1]
+    else:
+        input_text = sys.stdin.read()
+    try:
+        print(summarize_text(input_text))
+    except Exception as exc:
+        print(f"Review error: {exc}")
+
+
+if __name__ == "__main__":
+    main()
+`
 /**
  * Writes the code to custom_plugins/<name>.py and validates it with
  * `python3 -m py_compile`. Returns the compile error (if any) so the
@@ -265,7 +304,7 @@ export async function patchTool(
       useJsonMode: true,
     },
   )
-  const patched = parsePlugin(raw)
+  const patched = parsePlugin(raw.content)
   // keep the original name so we overwrite the same file
   if (patched) patched.name = name
   return patched
@@ -314,6 +353,84 @@ export function reflectForReuse(
     }
   }
   return bestMatch?.name || null
+}
+
+/** Build a deterministic gap when LLM gap analysis is unavailable. */
+export function buildDeterministicGap(
+  query: string,
+  sources: Source[],
+  existingTools: { name: string; description: string }[],
+): { capability: string; rationale: string } {
+  const sourceDigest = sources
+    .slice(0, 6)
+    .map((s, i) => `${i + 1}. ${s.title} (${s.host})`)
+    .join('\n')
+  const domainHint = sourceDigest
+    ? sourceDigest.slice(0, 120).replace(/\s+/g, ' ')
+    : query.slice(0, 120)
+  const capability = existingTools.some((t) => t.name === DETERMINISTIC_REVIEWER_NAME)
+    ? 'a reusable data-reviewer tool for summarizing collected research inputs'
+    : `a deterministic data-reviewer tool for summarizing ${domainHint}`
+  return {
+    capability,
+    rationale: 'When the LLM evolution pipeline is unavailable, the system still needs a safe, stdlib-only tool that can process gathered text and expose gaps for future runs.',
+  }
+}
+
+/** Create the deterministic fallback tool blueprint. */
+export function authorDeterministicTool(gap: { capability: string; rationale: string }): Omit<Plugin, 'id' | 'createdAt'> {
+  return {
+    name: DETERMINISTIC_REVIEWER_NAME,
+    description: DETERMINISTIC_REVIEWER_DESCRIPTION,
+    language: 'python',
+    code: DETERMINISTIC_REVIEWER_CODE,
+  }
+}
+
+/** Build a fallback EvolutionResult without calling LLMs. */
+export function buildDeterministicEvolutionResult(
+  query: string,
+  sources: Source[],
+  subQueries: string[],
+  existingTools: { name: string; description: string }[],
+): EvolutionResult {
+  const gap = buildDeterministicGap(query, sources, existingTools)
+  const reuseName = reflectForReuse(gap.capability, existingTools)
+  if (reuseName) {
+    return {
+      plugin: null,
+      gap,
+      testStatus: 'reused',
+      reusedToolName: reuseName,
+    }
+  }
+
+  const tool = authorDeterministicTool(gap)
+  const test = testTool(tool.name, tool.code)
+  if (!test.passed) {
+    rollbackTool(tool.name)
+    return {
+      plugin: null,
+      gap,
+      testStatus: 'failed',
+      testError: test.error || 'deterministic tool failed compile validation',
+    }
+  }
+
+  const plugin: Plugin = {
+    id: uid(),
+    name: tool.name,
+    description: tool.description,
+    language: tool.language,
+    code: tool.code,
+    createdAt: Date.now(),
+    gapAnalysis: gap.capability,
+    testStatus: 'passed',
+    testError: test.error,
+    patched: false,
+    executionStatus: 'not_run',
+  }
+  return { plugin, gap, testStatus: 'passed', testError: test.error }
 }
 
 /**

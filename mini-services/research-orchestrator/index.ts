@@ -20,7 +20,7 @@ import { plan } from './agents/planner'
 import { discover } from './agents/researcher'
 import { synthesize, extractUpgrades, buildUpgradeReport } from './agents/synthesizer'
 import { critique } from './agents/critic'
-import { evolve, authorFromBlueprint, testTool, rollbackTool, runUnitTest } from './agents/evolution'
+import { evolve, authorFromBlueprint, testTool, rollbackTool, runUnitTest, buildDeterministicEvolutionResult } from './agents/evolution'
 import { dream } from './agents/dreamer'
 import { devilsAdvocate } from './agents/devils_advocate'
 import { generateHypotheses, type Hypothesis } from './agents/hypothesis_engine'
@@ -700,7 +700,9 @@ async function runResearch(socket: any, query: string) {
     // -------- PHASE 3.5: REFLECTION (Dreamer) --------
     // The Dreamer reflects on ALL data, dreams on possibilities, proposes
     // best-possible outcomes + new goals, and surfaces relevant papers.
-    if (!degraded) {
+    // Always run it: LLM dreams are nice, but deterministic fallback dreams
+    // keep the final report honest even when inference is unavailable.
+    if (task.draft) {
       task.phase = 'reflection'
       emit('research:phase', {
         phase: 'reflection',
@@ -726,7 +728,7 @@ async function runResearch(socket: any, query: string) {
       } catch (e) {
         emit('research:thought', {
           agent: 'Dreamer',
-          text: `Dream stage skipped (LLM unavailable): ${(e as Error).message}`,
+          text: `Dream stage failed unexpectedly: ${(e as Error).message}.`,
         })
       }
       await sleep(300)
@@ -865,8 +867,42 @@ async function runResearch(socket: any, query: string) {
     } catch (e) {
       emit('research:thought', {
         agent: 'Evolution',
-        text: `Self-Teaching Loop skipped (LLM unavailable): ${(e as Error).message}`,
+        text: `Self-Teaching Loop failed (${(e as Error).message}); running deterministic fallback authoring.`,
       })
+      try {
+        const fallback = await buildDeterministicEvolutionResult(query, task.sources, task.subQueries, existingTools)
+        if (fallback.plugin) {
+          const plugin = fallback.plugin
+          emit('research:evolution', { stage: 'fallback_author', detail: { name: plugin.name, gap: fallback.gap } })
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: `🧰 Deterministic fallback: registered safe stdlib tool "${plugin.name}" because LLM authoring failed.`,
+          })
+          const sampleArg = task.subQueries[0] || query
+          const exec = await runEvolvedTool(plugin.name, sampleArg)
+          plugin.executionStatus = exec.ok ? 'ok' : 'error'
+          plugin.executionResult = (exec.ok ? exec.stdout : exec.stderr).slice(0, 200)
+          plugin.usageCount = 1
+          plugin.lastUsed = Date.now()
+          plugin.successRate = exec.ok ? 1.0 : 0.0
+          registerTool(pluginRegistryMeta, plugin)
+          task.plugin = plugin
+          pluginRegistry = reconstructPlugins(pluginRegistryMeta)
+          broadcastPlugins(socket)
+          emit('research:plugin', { plugin })
+          emit('research:evolution', { stage: 'exec', detail: { status: plugin.executionStatus, result: plugin.executionResult } })
+        } else {
+          emit('research:thought', {
+            agent: 'Evolution',
+            text: `Self-Teaching Loop ended without a tool. Gap: "${fallback.gap.capability}". ${fallback.testError ? `Reason: ${fallback.testError.slice(0, 100)}` : ''}`,
+          })
+        }
+      } catch (fallbackErr) {
+        emit('research:thought', {
+          agent: 'Evolution',
+          text: `Deterministic fallback also failed: ${(fallbackErr as Error).message}`,
+        })
+      }
     }
     await sleep(400)
     } // end if (!upgradeCompleted)
@@ -1022,7 +1058,7 @@ async function runResearch(socket: any, query: string) {
     socket.emit('telemetry:update', { log: runLog })
 
     // Store conclusion in vector memory for future RAG retrieval.
-    if (task.finalReport && !degraded) {
+    if (task.finalReport) {
       await storeConclusion(task.query, task.finalReport)
     }
 
