@@ -41,10 +41,14 @@ import { deprecateStaleTools } from './tools/skill_deprecation'
 import { buildExecutionDigest, pruneSources } from './tools/context_pruner'
 import { loadMetaPrompts, maybeEvolvePrompts, getEvolutionHistory } from './tools/meta_prompts'
 import { loadSettings, saveSettings, getSettings, fetchModels, PROVIDER_PRESETS, type LLMSettings, type ProviderType } from './tools/settings'
-import { announce, isVoiceEnabled, fetchVoices } from './tools/voicebox'
+import { announce, isVoiceEnabled, fetchVoices, fetchModels as fetchTtsModels } from './tools/voicebox'
 import { discoverEnvKeys, runHealthChecks } from './tools/health_check'
 import { warmupLocalModel } from './tools/llm'
 import type { UpgradeBlueprint } from './types'
+
+function uniqueStrings(values: unknown[]): string[] {
+  return Array.from(new Set(values.map((value) => String(value).trim()).filter(Boolean)))
+}
 
 const PORT = 3003
 const MAX_CRITIQUE_ITERATIONS = 3
@@ -53,19 +57,38 @@ const MAX_CRITIQUE_ITERATIONS = 3
 async function autoDetectLocalServices() {
   try {
     const s = getSettings()
-    // Try to fetch available voices from Audiobox
+    // Try to fetch available voices from VoiceBox/Audiobox or OpenAI-compatible TTS
     try {
       const voices = await fetchVoices()
-      const voiceNames = voices.map((v) => typeof v === 'string' ? v : v.id || v.name).filter(Boolean)
-      if (voiceNames.length > 0 && !s.ttsVoice) {
-        s.ttsVoice = voiceNames[0]
+      const voiceNames = uniqueStrings(voices)
+      if (voiceNames.length > 0) {
         s.ttsVoices = voiceNames
+        if (!s.ttsVoice || !voiceNames.includes(s.ttsVoice)) {
+          s.ttsVoice = voiceNames[0]
+        }
         saveSettings(s)
         console.log(`[voicebox] auto-detected voices: ${voiceNames.join(', ')}`)
       }
     } catch (e) {
       console.warn('[voicebox] auto-detect voices failed:', (e as Error)?.message)
     }
+
+    // Try to fetch available TTS models from VoiceBox/Audiobox or OpenAI-compatible TTS
+    try {
+      const ttsModels = await fetchTtsModels()
+      const modelNames = uniqueStrings(ttsModels)
+      if (modelNames.length > 0) {
+        s.ttsModels = modelNames
+        if (!s.ttsModel || !modelNames.includes(s.ttsModel)) {
+          s.ttsModel = modelNames[0]
+        }
+        saveSettings(s)
+        console.log(`[voicebox] auto-detected tts models: ${modelNames.join(', ')}`)
+      }
+    } catch (e) {
+      console.warn('[voicebox] auto-detect tts models failed:', (e as Error)?.message)
+    }
+
     // Try to fetch available models from local LLM providers
     try {
       const models = await fetchModels(s.provider, s.baseURL || '', s.apiKey || '')

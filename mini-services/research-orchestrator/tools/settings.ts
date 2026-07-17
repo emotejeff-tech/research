@@ -59,6 +59,8 @@ export interface LLMSettings {
   voiceBoxUrl?: string
   voiceBoxApiKey?: string
   voiceBoxEnabled?: boolean
+  /** VoiceBox TTS backend: auto tries local Audiobox first, then OpenAI-compatible TTS. */
+  ttsProvider?: 'auto' | 'audiobox' | 'openai-compatible'
   ttsModel?: string
   ttsVoice?: string
   ttsVoices?: string[]
@@ -144,10 +146,11 @@ const DEFAULT_SETTINGS: LLMSettings = {
   voiceBoxUrl: 'http://localhost:17493',
   voiceBoxApiKey: '',
   voiceBoxEnabled: true,
+  ttsProvider: 'auto',
   ttsModel: 'kokoro',
   ttsVoice: 'af_heart',
-  ttsVoices: ['af_heart', 'bf_heart', 'af_alloy', 'bf_alloy'],
-  ttsModels: ['kokoro', 'f5-tts', 'vits'],
+  ttsVoices: ['af_heart', 'bf_heart', 'af_alloy', 'bf_alloy', 'alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'shimmer', 'vivian', 'ryan', 'serena', 'chatterbox'],
+  ttsModels: ['kokoro', 'f5-tts', 'vits', 'qwen3-tts', 'qwen-tts', 'chatterbox-tts', 'chatterbox', 'openai-compatible'],
   whisperModel: 'whisper-1',
   memoryBackend: 'local',
   memoryPath: '',
