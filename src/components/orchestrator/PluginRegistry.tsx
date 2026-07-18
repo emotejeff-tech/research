@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Search,
   FileCode,
+  Brain,
 } from 'lucide-react'
 import { useOrchestrator, type Plugin } from '@/lib/orchestrator-store'
 import { GlassCard, GlassPanelHeader } from './GlassCard'
@@ -189,6 +190,7 @@ const STAGES = [
   { key: 'author', label: 'Author', icon: FileCode },
   { key: 'test', label: 'Test', icon: CheckCircle2 },
   { key: 'register', label: 'Register', icon: Sparkles },
+  { key: 'distill', label: 'Distill', icon: Brain },
   { key: 'exec', label: 'Execute', icon: Play },
 ]
 
@@ -200,6 +202,7 @@ function EvolutionProgress() {
 
   const currentIdx = STAGES.findIndex((s) => s.key === stage.stage)
   const patching = stage.stage === 'patch'
+  const distilling = stage.stage === 'distill'
 
   return (
     <motion.div
@@ -245,6 +248,12 @@ function EvolutionProgress() {
           self-correction: patching compile error…
         </div>
       )}
+      {distilling && (
+        <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-cyan-300">
+          <Brain className="h-3 w-3 animate-pulse" />
+          distillation: extracting strategic principle…
+        </div>
+      )}
     </motion.div>
   )
 }
@@ -260,7 +269,7 @@ export default function PluginRegistry() {
       <GlassPanelHeader
         icon={<Sparkles className="h-4 w-4" />}
         title="Evolution Engine · Self-Teaching Loop"
-        subtitle="custom_plugins/ · gap → author → sandbox → register → execute"
+        subtitle="custom_plugins/ · gap → author → test → register → distill → execute"
         accent="#fb923c"
         right={
           <span className="rounded-full bg-orange-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-orange-300">

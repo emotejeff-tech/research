@@ -9,7 +9,7 @@
  * Key improvements for local LLM support:
  *   - Ollama direct mode (no /v1 prefix needed)
  *   - Better timeout handling with AbortController
- *   - JSON response format support for structured prompts
+ *   - JSON response support via prompt engineering (not response_format, which local endpoints reject)
  *   - Smart retry with simplified prompts for JSON
  *   - Graceful degradation when all tiers fail
  *   - Warmup for local models to preload into VRAM
@@ -105,10 +105,8 @@ async function localLLMWithModel(
     temperature: 0.7,
   }
 
-  const shouldUseJson = useJsonMode ?? false
-  if (shouldUseJson) {
-    requestBody.response_format = { type: 'json_object' }
-  }
+  // Note: JSON mode uses prompt engineering + smart retry instead of response_format,
+  // since many local endpoints (Ollama, LM Studio) don't support OpenAI's json_object format.
 
   try {
     const res = await fetch(`${baseURL.replace(/\/$/, '')}/chat/completions`, {
@@ -136,8 +134,8 @@ async function localLLMWithModel(
 
 /**
  * Local LLM call with JSON mode support + heartbeat + smart retry.
- * When useJsonMode is true, adds response_format: { type: 'json_object' }
- * so the model returns valid JSON (critical for Critic, Evolution, Planner).
+ * When useJsonMode is true, relies on prompt engineering to extract valid JSON
+ * (critical for Critic, Evolution, Planner).
  *
  * Includes:
  *  - Heartbeat callback every 15s (so UI doesn't look frozen during long generation)
@@ -209,9 +207,8 @@ async function callLocalModel(
     max_tokens: Math.min(config.maxContextTokens, 4096),
   }
 
-  if (useJsonMode) {
-    requestBody.response_format = { type: 'json_object' }
-  }
+  // Note: JSON mode handled via prompt engineering + smart retry, not response_format.
+  // Local endpoints (Ollama, LM Studio, llama.cpp) often reject OpenAI's json_object format.
 
   try {
     const headers: Record<string, string> = {

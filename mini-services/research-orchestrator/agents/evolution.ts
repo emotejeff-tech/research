@@ -11,6 +11,8 @@
  *   4. Skill Registry         — persisted to custom_plugins/ on disk so the
  *                               tool survives restarts and can be hot-swapped
  *                               into the runtime toolkit.
+ *   5. Experience Distillation — extracts strategic principles from successful
+ *                               evolutions for future guidance (EvolveR-style).
  *
  * Self-correction: if the generated code fails compilation, the stack trace is
  * fed back to the Tool Authoring Agent which rewrites the file. One patch
@@ -520,5 +522,19 @@ export async function evolve(
     executionStatus: 'not_run',
   }
   onStage('done', { plugin })
+
+  // Stage 5 — Experience Distillation (EvolveR-style)
+  if (testStatus === 'passed' || testStatus === 'patched') {
+    try {
+      const { distillPrinciple } = await import('./principles')
+      const principle = await distillPrinciple(query, gap.capability, tool.name, testStatus)
+      if (principle) {
+        onStage('distill', { principle })
+      }
+    } catch (e) {
+      // Silently skip distillation if principles module unavailable
+    }
+  }
+
   return { plugin, gap, testStatus, testError: test.error }
 }

@@ -755,17 +755,18 @@ async function runResearch(socket: any, query: string) {
         existingTools,
         (stage: string, detail?: any) => {
           const stageText: Record<string, string> = {
-            gap: 'Gap Analysis: scanning research context for missing capabilities…',
-            gap_done: `Gap Analysis: missing capability identified — "${detail?.capability}"`,
-            reuse: `🧠 Reflection: existing tool "${detail?.name}" already covers this gap — reusing instead of authoring a new one.`,
-            author: `🛠️ Tool Authoring: generating Python for "${detail?.capability}"…`,
-            author_failed: 'Tool Authoring: failed to parse generated code.',
-            test: `Sandbox Test: compiling "${detail?.name}.py" via python3 -m py_compile…`,
-            patch: `Self-Correction: compile error detected — feeding stack trace to patcher…`,
-            test_failed: `Sandbox Test: failed after patch attempt. Rolling back. (${detail?.error?.slice(0, 80)})`,
-            register: `Skill Registry: registering "${detail?.name}" to custom_plugins/ on disk.`,
-            done: `Evolution complete: "${detail?.plugin?.name}" validated and registered.`,
-          }
+                      gap: 'Gap Analysis: scanning research context for missing capabilities…',
+                      gap_done: `Gap Analysis: missing capability identified — "${detail?.capability}"`,
+                      reuse: `🧠 Reflection: existing tool "${detail?.name}" already covers this gap — reusing instead of authoring a new one.`,
+                      author: `🛠️ Tool Authoring: generating Python for "${detail?.capability}"…`,
+                      author_failed: 'Tool Authoring: failed to parse generated code.',
+                      test: `Sandbox Test: compiling "${detail?.name}.py" via python3 -m py_compile…`,
+                      patch: `Self-Correction: compile error detected — feeding stack trace to patcher…`,
+                      test_failed: `Sandbox Test: failed after patch attempt. Rolling back. (${detail?.error?.slice(0, 80)})`,
+                      register: `Skill Registry: registering "${detail?.name}" to custom_plugins/ on disk.`,
+                      done: `Evolution complete: "${detail?.plugin?.name}" validated and registered.`,
+                      distill: `Experience Distillation: extracting strategic principle from successful evolution…`,
+                    }
           emit('research:evolution', { stage, detail })
           emit('research:thought', {
             agent: 'Evolution',
