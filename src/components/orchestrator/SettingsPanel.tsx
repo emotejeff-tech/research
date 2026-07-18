@@ -95,7 +95,7 @@ export default function SettingsPanel() {
 
   // When provider changes, apply preset defaults.
   const onProviderChange = (provider: string) => {
-    const preset = presets?.[provider]
+    const preset = presets?.[provider] ?? presetsFallback?.[provider]
     if (preset) {
       setOverrides((o) => ({
         ...o,
@@ -133,7 +133,15 @@ export default function SettingsPanel() {
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const currentPreset = presets?.[form.provider]
+  // Fallback presets if socket not connected yet
+  const presetsFallback = {
+    zai: { label: 'Z.ai (Built-in)', defaultURL: '', defaultKey: '', defaultModel: '', needsKey: false, help: 'Default cloud gateway. No configuration needed.' },
+    ollama: { label: 'Ollama', defaultURL: 'http://localhost:11434/v1', defaultKey: '', defaultModel: 'llama3.2', needsKey: false, help: 'Local Ollama server.' },
+    lmstudio: { label: 'LM Studio', defaultURL: 'http://localhost:1234/v1', defaultKey: '', defaultModel: 'local-model', needsKey: false, help: 'Local LM Studio server.' },
+    openrouter: { label: 'OpenRouter', defaultURL: 'https://openrouter.ai/api/v1', defaultKey: '', defaultModel: 'meta-llama/llama-3.2-3b-instruct:free', needsKey: true, help: 'Cloud router with free + paid models.' },
+  }
+
+  const currentPreset = presets?.[form.provider] ?? presetsFallback?.[form.provider]
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -159,8 +167,12 @@ export default function SettingsPanel() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="glass-strong border-white/15 bg-[#0a0f1e]/95">
-                {presets &&
-                  Object.entries(presets).map(([key, p]) => (
+                {Object.entries(presets || {
+                  zai: { label: 'Z.ai (Built-in)', defaultURL: '', defaultKey: '', defaultModel: '', needsKey: false, help: 'Default cloud gateway. No configuration needed.' },
+                  ollama: { label: 'Ollama', defaultURL: 'http://localhost:11434/v1', defaultKey: '', defaultModel: 'llama3.2', needsKey: false, help: 'Local Ollama server.' },
+                  lmstudio: { label: 'LM Studio', defaultURL: 'http://localhost:1234/v1', defaultKey: '', defaultModel: 'local-model', needsKey: false, help: 'Local LM Studio server.' },
+                  openrouter: { label: 'OpenRouter', defaultURL: 'https://openrouter.ai/api/v1', defaultKey: '', defaultModel: 'meta-llama/llama-3.2-3b-instruct:free', needsKey: true, help: 'Cloud router with free + paid models.' },
+                }).map(([key, p]) => (
                     <SelectItem
                       key={key}
                       value={key}
