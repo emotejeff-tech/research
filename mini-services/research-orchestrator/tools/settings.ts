@@ -33,7 +33,10 @@ export interface LLMSettings {
   /** Temperature for generation (0-2). */
   temperature: number
   /** Force JSON response format for structured prompts (Critic, Evolution). */
-  jsonMode: boolean
+    jsonMode: boolean
+    /** Critic/agent iteration controls. */
+    criticEnabled?: boolean
+    critiqueIterations?: number
   /** Optional: separate lightweight model for Planning/Discovery (saves VRAM). */
   planningModel?: string
   planningEndpoint?: string
