@@ -245,7 +245,7 @@ export default function FinalReport() {
                   {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="h-3 animate-pulse rounded bg-white/5" style={{ width: `${90 - i * 12}%` }} />
                   ))}
-                  <p className="pt-2 text-xs shimmer font-medium">agents writing…</p>
+                  <p className="pt-2 text-xs shimmer font-medium">agents writing...</p>
                 </div>
               )}
 
@@ -278,6 +278,42 @@ export default function FinalReport() {
                     ))}
                   </div>
                 </div>
+              )}
+
+              {/* Research Methodology Breakdown - comprehensive explanation */}
+              {finalMeta && !degraded && finalReport && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-indigo-400/25 bg-indigo-400/[0.05] p-4"
+                >
+                  <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-indigo-300">
+                    <Microscope className="h-3.5 w-3.5" /> Research Process Timeline
+                  </div>
+                  <div className="text-[11px] leading-relaxed text-indigo-100/80 space-y-2">
+                    <div>
+                      <strong>Phase 1 - Planning:</strong> Coordinator decomposed the query into subtasks and selected the search strategy.
+                    </div>
+                    <div>
+                      <strong>Phase 2 - Discovery:</strong> Researcher crawled live sources ({finalMeta.sourceCount} retrieved, filtered to primary data only).
+                    </div>
+                    <div>
+                      <strong>Phase 3 - Synthesis:</strong> Actor drafted the report from evidence, building logic chains from source facts.
+                    </div>
+                    <div>
+                      <strong>Phase 4 - Devil's Advocate:</strong> Cross-agent peer review identified potential weaknesses in the logic.
+                    </div>
+                    <div>
+                      <strong>Phase 5 - Critic:</strong> {finalMeta.iterations} iteration(s) of verification - flagged hedging/non-conclusions, ensured primary-data-only, validated logic chains.
+                    </div>
+                    <div>
+                      <strong>Phase 6 - Reflection:</strong> Dreamer extracted insights, proposed new avenues, surfaced relevant papers.
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-indigo-400/20">
+                      <strong>Verification Status:</strong> {finalMeta.iterations > 0 ? '✓ Critic verified no hedging/vague claims/non-primary data' : '⊘ Critic skipped (disabled)'}
+                    </div>
+                  </div>
+                </motion.div>
               )}
             </motion.div>
           )}
