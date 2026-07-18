@@ -93,7 +93,7 @@ export default function DreamPanel() {
 
               {/* New Goals + Possibilities grid */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {dream.newGoals.length > 0 && (
+                {dream.newGoals?.length > 0 && (
                   <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.04] p-3.5">
                     <div className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-300">
                       <Target className="h-3.5 w-3.5" /> New Goals
@@ -107,7 +107,7 @@ export default function DreamPanel() {
                     </ul>
                   </div>
                 )}
-                {dream.possibilities.length > 0 && (
+                {dream.possibilities?.length > 0 && (
                   <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-3.5">
                     <div className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-amber-300">
                       <Lightbulb className="h-3.5 w-3.5" /> Possibilities
@@ -124,10 +124,10 @@ export default function DreamPanel() {
               </div>
 
               {/* Papers */}
-              {dream.papers.length > 0 && (
+              {dream.papers?.length > 0 && (
                 <div className="rounded-xl border border-sky-400/20 bg-sky-400/[0.04] p-3.5">
                   <div className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-sky-300">
-                    <BookOpen className="h-3.5 w-3.5" /> Relevant Papers ({dream.papers.length})
+                    <BookOpen className="h-3.5 w-3.5" /> Relevant Papers ({dream.papers?.length})
                   </div>
                   <ul className="space-y-1.5">
                     {dream.papers.map((p, i) => (
