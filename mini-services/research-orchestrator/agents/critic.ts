@@ -11,6 +11,7 @@
  * Falls back to a "pass" verdict if all LLM tiers fail (never crashes the run).
  */
 import { llmWithFallback, extractJSON } from '../tools/llm'
+import { getSettings } from '../tools/settings'
 import type { Source, CritiqueRound, TaskType } from '../types'
 
 const RESEARCH_SYSTEM = `You are the Critic agent in an Actor-Critic research system. Your ONLY job is to find flaws in the Actor's INDEPENDENT RESEARCH ANALYSIS. Check specifically for:

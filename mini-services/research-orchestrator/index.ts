@@ -51,7 +51,7 @@ function uniqueStrings(values: unknown[]): string[] {
 }
 
 const PORT = 3003
-const MAX_CRITIQUE_ITERATIONS = 3
+const MAX_CRITIQUE_ITERATIONS = 3 // fallback; real value comes from getSettings().critiqueIterations
 const STARTUP_DETECT_TIMEOUT_MS = 1500
 
 // ---------- Auto-detect local services ----------
@@ -530,12 +530,15 @@ async function runResearch(socket: any, query: string) {
     }
 
     // -------- ACTOR-CRITIC LOOP (skipped for successful UPGRADE runs) --------
+    const maxIterations = getSettings().critiqueIterations ?? 3
+    const criticEnabled = getSettings().criticEnabled !== false
+
     if (!upgradeCompleted) {
     let iteration = 0
     let lastFeedback = ''
 
-    if (!degraded) {
-      while (iteration < MAX_CRITIQUE_ITERATIONS) {
+    if (!degraded && criticEnabled) {
+      while (iteration < maxIterations) {
         iteration += 1
 
         // ---- PHASE 3: SYNTHESIS (Actor, with fallback pipeline) ----
@@ -682,18 +685,18 @@ async function runResearch(socket: any, query: string) {
         }
       }
     } else {
-      // Already degraded at planning — compile a degraded synthesis now.
+      // Critic disabled → run a single synthesis pass without critique loop.
       task.phase = 'synthesis'
       emit('research:phase', {
         phase: 'synthesis',
-        title: 'Synthesis Agent: degraded compilation',
+        title: 'Synthesis Agent: drafting report (critic disabled)',
       })
       emit('research:iteration', { iteration: 1, role: 'actor' })
       const result = await synthesize(query, task.sources, '', 1, task.taskType)
       task.draft = result.draft
       emit('research:thought', {
         agent: 'Synthesis',
-        text: `Degraded draft compiled from ${task.sources.length} sources.`,
+        text: `Draft produced (${result.draft.length} chars) — critic loop skipped.`,
       })
     }
 

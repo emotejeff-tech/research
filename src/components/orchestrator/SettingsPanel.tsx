@@ -67,6 +67,8 @@ export default function SettingsPanel() {
     maxContextTokens: overrides.maxContextTokens ?? settings?.maxContextTokens ?? 8192,
     temperature: overrides.temperature ?? settings?.temperature ?? 0.7,
     jsonMode: overrides.jsonMode ?? settings?.jsonMode ?? true,
+    criticEnabled: overrides.criticEnabled ?? settings?.criticEnabled ?? true,
+    critiqueIterations: overrides.critiqueIterations ?? settings?.critiqueIterations ?? 3,
     planningModel: overrides.planningModel ?? settings?.planningModel ?? '',
     planningEndpoint: overrides.planningEndpoint ?? settings?.planningEndpoint ?? '',
     tavilyApiKey: overrides.tavilyApiKey ?? settings?.tavilyApiKey ?? '',
@@ -276,6 +278,35 @@ export default function SettingsPanel() {
                   onCheckedChange={(v) => setField('jsonMode', v)}
                 />
               </div>
+
+              {/* Critic Controls */}
+              <div className="flex items-center justify-between rounded-xl border border-amber-400/15 bg-amber-400/[0.04] p-3">
+                <div>
+                  <div className="text-[12px] font-medium text-white/80">Enable Critic Loop</div>
+                  <p className="text-[10px] text-white/40">
+                    When enabled, the Critic validates and iteratively refines drafts. Disable to skip critique for faster runs.
+                  </p>
+                </div>
+                <Switch
+                  checked={form.criticEnabled !== false}
+                  onCheckedChange={(v) => setField('criticEnabled', v)}
+                />
+              </div>
+
+              {form.criticEnabled !== false && (
+                <div>
+                  <label className="mb-1 block text-[10px] text-white/40">Max Critique Iterations</label>
+                  <select
+                    value={form.critiqueIterations || 3}
+                    onChange={(e) => setField('critiqueIterations', parseInt(e.target.value))}
+                    className="glass w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-[12px] text-white/90 outline-none"
+                  >
+                    <option value={1}>1 (fastest)</option>
+                    <option value={2}>2 (balanced)</option>
+                    <option value={3}>3 (thorough)</option>
+                  </select>
+                </div>
+              )}
 
               {/* Hybrid routing: lightweight planning model (saves VRAM) */}
               <div className="rounded-xl border border-violet-400/15 bg-violet-400/[0.04] p-3">

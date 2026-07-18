@@ -165,6 +165,8 @@ interface OrchestratorState {
     maxContextTokens: number
     temperature: number
     jsonMode: boolean
+    criticEnabled?: boolean
+    critiqueIterations?: number
     planningModel?: string
     planningEndpoint?: string
     tavilyApiKey?: string
